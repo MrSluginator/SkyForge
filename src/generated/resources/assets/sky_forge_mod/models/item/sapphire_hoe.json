@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "sky_forge_mod:item/sapphire_hoe"
+  }
+}

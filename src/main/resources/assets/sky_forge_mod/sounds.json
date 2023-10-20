@@ -1,0 +1,46 @@
+{
+  "metal_detector_found_ore": {
+    "subtitles": "sounds.sky_forge_mod.metal_detector_found_ore",
+    "sounds": [
+      "sky_forge_mod:metal_detector_found_ore"
+    ]
+  },
+  "sound_block_break": {
+    "subtitle": "sounds.sky_forge_mod.sound_block_break",
+    "sounds": [
+      "sky_forge_mod:sound_block_break"
+    ]
+  },
+  "sound_block_step": {
+    "subtitle": "sounds.sky_forge_mod.sound_block_step",
+    "sounds": [
+      "sky_forge_mod:sound_block_step"
+    ]
+  },
+  "sound_block_place": {
+    "subtitle": "sounds.sky_forge_mod.sound_block_place",
+    "sounds": [
+      "sky_forge_mod:sound_block_place"
+    ]
+  },
+  "sound_block_hit": {
+    "subtitle": "sounds.sky_forge_mod.sound_block_hit",
+    "sounds": [
+      "sky_forge_mod:sound_block_hit"
+    ]
+  },
+  "sound_block_fall": {
+    "subtitle": "sounds.sky_forge_mod.sound_block_fall",
+    "sounds": [
+      "sky_forge_mod:sound_block_fall"
+    ]
+  },
+  "bar_brawl": {
+    "sounds": [
+      {
+        "name": "sky_forge_mod:bar_brawl",
+        "stream": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "sky_forge_mod:block/sapphire_block",
+    "side": "sky_forge_mod:block/sapphire_block",
+    "top": "sky_forge_mod:block/sapphire_block"
+  }
+}

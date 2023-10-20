@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_fence_gate_open",
+  "textures": {
+    "texture": "sky_forge_mod:block/sapphire_block"
+  }
+}

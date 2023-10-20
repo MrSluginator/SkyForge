@@ -1,0 +1,10 @@
+{
+  "type": "sky_forge_mod:add_item",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:entities/creeper"
+    }
+  ],
+  "item": "sky_forge_mod:pine_cone"
+}

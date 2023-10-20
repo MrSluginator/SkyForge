@@ -1,0 +1,12 @@
+{
+  "type": "sky_forge_mod:gem_polishing",
+  "ingredients": [
+    {
+      "item": "minecraft:coal"
+    }
+  ],
+  "output": {
+    "count": 7,
+    "item": "minecraft:diamond"
+  }
+}

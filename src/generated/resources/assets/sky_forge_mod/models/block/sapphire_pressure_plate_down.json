@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/pressure_plate_down",
+  "textures": {
+    "texture": "sky_forge_mod:block/sapphire_block"
+  }
+}

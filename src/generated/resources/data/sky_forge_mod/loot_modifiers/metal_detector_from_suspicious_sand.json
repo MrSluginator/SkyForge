@@ -1,0 +1,10 @@
+{
+  "type": "sky_forge_mod:add_sus_sand_item",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:archaeology/desert_pyramid"
+    }
+  ],
+  "item": "sky_forge_mod:metal_detector"
+}

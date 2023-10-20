@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "sky_forge_mod:block/stripped_pine_log_top",
+    "side": "sky_forge_mod:block/stripped_pine_log"
+  }
+}

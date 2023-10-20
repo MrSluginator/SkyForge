@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "sky_forge_mod:block/sapphire_slab"
+    },
+    "type=double": {
+      "model": "sky_forge_mod:block/sapphire_block"
+    },
+    "type=top": {
+      "model": "sky_forge_mod:block/sapphire_slab_top"
+    }
+  }
+}

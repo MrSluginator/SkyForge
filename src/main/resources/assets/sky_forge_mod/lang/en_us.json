@@ -1,0 +1,69 @@
+{
+  "item.sky_forge_mod.sapphire": "Sapphire",
+  "item.sky_forge_mod.raw_sapphire": "Raw Sapphire",
+
+  "item.sky_forge_mod.metal_detector": "Metal Detector",
+  "item.sky_forge_mod.strawberry": "Strawberry",
+  "item.sky_forge_mod.pine_cone": "Pine Cone",
+  "item.sky_forge_mod.sapphire_staff": "Sapphire Staff",
+
+  "item.sky_forge_mod.sapphire_sword": "Sapphire Sword",
+  "item.sky_forge_mod.sapphire_pickaxe": "Sapphire Pickaxe",
+  "item.sky_forge_mod.sapphire_axe": "Sapphire Axe",
+  "item.sky_forge_mod.sapphire_shovel": "Sapphire Shovel",
+  "item.sky_forge_mod.sapphire_hoe": "Sapphire Hoe",
+
+  "item.sky_forge_mod.sapphire_helmet": "Sapphire Helmet",
+  "item.sky_forge_mod.sapphire_chestplate": "Sapphire Chestplate",
+  "item.sky_forge_mod.sapphire_leggings": "Sapphire Leggings",
+  "item.sky_forge_mod.sapphire_boots": "Sapphire Boots",
+
+  "item.sky_forge_mod.strawberry_seeds": "Strawberry Seeds",
+
+  "item.sky_forge_mod.corn": "Corn",
+  "item.sky_forge_mod.corn_seeds": "Corn Seeds",
+
+  "item.sky_forge_mod.bar_brawl_music_disc": "Bar Brawl Music Disc",
+  "item.sky_forge_mod.bar_brawl_music_disc.desc": "Bryan Tech - Bar Brawl (CC0)",
+
+  "block.sky_forge_mod.sapphire_block": "Block of Sapphire",
+  "block.sky_forge_mod.raw_sapphire_block": "Block of Raw Sapphire",
+
+  "block.sky_forge_mod.sapphire_ore": "Sapphire Ore",
+  "block.sky_forge_mod.deepslate_sapphire_ore": "Deepslate Sapphire Ore",
+  "block.sky_forge_mod.end_stone_sapphire_ore": "Endstone Sapphire Ore",
+  "block.sky_forge_mod.nether_sapphire_ore": "Nether Sapphire Ore",
+
+  "block.sky_forge_mod.sound_block": "Sound Block",
+
+  "block.sky_forge_mod.sapphire_stairs": "Sapphire Stairs",
+  "block.sky_forge_mod.sapphire_slab": "Sapphire Slab",
+  "block.sky_forge_mod.sapphire_button": "Sapphire Button",
+  "block.sky_forge_mod.sapphire_pressure_plate": "Sapphire Pressure Plate",
+  "block.sky_forge_mod.sapphire_fence": "Sapphire Fence",
+  "block.sky_forge_mod.sapphire_fence_gate": "Sapphire Fence Gate",
+  "block.sky_forge_mod.sapphire_wall": "Sapphire Wall",
+  "block.sky_forge_mod.sapphire_door": "Sapphire Door",
+  "block.sky_forge_mod.sapphire_trapdoor": "Sapphire Trapdoor",
+  
+  "block.sky_forge_mod.catmint": "Catmint",
+
+  "block.sky_forge_mod.gem_polishing_station": "Gem Polishing Station",
+
+  "block.sky_forge_mod.pine_log": "Pine Log",
+  "block.sky_forge_mod.pine_planks": "Pine Planks",
+  "block.sky_forge_mod.pine_wood": "Pine Wood",
+  "block.sky_forge_mod.stripped_pine_log": "Stripped Pine Log",
+  "block.sky_forge_mod.stripped_pine_wood": "Stripped Pine Wood",
+  "block.sky_forge_mod.pine_leaves": "Pine Leaves",
+
+
+  "tooltip.sky_forge_mod.metal_detector.tooltip": "Finds valuables underground!",
+
+  "entity.minecraft.villager.sky_forge_mod.soundmaster": "Sound Master",
+
+  "sounds.sky_forge_mod.metal_detector_found_ore": "Metal Detector Jingle",
+
+
+  "creativetab.tutorial_tab": "Sapphire Tutorial Tab"
+}

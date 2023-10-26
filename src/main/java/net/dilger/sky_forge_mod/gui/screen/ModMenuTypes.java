@@ -1,4 +1,4 @@
-package net.dilger.sky_forge_mod.screen;
+package net.dilger.sky_forge_mod.gui.screen;
 
 import net.dilger.sky_forge_mod.SkyForgeMod;
 import net.minecraft.world.inventory.AbstractContainerMenu;

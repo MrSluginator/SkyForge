@@ -1,5 +1,6 @@
 package net.dilger.sky_forge_mod.event;
 
+import net.dilger.sky_forge_mod.SkyForgeMod;
 import net.dilger.sky_forge_mod.skills.PlayerSkillData;
 import net.dilger.sky_forge_mod.util.PlayerDataUtility;
 import net.dilger.sky_forge_mod.util.ModTags;
@@ -12,7 +13,10 @@ import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
+@Mod.EventBusSubscriber(modid = SkyForgeMod.MOD_ID)
+// this needs to be registered in mod class as an event bus but ModEvents does not
 public class ModObjectiveEvents {
 
     @SubscribeEvent

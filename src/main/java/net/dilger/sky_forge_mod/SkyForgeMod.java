@@ -3,22 +3,26 @@ package net.dilger.sky_forge_mod;
 import com.mojang.logging.LogUtils;
 import net.dilger.sky_forge_mod.block.ModBlocks;
 import net.dilger.sky_forge_mod.block.entity.ModBlockEntities;
+import net.dilger.sky_forge_mod.client.ModKeyMappings;
 import net.dilger.sky_forge_mod.entity.ModEntities;
 import net.dilger.sky_forge_mod.entity.client.RhinoRenderer;
+import net.dilger.sky_forge_mod.event.ModObjectiveEvents;
+import net.dilger.sky_forge_mod.gui.screen.GemPolishingStationScreen;
+import net.dilger.sky_forge_mod.gui.screen.ModMenuTypes;
 import net.dilger.sky_forge_mod.item.ModCreativeModTabs;
 import net.dilger.sky_forge_mod.item.ModItems;
 import net.dilger.sky_forge_mod.loot.ModLootModifiers;
 import net.dilger.sky_forge_mod.recipe.ModRecipes;
-import net.dilger.sky_forge_mod.screen.GemPolishingStationScreen;
-import net.dilger.sky_forge_mod.screen.ModMenuTypes;
 import net.dilger.sky_forge_mod.sound.ModSounds;
 import net.dilger.sky_forge_mod.villager.ModVillagers;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -58,6 +62,7 @@ public class SkyForgeMod {
         modEventBus.addListener(this::commonSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(new ModObjectiveEvents());
         modEventBus.addListener(this::addCreative);
     }
 
@@ -88,6 +93,16 @@ public class SkyForgeMod {
             EntityRenderers.register(ModEntities.RHINO.get(), RhinoRenderer::new);
 
             MenuScreens.register(ModMenuTypes.GEM_POLISHING_MENU.get(), GemPolishingStationScreen::new);
+
+            ModKeyMappings.init();
+        }
+
+        @SubscribeEvent
+        public static void onKeyRegister(RegisterKeyMappingsEvent event) {
+
+            for (KeyMapping key: ModKeyMappings.getKeys()) {
+                event.register(key);
+            }
         }
     }
 }

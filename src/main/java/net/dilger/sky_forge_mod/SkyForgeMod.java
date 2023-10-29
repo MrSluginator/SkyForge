@@ -11,6 +11,7 @@ import net.dilger.sky_forge_mod.loot.ModLootModifiers;
 import net.dilger.sky_forge_mod.recipe.ModRecipes;
 import net.dilger.sky_forge_mod.screen.GemPolishingStationScreen;
 import net.dilger.sky_forge_mod.screen.ModMenuTypes;
+import net.dilger.sky_forge_mod.screen.SkillScreen;
 import net.dilger.sky_forge_mod.sound.ModSounds;
 import net.dilger.sky_forge_mod.villager.ModVillagers;
 import net.minecraft.client.gui.screens.MenuScreens;

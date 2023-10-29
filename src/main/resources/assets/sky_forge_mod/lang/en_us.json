@@ -65,5 +65,8 @@
   "sounds.sky_forge_mod.metal_detector_found_ore": "Metal Detector Jingle",
 
 
-  "creativetab.tutorial_tab": "Sapphire Tutorial Tab"
+  "creativetab.tutorial_tab": "Sapphire Tutorial Tab",
+
+  "key.category.skyrim.tutorial": "SkyForge",
+  "key.category.skyrim.open_skillscreen": "Open the Skill Screen"
 }

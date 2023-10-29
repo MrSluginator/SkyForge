@@ -1,0 +1,23 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "gradle",
+			"id": "/Users/max/Desktop/SkyForge/SkyForgerunClientSkyForge",
+			"script": "runClient",
+			"description": "",
+			"group": "forgegradle runs",
+			"project": "SkyForge",
+			"buildFile": "/Users/max/Desktop/SkyForge/SkyForge/build.gradle",
+			"rootProject": "SkyForge",
+			"projectFolder": "/Users/max/Desktop/SkyForge/SkyForge",
+			"workspaceFolder": "/Users/max/Desktop/SkyForge/SkyForge",
+			"args": "",
+			"javaDebug": false,
+			"problemMatcher": [
+				"$gradle"
+			],
+			"label": "gradle: runClient"
+		}
+	]
+}

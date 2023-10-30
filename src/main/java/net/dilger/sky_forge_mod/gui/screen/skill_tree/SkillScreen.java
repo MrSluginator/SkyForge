@@ -1,13 +1,17 @@
 package net.dilger.sky_forge_mod.gui.screen.skill_tree;
 
 import com.google.common.collect.Maps;
-import net.dilger.sky_forge_mod.database.data.perks.Perk;
-import net.dilger.sky_forge_mod.gui.screen.skill_tree.buttons.PerkButton;
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.dilger.sky_forge_mod.SkyForgeMod;
+import net.dilger.sky_forge_mod.client.KeyBinding;
+import net.dilger.sky_forge_mod.gui.buttons.ExampleButton;
+import net.dilger.sky_forge_mod.skills.Perk;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 
-import javax.annotation.Nullable;
 import java.util.Map;
 
 /*
@@ -18,38 +22,45 @@ Skills are of several types each with their own tab and screen
 */
 
 public class SkillScreen extends Screen {
+    private static final ResourceLocation WINDOW_RESOURCE_LOCATION = new ResourceLocation(SkyForgeMod.MOD_ID,"textures/gui/skills/window.png");
 
+    private static final Component VERY_SAD_LABEL = Component.translatable("skills.sad_label");
+    private static final Component NO_PERKS_LABEL = Component.translatable("skills.empty");
     private final Map<Perk, SkillTreeScreen> skillTrees = Maps.newLinkedHashMap();
     private SkillTreeScreen selectedSkillTree;
     private boolean isScrolling;
+    private static int tabPage, maxPages;
+    private static ExampleButton exButton;
 
-    protected SkillScreen() {
+    public SkillScreen() {
 //    constructor
         super(Component.literal("Skill Tree Screen"));
-        // should implement cient skills: the skills that are saved onto the player
+        // should implement client skills: the skills that are saved onto the player
     }
 
     protected void init() {
+        tabPage = 0;
+        exButton = new ExampleButton();
         /*
-        initialized the selected skill tree as well as the tabs to pick other ones
-        modifies the page if there are too many tabs at the top by adding arrow buttons
+        initialized the selected skill tree as well as the skillTrees to pick other ones
+        modifies the page if there are too many skillTrees at the top by adding arrow buttons
 
-        this.tabs.clear();
+        this.skillTrees.clear();
         this.selectedTab = null;
         this.perks.setListener(this);
-        if (this.selectedTab == null && !this.tabs.isEmpty()) {
-            this.perks.setSelectedTab(this.tabs.values().iterator().next().getPerk(), true);
+        if (this.selectedTab == null && !this.skillTrees.isEmpty()) {
+            this.perks.setSelectedTab(this.skillTrees.values().iterator().next().getPerk(), true);
         } else {
             this.perks.setSelectedTab(this.selectedTab == null ? null : this.selectedTab.getPerk(), true);
         }
-        if (this.tabs.size() > SkillTreeScreenType.MAX_TABS) {
+        if (this.skillTrees.size() > SkillTreeScreenType.MAX_SKILLTREES) {
             int guiLeft = (this.width - 252) / 2;
             int guiTop = (this.height - 140) / 2;
             addRenderableWidget(net.minecraft.client.gui.components.Button.builder(Component.literal("<"), b -> tabPage = java.lang.Math.max(tabPage - 1, 0       ))
                     .pos(guiLeft, guiTop - 50).size(20, 20).build());
             addRenderableWidget(net.minecraft.client.gui.components.Button.builder(Component.literal(">"), b -> tabPage = Math.min(tabPage + 1, maxPages))
                     .pos(guiLeft + WINDOW_WIDTH - 20, guiTop - 50).size(20, 20).build());
-            maxPages = this.tabs.size() / SkillTreeScreenType.MAX_TABS;
+            maxPages = this.skillTrees.size() / SkillTreeScreenType.MAX_SKILLTREES;
         }*/
     }
 
@@ -67,14 +78,14 @@ public class SkillScreen extends Screen {
 
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
         /*
-        check if any of the tabs have been clicked
+        check if any of the skillTrees have been clicked
         change the selected tab if there has
 
         if (pButton == 0) {
             int i = (this.width - 252) / 2;
             int j = (this.height - 140) / 2;
 
-            for(SkillTreeScreen SkillTreeScreen : this.tabs.values()) {
+            for(SkillTreeScreen SkillTreeScreen : this.skillTrees.values()) {
                 if (SkillTreeScreen.getPage() == tabPage && SkillTreeScreen.isMouseOver(i, j, pMouseX, pMouseY)) {
                     this.perks.setSelectedTab(SkillTreeScreen.getPerk(), true);
                     break;
@@ -86,17 +97,16 @@ public class SkillScreen extends Screen {
     }
 
     public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
-        /*
-        check to see if the keyCode received matches any in the key file
-        atm it just closes or open the screen but could be used to switch tabs etc
-        if (this.minecraft.options.keyPerks.matches(pKeyCode, pScanCode)) {
-            this.minecraft.setScreen((Screen)null);
-            this.minecraft.mouseHandler.grabMouse();
+
+//        atm it just closes the screen but could be used to switch skillTrees etc
+//        opening the screen is handled in ClientEvents
+        if (KeyBinding.keySkills.matches(pKeyCode, pScanCode)) {
+            Minecraft.getInstance().setScreen((Screen) null);
+            Minecraft.getInstance().mouseHandler.grabMouse();
             return true;
         } else {
             return super.keyPressed(pKeyCode, pScanCode, pModifiers);
-        }*/
-        return false;
+        }
     }
 
     public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
@@ -121,6 +131,7 @@ public class SkillScreen extends Screen {
 
         // render from background to foreground
         this.renderBackground(pGuiGraphics);
+        exButton.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
         /*
         draws which page you've selected:
         "1/4" -> tabPage/maxPages
@@ -136,10 +147,9 @@ public class SkillScreen extends Screen {
     }
 
     private void renderInside(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, int pOffsetX, int pOffsetY) {
-        /*
-        draw the skill tree
+//        draw the skill tree
 
-        SkillTreeScreen SkillTreeScreen = this.selectedTab;
+        SkillTreeScreen SkillTreeScreen = this.selectedSkillTree;
         if (SkillTreeScreen == null) {
             pGuiGraphics.fill(pOffsetX + 9, pOffsetY + 18, pOffsetX + 9 + 234, pOffsetY + 18 + 113, -16777216);
             int i = pOffsetX + 9 + 117;
@@ -147,36 +157,36 @@ public class SkillScreen extends Screen {
             pGuiGraphics.drawCenteredString(this.font, VERY_SAD_LABEL, i, pOffsetY + 18 + 113 - 9, -1);
         } else {
             SkillTreeScreen.drawContents(pGuiGraphics, pOffsetX + 9, pOffsetY + 18);
-        }*/
+        }
     }
 
     public void renderWindow(GuiGraphics pGuiGraphics, int pOffsetX, int pOffsetY) {
-        /*
+
         RenderSystem.enableBlend();
 
-        window location assumes that the window can be moved
-        can be removed if it is a full screen
+//        window location is resource location
+//        can be removed if it is a full screen
 
-        pGuiGraphics.blit(WINDOW_LOCATION, pOffsetX, pOffsetY, 0, 0, 252, 140);
+        pGuiGraphics.blit(WINDOW_RESOURCE_LOCATION, pOffsetX, pOffsetY, 0, 0, 252, 140);
 
-        if (this.tabs.size() > 1) {
+        if (this.skillTrees.size() > 1) {
 
-            draws the actual tabs for each catagory: blank tabs
+//            draws the actual tabs for each catagory: blank tabs
 
-            for(SkillTreeScreen SkillTreeScreen : this.tabs.values()) {
-                if (SkillTreeScreen.getPage() == tabPage)
-                    SkillTreeScreen.drawTab(pGuiGraphics, pOffsetX, pOffsetY, SkillTreeScreen == this.selectedTab);
+            for(SkillTreeScreen skillTreeScreen : this.skillTrees.values()) {
+                if (true)//skillTreeScreen.getPage() == tabPage)
+                    skillTreeScreen.drawSkillTreeTab(pGuiGraphics, pOffsetX, pOffsetY, skillTreeScreen == this.selectedSkillTree);
             }
 
-            draws the icons ontop of each tab
+//            draws the icons ontop of each tab
 
-            for(SkillTreeScreen SkillTreeScreen1 : this.tabs.values()) {
-                if (SkillTreeScreen1.getPage() == tabPage)
-                    SkillTreeScreen1.drawIcon(pGuiGraphics, pOffsetX, pOffsetY);
+            for(SkillTreeScreen skillTreeScreen : this.skillTrees.values()) {
+                if (true)//skillTreeScreen.getPage() == tabPage)
+                    skillTreeScreen.drawIcon(pGuiGraphics, pOffsetX, pOffsetY);
             }
         }
 
-        pGuiGraphics.drawString(this.font, TITLE, pOffsetX + 8, pOffsetY + 6, 4210752, false);*/
+        pGuiGraphics.drawString(this.font, getTitle(), pOffsetX + 8, pOffsetY + 6, 4210752, false);
     }
 
     private void renderTooltips(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, int pOffsetX, int pOffsetY) {
@@ -194,8 +204,8 @@ public class SkillScreen extends Screen {
         
         draw tool tip for the tab if one is being hovered
         
-        if (this.tabs.size() > 1) {
-            for(SkillTreeScreen SkillTreeScreen : this.tabs.values()) {
+        if (this.skillTrees.size() > 1) {
+            for(SkillTreeScreen SkillTreeScreen : this.skillTrees.values()) {
                 if (SkillTreeScreen.getPage() == tabPage && SkillTreeScreen.isMouseOver(pOffsetX, pOffsetY, (double)pMouseX, (double)pMouseY)) {
                     pGuiGraphics.renderTooltip(this.font, SkillTreeScreen.getTitle(), pMouseX, pMouseY);
                 }
@@ -204,8 +214,7 @@ public class SkillScreen extends Screen {
 
     }
     
-    /*
-    not nessecary for now
+
 
     public void onAddPerkRoot(Perk pPerk) {
         SkillTreeScreen skillTreeScreen = SkillTreeScreen.create(this.minecraft, this, this.skillTrees.size(), pPerk);
@@ -217,7 +226,7 @@ public class SkillScreen extends Screen {
     public void onRemovePerkRoot(Perk pPerk) {
     }
 
-    public void onAddPerkTask(Perk perk) {
+    /*public void onAddPerkTask(Perk perk) {
         SkillTreeScreen SkillTreeScreen = this.getSkillTree(perk);
         if (SkillTreeScreen != null) {
             SkillTreeScreen.addPerk(perk);
@@ -226,32 +235,32 @@ public class SkillScreen extends Screen {
     }
 
     public void onRemovePerkTask(Perk pPerk) {
-    }
+    }*/
 
-    public void onUpdatePerkProgress(Perk pPerk, PerkProgress progress) {
+    /*public void onUpdatePerkProgress(Perk pPerk, PerkProgress progress) {
         PerkButton perkButton = this.getPerkButton(pPerk);
         if (perkButton != null) {
             perkButton.setProgress(progress);
         }
 
-    }
+    }*/
 
-    public void onSelectedTabChanged(@Nullable Perk perk) {
+    /*public void onSelectedTabChanged(@Nullable Perk perk) {
         this.selectedSkillTree = this.skillTrees.get(perk);
-    }
+    }*/
 
-    public void onPerksCleared() {
+    /*public void onPerksCleared() {
         this.skillTrees.clear();
         this.selectedSkillTree = null;
-    }
+    }*/
 
-    @Nullable
+    /*@Nullable
     public PerkButton getPerkButton(Perk perk) {
         SkillTreeScreen skillTree = this.getSkillTree(perk);
         return skillTree == null ? null : skillTree.getWidget(perk);
-    }
+    }*/
 
-    @Nullable
+    /*@Nullable
     private SkillTreeScreen getSkillTree(Perk perk) {
         while(perk.getParent() != null) {
             perk = perk.getParent();

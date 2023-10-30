@@ -64,6 +64,16 @@
 
   "sounds.sky_forge_mod.metal_detector_found_ore": "Metal Detector Jingle",
 
+  "message.sky_forge_mod.get_perk": "Get Perk",
+  "message.sky_forge_mod.gain_xp": "Gain XP",
+
+  "key.category.sky_forge_mod.sky_forge": "Sky Forge Category",
+  "key.sky_forge_mod.skill_menu": "Skill Menu Key",
+
+  "skills.sad_label": "SAD BOIIII",
+  "skills.empty": "NOTHING!!!",
+
+  "perks.sill_tree.root.title": "Root Perk",
 
   "creativetab.tutorial_tab": "Sapphire Tutorial Tab"
 }

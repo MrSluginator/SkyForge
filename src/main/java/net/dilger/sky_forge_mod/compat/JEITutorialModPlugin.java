@@ -7,7 +7,7 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.dilger.sky_forge_mod.SkyForgeMod;
 import net.dilger.sky_forge_mod.recipe.GemPolishingRecipe;
-import net.dilger.sky_forge_mod.screen.GemPolishingStationScreen;
+import net.dilger.sky_forge_mod.gui.screen.gem_polishing_station.GemPolishingStationScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeManager;

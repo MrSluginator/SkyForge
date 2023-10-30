@@ -57,13 +57,11 @@
   "block.sky_forge_mod.stripped_pine_wood": "Stripped Pine Wood",
   "block.sky_forge_mod.pine_leaves": "Pine Leaves",
 
-
   "tooltip.sky_forge_mod.metal_detector.tooltip": "Finds valuables underground!",
 
   "entity.minecraft.villager.sky_forge_mod.soundmaster": "Sound Master",
 
   "sounds.sky_forge_mod.metal_detector_found_ore": "Metal Detector Jingle",
-
 
   "creativetab.tutorial_tab": "Sapphire Tutorial Tab",
 

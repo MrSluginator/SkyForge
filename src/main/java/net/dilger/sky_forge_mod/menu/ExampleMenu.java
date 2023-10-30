@@ -1,6 +1,6 @@
 package net.dilger.sky_forge_mod.menu;
 
-import net.dilger.sky_forge_mod.blockentity.ExampleMenuBlockEntity;
+import net.dilger.sky_forge_mod.block.entity.ExampleMenuBlockEntity;
 import net.dilger.sky_forge_mod.init.BlockInit;
 import net.dilger.sky_forge_mod.init.MenuInit;
 import net.minecraft.network.FriendlyByteBuf;

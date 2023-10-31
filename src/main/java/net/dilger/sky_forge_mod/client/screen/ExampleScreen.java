@@ -1,6 +1,8 @@
 package net.dilger.sky_forge_mod.client.screen;
 
 import net.dilger.sky_forge_mod.SkyForgeMod;
+import net.dilger.sky_forge_mod.networking.ChangePlayerAtributes;
+import net.dilger.sky_forge_mod.util.KeyBinding;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -9,8 +11,11 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.ForgeConfig;
 import org.jetbrains.annotations.NotNull;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.MinecraftServer;
+import com.mojang.authlib.GameProfile;
+
 
 public class ExampleScreen extends Screen {
     private static final Component TITLE =
@@ -26,6 +31,8 @@ public class ExampleScreen extends Screen {
     private int leftPos, topPos;
 
     private Button button;
+
+    private static ChangePlayerAtributes ourPlayer = new ChangePlayerAtributes(Minecraft.getInstance().level.getServer(), Minecraft.getInstance().player.getGameProfile());
 
     public ExampleScreen() {
         super(TITLE);
@@ -57,11 +64,12 @@ public class ExampleScreen extends Screen {
 
     @Override
     public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        //renderTransparentBackground(graphics); //not sure what this does but doesn't seem to be needed. can't find the method in any existing class
+        // darkens the background screen
+        this.renderBackground(graphics);
         graphics.blit(TEXTURE, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
         super.render(graphics, mouseX, mouseY, partialTicks);
 
-        //this is the format of hpw we draw text on the exampleScreen
+        //this is the format of how we draw text on the exampleScreen
         graphics.drawString(this.font,
                 TITLE,
                 this.leftPos + 8,
@@ -74,8 +82,21 @@ public class ExampleScreen extends Screen {
         // logic here
         Minecraft.getInstance().player.sendSystemMessage(Component.literal("Pressed a Button!"));
         if (Minecraft.getInstance().player.experienceLevel >= 15){
-            Minecraft.getInstance().player.experienceLevel -= 15; //kind of works but doesnt tell the server that the player level has changed at all
+            ourPlayer.subtractLevel(15);
+            // we could use packets for this maybe?
             Minecraft.getInstance().player.sendSystemMessage(Component.literal("Stole some XP"));
+        }
+    }
+
+    public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
+
+//        atm it just closes the screen but could be used to switch tabs etc
+        if (KeyBinding.OPEN_TESTSCREEN.matches(pKeyCode, pScanCode)) {
+            this.minecraft.setScreen(null);
+            this.minecraft.mouseHandler.grabMouse();
+            return true;
+        } else {
+            return super.keyPressed(pKeyCode, pScanCode, pModifiers);
         }
     }
 

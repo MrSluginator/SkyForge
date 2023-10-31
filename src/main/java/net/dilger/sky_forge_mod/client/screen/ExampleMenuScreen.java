@@ -22,7 +22,7 @@ public class ExampleMenuScreen extends AbstractContainerScreen<ExampleMenu> {
 
     @Override
     protected void renderBg(@NotNull GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
-        //renderTransparentBackground(pGuiGraphics);
+        //renderBackground(pGuiGraphics);
         pGuiGraphics.blit(TEXTURE, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
     }
 

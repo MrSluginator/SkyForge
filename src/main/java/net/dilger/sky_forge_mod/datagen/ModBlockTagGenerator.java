@@ -40,8 +40,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                         ModBlocks.SAPPHIRE_ORE.get(),
                         ModBlocks.DEEPSLATE_SAPPHIRE_ORE.get(),
                         ModBlocks.NETHER_SAPPHIRE_ORE.get(),
-                        ModBlocks.END_STONE_SAPPHIRE_ORE.get(),
-                        ModBlocks.SOUND_BLOCK.get());
+                        ModBlocks.END_STONE_SAPPHIRE_ORE.get());
 
 
         this.tag(BlockTags.NEEDS_IRON_TOOL)
@@ -56,8 +55,6 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         this.tag(Tags.Blocks.NEEDS_NETHERITE_TOOL)
                 .add(ModBlocks.END_STONE_SAPPHIRE_ORE.get());
 
-        this.tag(ModTags.Blocks.NEEDS_SAPPHIRE_TOOL)
-                .add(ModBlocks.SOUND_BLOCK.get());
 
         this.tag(BlockTags.FENCES)
                 .add(ModBlocks.SAPPHIRE_FENCE.get());
@@ -66,13 +63,5 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         this.tag(BlockTags.WALLS)
                 .add(ModBlocks.SAPPHIRE_WALL.get());
 
-        this.tag(BlockTags.LOGS_THAT_BURN)
-                .add(ModBlocks.PINE_LOG.get())
-                .add(ModBlocks.PINE_WOOD.get())
-                .add(ModBlocks.STRIPPED_PINE_LOG.get())
-                .add(ModBlocks.STRIPPED_PINE_WOOD.get());
-
-        this.tag(BlockTags.PLANKS)
-                .add(ModBlocks.PINE_PLANKS.get());
     }
 }

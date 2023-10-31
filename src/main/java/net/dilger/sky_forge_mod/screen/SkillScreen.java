@@ -25,9 +25,6 @@ public class SkillScreen extends Screen{
    public static final DeferredRegister<MenuType<?>> MENUS =
             DeferredRegister.create(ForgeRegistries.MENU_TYPES, SkyForgeMod.MOD_ID);
 
-    public static final RegistryObject<MenuType<GemPolishingStationMenu>> GEM_POLISHING_MENU =
-            registerMenuType("gem_polishing_menu", GemPolishingStationMenu::new);
-
     protected SkillScreen(Component pTitle) {
         super(pTitle);
     }

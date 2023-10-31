@@ -2,19 +2,13 @@ package net.dilger.sky_forge_mod;
 
 import com.mojang.logging.LogUtils;
 import net.dilger.sky_forge_mod.block.ModBlocks;
-import net.dilger.sky_forge_mod.block.entity.ModBlockEntities;
-import net.dilger.sky_forge_mod.entity.ModEntities;
-import net.dilger.sky_forge_mod.entity.client.RhinoRenderer;
 import net.dilger.sky_forge_mod.item.ModCreativeModTabs;
 import net.dilger.sky_forge_mod.item.ModItems;
 import net.dilger.sky_forge_mod.loot.ModLootModifiers;
 import net.dilger.sky_forge_mod.recipe.ModRecipes;
-import net.dilger.sky_forge_mod.screen.GemPolishingStationScreen;
 import net.dilger.sky_forge_mod.screen.ModMenuTypes;
-import net.dilger.sky_forge_mod.screen.SkillScreen;
 import net.dilger.sky_forge_mod.sound.ModSounds;
 import net.dilger.sky_forge_mod.villager.ModVillagers;
-import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.level.block.Blocks;
@@ -49,23 +43,13 @@ public class SkyForgeMod {
         ModVillagers.register(modEventBus);
 
         ModSounds.register(modEventBus);
-        ModEntities.register(modEventBus);
 
-        ModBlockEntities.register(modEventBus);
         ModMenuTypes.register(modEventBus);
 
         ModRecipes.register(modEventBus);
 
-        modEventBus.addListener(this::commonSetup);
-
         MinecraftForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::addCreative);
-    }
-
-    private void commonSetup(final FMLCommonSetupEvent event) {
-        event.enqueueWork(() -> {
-            ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(ModBlocks.CATMINT.getId(), ModBlocks.POTTED_CATMINT);
-        });
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
@@ -84,11 +68,6 @@ public class SkyForgeMod {
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
     @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents {
-        @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event) {
-            EntityRenderers.register(ModEntities.RHINO.get(), RhinoRenderer::new);
 
-            MenuScreens.register(ModMenuTypes.GEM_POLISHING_MENU.get(), GemPolishingStationScreen::new);
-        }
     }
 }

@@ -24,10 +24,6 @@ public class ModCreativeModTabs {
 
                         pOutput.accept(ModItems.METAL_DETECTOR.get());
 
-                        pOutput.accept(Items.DIAMOND);
-
-                        pOutput.accept(ModItems.STRAWBERRY.get());
-                        pOutput.accept(ModItems.PINE_CONE.get());
                         pOutput.accept(ModItems.SAPPHIRE_STAFF.get());
 
                         pOutput.accept(ModItems.SAPPHIRE_SWORD.get());
@@ -41,14 +37,6 @@ public class ModCreativeModTabs {
                         pOutput.accept(ModItems.SAPPHIRE_LEGGINGS.get());
                         pOutput.accept(ModItems.SAPPHIRE_BOOTS.get());
 
-                        pOutput.accept(ModItems.STRAWBERRY_SEEDS.get());
-
-                        pOutput.accept(ModItems.CORN.get());
-                        pOutput.accept(ModItems.CORN_SEEDS.get());
-
-                        pOutput.accept(ModItems.BAR_BRAWL_MUSIC_DISC.get());
-                        pOutput.accept(ModItems.RHINO_SPANW_EGG.get());
-
                         pOutput.accept(ModBlocks.SAPPHIRE_BLOCK.get());
                         pOutput.accept(ModBlocks.RAW_SAPPHIRE_BLOCK.get());
 
@@ -56,8 +44,6 @@ public class ModCreativeModTabs {
                         pOutput.accept(ModBlocks.DEEPSLATE_SAPPHIRE_ORE.get());
                         pOutput.accept(ModBlocks.NETHER_SAPPHIRE_ORE.get());
                         pOutput.accept(ModBlocks.END_STONE_SAPPHIRE_ORE.get());
-
-                        pOutput.accept(ModBlocks.SOUND_BLOCK.get());
 
                         pOutput.accept(ModBlocks.SAPPHIRE_STAIRS.get());
                         pOutput.accept(ModBlocks.SAPPHIRE_SLAB.get());
@@ -71,16 +57,6 @@ public class ModCreativeModTabs {
                         pOutput.accept(ModBlocks.SAPPHIRE_DOOR.get());
                         pOutput.accept(ModBlocks.SAPPHIRE_TRAPDOOR.get());
 
-                        pOutput.accept(ModBlocks.CATMINT.get());
-                        pOutput.accept(ModBlocks.GEM_POLISHING_STATION.get());
-
-                        pOutput.accept(ModBlocks.PINE_LOG.get());
-                        pOutput.accept(ModBlocks.PINE_WOOD.get());
-                        pOutput.accept(ModBlocks.STRIPPED_PINE_LOG.get());
-                        pOutput.accept(ModBlocks.STRIPPED_PINE_WOOD.get());
-
-                        pOutput.accept(ModBlocks.PINE_PLANKS.get());
-                        pOutput.accept(ModBlocks.PINE_LEAVES.get());
 
                     })
                     .build());

@@ -1,7 +1,7 @@
 package net.dilger.sky_forge_mod.block.entity;
 
 import net.dilger.sky_forge_mod.recipe.GemPolishingRecipe;
-import net.dilger.sky_forge_mod.screen.GemPolishingStationMenu;
+import net.dilger.sky_forge_mod.gui.screen.gem_polishing_station.GemPolishingStationMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;

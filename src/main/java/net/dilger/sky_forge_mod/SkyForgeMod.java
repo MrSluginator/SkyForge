@@ -5,12 +5,13 @@ import net.dilger.sky_forge_mod.block.ModBlocks;
 import net.dilger.sky_forge_mod.block.entity.ModBlockEntities;
 import net.dilger.sky_forge_mod.entity.ModEntities;
 import net.dilger.sky_forge_mod.entity.client.RhinoRenderer;
+import net.dilger.sky_forge_mod.gui.screen.ModMenuTypes;
+import net.dilger.sky_forge_mod.gui.screen.gem_polishing_station.GemPolishingStationScreen;
 import net.dilger.sky_forge_mod.item.ModCreativeModTabs;
 import net.dilger.sky_forge_mod.item.ModItems;
 import net.dilger.sky_forge_mod.loot.ModLootModifiers;
+import net.dilger.sky_forge_mod.networking.ModMessages;
 import net.dilger.sky_forge_mod.recipe.ModRecipes;
-import net.dilger.sky_forge_mod.screen.GemPolishingStationScreen;
-import net.dilger.sky_forge_mod.screen.ModMenuTypes;
 import net.dilger.sky_forge_mod.sound.ModSounds;
 import net.dilger.sky_forge_mod.villager.ModVillagers;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -58,6 +59,7 @@ public class SkyForgeMod {
         modEventBus.addListener(this::commonSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
+
         modEventBus.addListener(this::addCreative);
     }
 
@@ -65,6 +67,8 @@ public class SkyForgeMod {
         event.enqueueWork(() -> {
             ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(ModBlocks.CATMINT.getId(), ModBlocks.POTTED_CATMINT);
         });
+//        might have to be inside enqueue
+        ModMessages.register();
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
@@ -89,5 +93,6 @@ public class SkyForgeMod {
 
             MenuScreens.register(ModMenuTypes.GEM_POLISHING_MENU.get(), GemPolishingStationScreen::new);
         }
+
     }
 }

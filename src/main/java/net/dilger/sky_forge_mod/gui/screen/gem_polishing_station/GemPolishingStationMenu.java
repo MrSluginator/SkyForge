@@ -1,7 +1,8 @@
-package net.dilger.sky_forge_mod.screen;
+package net.dilger.sky_forge_mod.gui.screen.gem_polishing_station;
 
 import net.dilger.sky_forge_mod.block.ModBlocks;
 import net.dilger.sky_forge_mod.block.entity.GemPolishingStationBlockEntity;
+import net.dilger.sky_forge_mod.gui.screen.ModMenuTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;

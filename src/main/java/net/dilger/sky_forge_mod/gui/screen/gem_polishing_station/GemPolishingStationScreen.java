@@ -1,4 +1,4 @@
-package net.dilger.sky_forge_mod.screen;
+package net.dilger.sky_forge_mod.gui.screen.gem_polishing_station;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.dilger.sky_forge_mod.SkyForgeMod;
@@ -44,9 +44,9 @@ public class GemPolishingStationScreen extends AbstractContainerScreen<GemPolish
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float tickDelta) {
         renderBackground(guiGraphics);
-        super.render(guiGraphics, mouseX, mouseY, delta);
+        super.render(guiGraphics, mouseX, mouseY, tickDelta);
         renderTooltip(guiGraphics, mouseX, mouseY);
     }
 }

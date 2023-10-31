@@ -5,10 +5,12 @@ import net.dilger.sky_forge_mod.block.ModBlocks;
 import net.dilger.sky_forge_mod.item.ModCreativeModTabs;
 import net.dilger.sky_forge_mod.item.ModItems;
 import net.dilger.sky_forge_mod.loot.ModLootModifiers;
+import net.dilger.sky_forge_mod.networking.ModMessages;
 import net.dilger.sky_forge_mod.recipe.ModRecipes;
 import net.dilger.sky_forge_mod.screen.ModMenuTypes;
 import net.dilger.sky_forge_mod.sound.ModSounds;
 import net.dilger.sky_forge_mod.villager.ModVillagers;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.level.block.Blocks;
@@ -50,6 +52,14 @@ public class SkyForgeMod {
 
         MinecraftForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::addCreative);
+    }
+
+    private void commonSetup(final FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(ModBlocks.CATMINT.getId(), ModBlocks.POTTED_CATMINT);
+        });
+//        might have to be inside enqueue
+        ModMessages.register();
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {

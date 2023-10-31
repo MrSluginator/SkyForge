@@ -2,6 +2,8 @@ package net.dilger.sky_forge_mod.compat;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.registration.IGuiHandlerRegistration;
+import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.dilger.sky_forge_mod.SkyForgeMod;
 import net.minecraft.client.Minecraft;

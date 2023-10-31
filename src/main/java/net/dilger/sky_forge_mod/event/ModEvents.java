@@ -4,15 +4,26 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.dilger.sky_forge_mod.SkyForgeMod;
 import net.dilger.sky_forge_mod.block.ModBlocks;
 import net.dilger.sky_forge_mod.item.ModItems;
+import net.dilger.sky_forge_mod.networking.ModMessages;
+import net.dilger.sky_forge_mod.networking.packets.SkillXpDataSyncS2CPacket;
+import net.dilger.sky_forge_mod.skills.PlayerSkillXpProvider;
 import net.dilger.sky_forge_mod.villager.ModVillagers;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.trading.MerchantOffer;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.event.village.WandererTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -87,5 +98,56 @@ public class ModEvents {
                 new ItemStack(Items.EMERALD, 24),
                 new ItemStack(ModItems.METAL_DETECTOR.get(), 1),
                 2, 12, 0.15f));
+    }
+
+    @SubscribeEvent
+    public static void onAttachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
+        if (event.getObject() instanceof Player) {
+            // attach a new capability to the player if it isn't already there
+            if (!event.getObject().getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).isPresent()) {
+                event.addCapability(new ResourceLocation(SkyForgeMod.MOD_ID, "properties"), new PlayerSkillXpProvider());
+
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerCloned(PlayerEvent.Clone event) {
+        if (event.isWasDeath()) {
+            // get data from the dead clone and put it onto the new clone
+
+            event.getOriginal().getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).ifPresent(oldStore -> {
+                event.getOriginal().getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).ifPresent(newStore -> {
+                    newStore.copyFrom(oldStore);
+                });
+            });
+        }
+    }
+
+    @SubscribeEvent
+    public static void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
+//      @AutoRegisterCapabilities
+    }
+
+    /*@SubscribeEvent
+    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if (event.side == LogicalSide.SERVER) {
+            event.player.getCapability(PlayerPerkProvider.PLAYER_PERKS).ifPresent(perks -> {
+                // Timed based event would go here
+                // ex: heal every 10 sec
+            });
+        }
+    }*/
+
+    @SubscribeEvent
+    public static void onPlayerJoinWorld(EntityJoinLevelEvent event) {
+        if (!event.getLevel().isClientSide()) {
+            if (event.getEntity() instanceof ServerPlayer player) {
+
+                player.getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).ifPresent(skillXp -> {
+                    ModMessages.sentToPlayer(new SkillXpDataSyncS2CPacket(skillXp.getSkillsXpMap()), player);
+                });
+            }
+        }
     }
 }

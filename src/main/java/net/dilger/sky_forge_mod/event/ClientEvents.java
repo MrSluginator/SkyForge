@@ -1,6 +1,7 @@
 package net.dilger.sky_forge_mod.event;
 
 import net.dilger.sky_forge_mod.SkyForgeMod;
+import net.dilger.sky_forge_mod.client.ClientHooks;
 import net.dilger.sky_forge_mod.util.KeyBinding;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -9,6 +10,7 @@ import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraft.core.BlockPos;
 
 public class ClientEvents {
     @Mod.EventBusSubscriber(modid = SkyForgeMod.MOD_ID, value = Dist.CLIENT)
@@ -17,7 +19,10 @@ public class ClientEvents {
         public static void onKeyInput(InputEvent.Key event) {
             if(KeyBinding.OPEN_SKILLSCREEN.consumeClick()) {
                 Minecraft.getInstance().player.sendSystemMessage(Component.literal("Pressed a Key!"));
-                Minecraft.getInstance().player.openMenu(null);
+                //Minecraft.getInstance().player.openMenu(null);
+            }
+            if(KeyBinding.OPEN_TESTSCREEN.consumeClick()){
+                ClientHooks.openExampleScreen();
             }
         }
     }

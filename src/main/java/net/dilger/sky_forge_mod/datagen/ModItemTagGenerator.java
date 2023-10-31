@@ -27,19 +27,5 @@ public class ModItemTagGenerator extends ItemTagsProvider {
                         ModItems.SAPPHIRE_LEGGINGS.get(),
                         ModItems.SAPPHIRE_BOOTS.get());
 
-        this.tag(ItemTags.MUSIC_DISCS)
-                .add(ModItems.BAR_BRAWL_MUSIC_DISC.get());
-
-        this.tag(ItemTags.CREEPER_DROP_MUSIC_DISCS)
-                .add(ModItems.BAR_BRAWL_MUSIC_DISC.get());
-
-        this.tag(ItemTags.LOGS_THAT_BURN)
-                .add(ModBlocks.PINE_LOG.get().asItem())
-                .add(ModBlocks.PINE_WOOD.get().asItem())
-                .add(ModBlocks.STRIPPED_PINE_LOG.get().asItem())
-                .add(ModBlocks.STRIPPED_PINE_WOOD.get().asItem());
-
-        this.tag(ItemTags.PLANKS)
-                .add(ModBlocks.PINE_PLANKS.get().asItem());
     }
 }

@@ -1,7 +1,5 @@
 package net.dilger.sky_forge_mod.menu;
 
-import net.dilger.sky_forge_mod.block.entity.ExampleMenuBlockEntity;
-import net.dilger.sky_forge_mod.init.BlockInit;
 import net.dilger.sky_forge_mod.init.MenuInit;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -15,32 +13,35 @@ import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
 public class ExampleMenu extends AbstractContainerMenu {
-    private final ExampleMenuBlockEntity blockEntity;
-    private final ContainerLevelAccess levelAccess;
+    //private final ContainerLevelAccess levelAccess;
 
     // Client Constructor
     public ExampleMenu(int containerId, Inventory playerInv, FriendlyByteBuf additionalData) {
         this(containerId, playerInv, playerInv.player.level().getBlockEntity(additionalData.readBlockPos()));
     }
 
+   /* public ExampleMenu(Inventory playerInv, FriendlyByteBuf additionalData) {
+        this(playerInv, playerInv.player.level().getBlockEntity(additionalData.readBlockPos()));
+    }*/
+
     // Server Constructor
     public ExampleMenu(int containerId, Inventory playerInv, BlockEntity blockEntity) {
         super(MenuInit.EXAMPLE_MENU.get(), containerId);
-        if(blockEntity instanceof ExampleMenuBlockEntity be) {
+        /*if(blockEntity instanceof ExampleMenuBlockEntity be) {
             this.blockEntity = be;
         } else {
             throw new IllegalStateException("Incorrect block entity class (%s) passed into ExampleMenu!"
                     .formatted(blockEntity.getClass().getCanonicalName()));
-        }
+        }*/
 
-        this.levelAccess = ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos());
+        //this.levelAccess = ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos());
 
         createPlayerHotbar(playerInv);
         createPlayerInventory(playerInv);
-        createBlockEntityInventory(be);
+        //createBlockEntityInventory(be);
     }
 
-    private void createBlockEntityInventory(ExampleMenuBlockEntity be) {
+    /*private void createBlockEntityInventory(ExampleMenuBlockEntity be) {
         be.getOptional().ifPresent(inventory -> {
             for (int row = 0; row < 3; row++) {
                 for (int column = 0; column < 9; column++) {
@@ -51,7 +52,7 @@ public class ExampleMenu extends AbstractContainerMenu {
                 }
             }
         });
-    }
+    }*/
 
     private void createPlayerInventory(Inventory playerInv) {
         for (int row = 0; row < 3; row++) {
@@ -106,11 +107,16 @@ public class ExampleMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public boolean stillValid(@NotNull Player pPlayer) {
-        return stillValid(this.levelAccess, pPlayer, BlockInit.EXAMPLE_MENU_BLOCK.get());
+    public boolean stillValid(Player pPlayer) {
+        return false;
     }
 
-    public ExampleMenuBlockEntity getBlockEntity() {
+    //@Override
+    /*public boolean stillValid(@NotNull Player pPlayer) {
+        return stillValid(this.levelAccess, pPlayer, BlockInit.EXAMPLE_MENU_BLOCK.get());
+    }*/
+
+    /*public ExampleMenuBlockEntity getBlockEntity() {
         return this.blockEntity;
-    }
+    }*/
 }

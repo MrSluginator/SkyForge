@@ -11,7 +11,9 @@ public class KeyBinding {
 
     public static final String CATEGORY = "key.category.skyrim.tutorial";
     public static final String KEY_OPEN_SKILLSCREEN = "key.category.skyrim.open_skillscreen";
+    public static final String KEY_OPEN_TESTSCREEN = "key.category.skyrim.open_testscreen";
 
     public static final KeyMapping OPEN_SKILLSCREEN = new KeyMapping(KEY_OPEN_SKILLSCREEN, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_O, CATEGORY);
+    public static final KeyMapping OPEN_TESTSCREEN = new KeyMapping(KEY_OPEN_TESTSCREEN, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_P, CATEGORY);
     
 }

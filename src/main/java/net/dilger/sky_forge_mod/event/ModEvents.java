@@ -29,7 +29,7 @@ public class ModEvents {
             Int2ObjectMap<List<VillagerTrades.ItemListing>> trades = event.getTrades();
 
             // Level 1
-            trades.get(1).add((pTrader, pRandom) -> new MerchantOffer(
+           /* trades.get(1).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemStack(Items.EMERALD, 2),
                     new ItemStack(ModItems.STRAWBERRY.get(), 12),
                     10, 8, 0.02f));
@@ -44,7 +44,7 @@ public class ModEvents {
             trades.get(3).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemStack(Items.GOLD_INGOT, 8),
                     new ItemStack(ModItems.CORN_SEEDS.get(), 2),
-                    2, 12, 0.075f));
+                    2, 12, 0.075f));*/
         }
 
         if(event.getType() == VillagerProfession.LIBRARIAN) {
@@ -58,19 +58,19 @@ public class ModEvents {
                     2, 8, 0.02f));
         }
 
-        if(event.getType() == ModVillagers.SOUND_MASTER.get()) {
+        /*if(event.getType() == ModVillagers.SOUND_MASTER.get()) {
             Int2ObjectMap<List<VillagerTrades.ItemListing>> trades = event.getTrades();
 
-            trades.get(1).add((pTrader, pRandom) -> new MerchantOffer(
+            *//*trades.get(1).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemStack(Items.EMERALD, 16),
                     new ItemStack(ModBlocks.SOUND_BLOCK.get(), 1),
-                    16, 8, 0.02f));
+                    16, 8, 0.02f));*//*
 
             trades.get(2).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemStack(Items.EMERALD, 6),
                     new ItemStack(ModBlocks.SAPPHIRE_ORE.get(), 2),
                     5, 12, 0.02f));
-        }
+        }*/
     }
 
     @SubscribeEvent

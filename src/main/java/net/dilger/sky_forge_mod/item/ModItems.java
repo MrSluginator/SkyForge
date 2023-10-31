@@ -2,8 +2,6 @@ package net.dilger.sky_forge_mod.item;
 
 import net.dilger.sky_forge_mod.SkyForgeMod;
 import net.dilger.sky_forge_mod.block.ModBlocks;
-import net.dilger.sky_forge_mod.entity.ModEntities;
-import net.dilger.sky_forge_mod.item.custom.FuelItem;
 import net.dilger.sky_forge_mod.item.custom.MetalDetectorItem;
 import net.dilger.sky_forge_mod.item.custom.ModArmorItem;
 import net.dilger.sky_forge_mod.sound.ModSounds;
@@ -26,14 +24,9 @@ public class ModItems {
     public static final RegistryObject<Item> METAL_DETECTOR = ITEMS.register("metal_detector",
             () -> new MetalDetectorItem(new Item.Properties().durability(100)));
 
-    public static final RegistryObject<Item> STRAWBERRY = ITEMS.register("strawberry",
-            () -> new Item(new Item.Properties().food(ModFoods.STRAWBERRY)));
 
     public static final RegistryObject<Item> SAPPHIRE_STAFF = ITEMS.register("sapphire_staff",
             () -> new Item(new Item.Properties().stacksTo(1)));
-
-    public static final RegistryObject<Item> PINE_CONE = ITEMS.register("pine_cone",
-            () -> new FuelItem(new Item.Properties(), 400));
 
 
     public static final RegistryObject<Item> SAPPHIRE_SWORD = ITEMS.register("sapphire_sword",
@@ -55,20 +48,6 @@ public class ModItems {
             () -> new ArmorItem(ModArmorMaterials.SAPPHIRE, ArmorItem.Type.LEGGINGS, new Item.Properties()));
     public static final RegistryObject<Item> SAPPHIRE_BOOTS = ITEMS.register("sapphire_boots",
             () -> new ArmorItem(ModArmorMaterials.SAPPHIRE, ArmorItem.Type.BOOTS, new Item.Properties()));
-
-    public static final RegistryObject<Item> STRAWBERRY_SEEDS = ITEMS.register("strawberry_seeds",
-            () -> new ItemNameBlockItem(ModBlocks.STRAWBERRY_CROP.get(), new Item.Properties()));
-
-    public static final RegistryObject<Item> CORN_SEEDS = ITEMS.register("corn_seeds",
-            () -> new ItemNameBlockItem(ModBlocks.CORN_CROP.get(), new Item.Properties()));
-    public static final RegistryObject<Item> CORN = ITEMS.register("corn",
-            () -> new Item(new Item.Properties()));
-
-    public static final RegistryObject<Item> BAR_BRAWL_MUSIC_DISC = ITEMS.register("bar_brawl_music_disc",
-            () -> new RecordItem(6, ModSounds.BAR_BRAWL, new Item.Properties().stacksTo(1), 2440));
-
-    public static final RegistryObject<Item> RHINO_SPANW_EGG = ITEMS.register("rhino_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.RHINO, 0x7e9680, 0xc5d1c5, new Item.Properties()));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

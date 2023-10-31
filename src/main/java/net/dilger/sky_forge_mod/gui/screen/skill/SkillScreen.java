@@ -1,6 +1,8 @@
-package net.dilger.sky_forge_mod.client.screen;
+package net.dilger.sky_forge_mod.gui.screen.skill;
 
 import net.dilger.sky_forge_mod.SkyForgeMod;
+import net.dilger.sky_forge_mod.gui.screen.skill.buttons.SkillTreeButton;
+import net.dilger.sky_forge_mod.skills.PlayerSkillXp;
 import net.dilger.sky_forge_mod.util.KeyBinding;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -12,11 +14,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
-public class ExampleScreen extends Screen {
+public class SkillScreen extends Screen {
     private static final Component TITLE =
-            Component.translatable("gui." + SkyForgeMod.MOD_ID + ".example_screen");
+            Component.translatable("gui.sky_forge_mod.skill_screen");
     private static final Component EXAMPLE_BUTTON =
-            Component.translatable("gui." + SkyForgeMod.MOD_ID + ".example_screen.button.example_button");
+            Component.translatable("gui.sky_forge_mod.skill_screen.button.example_button");
 
     private static final ResourceLocation TEXTURE =
             new ResourceLocation(SkyForgeMod.MOD_ID, "textures/gui/example_block.png");
@@ -27,7 +29,7 @@ public class ExampleScreen extends Screen {
 
     private Button button;
 
-    public ExampleScreen() {
+    public SkillScreen() {
         super(TITLE);
 
         this.imageWidth = 176;
@@ -46,14 +48,24 @@ public class ExampleScreen extends Screen {
         if(level == null) return;
 
         //create button
-        this.button = addRenderableWidget(
+        addRenderableWidget(
                 Button.builder(
                         EXAMPLE_BUTTON,
                         this::handleExampleButton)
                         .bounds(this.leftPos + 8, this.topPos + 20, 80, 20)
                         .tooltip(Tooltip.create(EXAMPLE_BUTTON))
                         .build());
+
+
+        int index = 0;
+        for (PlayerSkillXp.SKILL_TYPE skill_type: PlayerSkillXp.SKILL_TYPE.values()) {
+            addRenderableWidget(
+                    new SkillTreeButton(this.leftPos + 12 + 24 * index, this.topPos + 40, skill_type)
+            );
+            index++;
+        }
     }
+
 
     @Override
     public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {

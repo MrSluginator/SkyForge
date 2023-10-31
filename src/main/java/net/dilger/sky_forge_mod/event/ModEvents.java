@@ -2,12 +2,10 @@ package net.dilger.sky_forge_mod.event;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.dilger.sky_forge_mod.SkyForgeMod;
-import net.dilger.sky_forge_mod.block.ModBlocks;
 import net.dilger.sky_forge_mod.item.ModItems;
 import net.dilger.sky_forge_mod.networking.ModMessages;
 import net.dilger.sky_forge_mod.networking.packets.SkillXpDataSyncS2CPacket;
 import net.dilger.sky_forge_mod.skills.PlayerSkillXpProvider;
-import net.dilger.sky_forge_mod.villager.ModVillagers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;

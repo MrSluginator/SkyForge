@@ -1,13 +1,9 @@
-package net.dilger.sky_forge_mod.screen;
-
-import com.mojang.blaze3d.platform.InputConstants;
+package net.dilger.sky_forge_mod.gui.screen.skills;
 
 import net.dilger.sky_forge_mod.SkyForgeMod;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;

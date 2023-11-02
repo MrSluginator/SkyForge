@@ -2,7 +2,7 @@ package net.dilger.sky_forge_mod.gui.screen.skill;
 
 import net.dilger.sky_forge_mod.SkyForgeMod;
 import net.dilger.sky_forge_mod.gui.screen.skill.buttons.SkillTreeButton;
-import net.dilger.sky_forge_mod.skills.PlayerSkillXp;
+import net.dilger.sky_forge_mod.skill.PlayerSkillXp;
 import net.dilger.sky_forge_mod.util.KeyBinding;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;

@@ -2,8 +2,8 @@ package net.dilger.sky_forge_mod.networking.packets.skillXp;
 
 import net.dilger.sky_forge_mod.networking.ModMessages;
 import net.dilger.sky_forge_mod.networking.packets.SkillXpDataSyncS2CPacket;
-import net.dilger.sky_forge_mod.skills.PlayerSkillXp;
-import net.dilger.sky_forge_mod.skills.PlayerSkillXpProvider;
+import net.dilger.sky_forge_mod.skill.PlayerSkillXp;
+import net.dilger.sky_forge_mod.skill.PlayerSkillXpProvider;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;

@@ -1,4 +1,4 @@
-package net.dilger.sky_forge_mod.skills;
+package net.dilger.sky_forge_mod.skill;
 
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;

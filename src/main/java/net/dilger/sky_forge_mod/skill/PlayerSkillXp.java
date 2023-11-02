@@ -1,4 +1,4 @@
-package net.dilger.sky_forge_mod.skills;
+package net.dilger.sky_forge_mod.skill;
 
 import com.google.common.collect.Maps;
 import net.minecraft.nbt.CompoundTag;

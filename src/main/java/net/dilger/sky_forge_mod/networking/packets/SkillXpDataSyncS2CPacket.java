@@ -1,7 +1,7 @@
 package net.dilger.sky_forge_mod.networking.packets;
 
 import net.dilger.sky_forge_mod.client.ClientSkillXpData;
-import net.dilger.sky_forge_mod.skills.PlayerSkillXp;
+import net.dilger.sky_forge_mod.skill.PlayerSkillXp;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 

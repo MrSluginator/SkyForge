@@ -2,6 +2,7 @@ package net.dilger.sky_forge_mod.gui.screen.skill;
 
 import com.google.common.collect.Sets;
 import net.dilger.sky_forge_mod.SkyForgeMod;
+import net.dilger.sky_forge_mod.gui.screen.skill.buttons.IconInfo;
 import net.dilger.sky_forge_mod.gui.screen.skill.buttons.PerkButton;
 import net.dilger.sky_forge_mod.skill.Perk;
 import net.dilger.sky_forge_mod.skill.PerkDisplayInfo;
@@ -32,12 +33,14 @@ public class SkillTreeScreen extends Screen {
         this.imageWidth = 176;
         this.imageHeight = 166;
 
+        // testing
+        // need to find a better way to add buttons to the skill screen
         this.skill_type = skill_type;
         PerkDisplayInfo rootDisplay = new PerkDisplayInfo(Component.literal("root"), null);
-        this.root = new Perk(null);
-        Perk child = new Perk(this.root);
+        this.root = new Perk(null, IconInfo.HEART_PLUS);
+        Perk child = new Perk(this.root, IconInfo.HEART);
         this.root.addChild(child);
-        Perk grandChild = new Perk(child);
+        Perk grandChild = new Perk(child, IconInfo.HEART_DOUBLE);
         child.addChild(grandChild);
 
     }
@@ -46,8 +49,8 @@ public class SkillTreeScreen extends Screen {
     protected void init() {
         super.init();
 
-        this.leftPos = (this.width - this.imageWidth) / 2;
-        this.topPos = (this.height - this.imageHeight) / 2;
+        this.leftPos = (this.width) / 2;
+        this.topPos = (this.height) / 2;
 
         if(this.minecraft == null) return;
         Level level = this.minecraft.level;
@@ -55,6 +58,7 @@ public class SkillTreeScreen extends Screen {
 
         //create buttons
         for (PerkButton perkButton: getAllButtons(root)) {
+            // adding a widget puts it into the build in child set
             addRenderableWidget(perkButton);
         }
     }
@@ -81,9 +85,8 @@ public class SkillTreeScreen extends Screen {
         // darkens the background screen
         this.renderBackground(graphics);
 //        graphics.blit(TEXTURE, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
-        super.render(graphics, mouseX, mouseY, partialTicks);
 //        this.drawContents(graphics, this.leftPos, this.topPos);
-
+        this.renderPerks(graphics, mouseX, mouseY, partialTicks);
         //this is the format of how we draw text on the exampleScreen
         graphics.drawString(this.font,
                 TITLE,
@@ -93,6 +96,12 @@ public class SkillTreeScreen extends Screen {
                 false);
     }
 
+    public void renderPerks(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        this.root.drawConnectivity(graphics, 0, 0);
+        //super.render renders all widgets
+        super.render(graphics, mouseX, mouseY, partialTicks);
+        this.root.drawIcon(graphics, 0, 0);
+    }
     public void drawContents(GuiGraphics pGuiGraphics, int pX, int pY) {
         /*if (!this.centered) {
             this.scrollX = (double)(117 - (this.maxX + this.minX) / 2);

@@ -43,7 +43,7 @@ public class GainMiningXpC2SPacket {
             // Change the player skill xp
             player.getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).ifPresent(skill_xp -> {
                 skill_xp.addSkillXp(1, skill_type);
-                player.sendSystemMessage(Component.literal("Current Xp " + skill_xp.getSkillXp(skill_type))
+                player.sendSystemMessage(Component.literal(skill_type.toString() + skill_xp.getSkillXp(skill_type))
                         .withStyle(ChatFormatting.GOLD));
                 ModMessages.sentToPlayer(new SkillXpDataSyncS2CPacket(skill_xp.getSkillsXpMap()), player);
             });

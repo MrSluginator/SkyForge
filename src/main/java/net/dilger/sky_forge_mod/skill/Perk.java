@@ -2,27 +2,36 @@ package net.dilger.sky_forge_mod.skill;
 
 import com.google.common.collect.Sets;
 import com.google.gson.JsonObject;
+import net.dilger.sky_forge_mod.gui.screen.skill.buttons.IconInfo;
 import net.dilger.sky_forge_mod.gui.screen.skill.buttons.PerkButton;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.critereon.DeserializationContext;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.Set;
 
 public class Perk {
 
     private final PerkButton button;
     protected final Component title = Component.literal("root");
+    private final IconInfo iconInfo;
     private final Perk parent;
     private final Set<Perk> children = Sets.newLinkedHashSet();
+    private final int pX, pY;
 
-    public Perk(@Nullable Perk parent) {
+    public Perk(@Nullable Perk parent, IconInfo iconInfo) {
         this.parent = parent;
         // textures are 26x26
-        this.button = new PerkButton(this, 30 * getAncestryLevel(this), 0, 0, 0, this::handlePerkButton);
+        this.pX = parent != null ? parent.pX + 32: 0;
+        this.pY = parent != null ? parent.pY + 48: 0;
+        this.button = new PerkButton(this, pX, pY, 0, 0, this::handlePerkButton);
+        this.iconInfo = iconInfo;
+
     }
 
 //    display methods
@@ -40,6 +49,57 @@ public class Perk {
         }
     }
 
+    public void drawIcon(GuiGraphics graphics, int pX, int pY) {
+
+        // get the icon type
+        // location from enum
+        int size = iconInfo.getSize();
+        // blit the icon on top of the button
+        graphics.blit(iconInfo.getTexture(),
+                pX + this.pX + 3 + (button.getWidth() - size)/2,
+                pY + this.pY + (button.getHeight() - size)/2,
+                iconInfo.getXTexStart(),
+                iconInfo.getYTexStart(),
+                size, size);
+
+        for(Perk perk : this.children) {
+            perk.drawIcon(graphics, pX, pY);
+        }
+    }
+    public void drawConnectivity(GuiGraphics graphics, int pX, int pY) {
+
+        if (this.parent != null) {
+            int parentCenterX = pX + this.parent.pX + 13;
+            int midwayX = pX + this.parent.pX + 26 + 4;
+            int parentCenterY = pY + this.parent.pY + 13;
+            int childCenterX = pX + this.pX + 13;
+            int childCenterY = pY + this.pY + 13;
+            int colour = Color.WHITE.hashCode();
+            /*
+            if (pDropShadow) {
+                pGuiGraphics.hLine(midwayX, parentCenterX, parentCenterY - 1, colour);
+                pGuiGraphics.hLine(midwayX + 1, parentCenterX, parentCenterY, colour);
+                pGuiGraphics.hLine(midwayX, parentCenterX, parentCenterY + 1, colour);
+                pGuiGraphics.hLine(childCenterX, midwayX - 1, childCenterY - 1, colour);
+                pGuiGraphics.hLine(childCenterX, midwayX - 1, childCenterY, colour);
+                pGuiGraphics.hLine(childCenterX, midwayX - 1, childCenterY + 1, colour);
+                pGuiGraphics.vLine(midwayX - 1, childCenterY, parentCenterY, colour);
+                pGuiGraphics.vLine(midwayX + 1, childCenterY, parentCenterY, colour);*/
+
+            // line coming out of parent
+            graphics.hLine(parentCenterX, midwayX, parentCenterY, colour);
+            // line going into child
+            graphics.hLine(midwayX, childCenterX, childCenterY, colour);
+            // vertical connection line
+            graphics.vLine(midwayX, parentCenterY, childCenterY, colour);
+
+        }
+
+        for(Perk perk : this.children) {
+            perk.drawConnectivity(graphics, pX, pY);
+        }
+
+    }
 //    component methods
     private void handlePerkButton(Button button) {
         Minecraft.getInstance().player.sendSystemMessage(Component.literal("Pressed " + this.title + " Button!").withStyle(ChatFormatting.DARK_PURPLE));
@@ -59,6 +119,8 @@ public class Perk {
     public Set<Perk> getChildren() {
         return children;
     }
+
+
 
     /*@Nullable
     private final Perk parent;

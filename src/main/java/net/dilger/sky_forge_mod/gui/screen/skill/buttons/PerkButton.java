@@ -31,4 +31,12 @@ public class PerkButton extends ImageButton {
 
     }
 
+    public int getWidth() {
+        return BUTTON_WIDTH;
+    }
+
+    public int getHeight() {
+        return BUTTON_HEIGHT;
+    }
+
 }

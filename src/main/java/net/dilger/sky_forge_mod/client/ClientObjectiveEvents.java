@@ -43,6 +43,7 @@ public class ClientObjectiveEvents {
 
         @SubscribeEvent
         public static void miningObjectiveEvent(BlockEvent.BreakEvent event) {
+            // this is fucked up
             if (event.getState().is(ModTags.Blocks.MINING_SKILL_OBJECTIVES)) {
                 Player player = event.getPlayer();
                 ModMessages.sentToServer(new GainMiningXpC2SPacket());

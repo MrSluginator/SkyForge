@@ -9,11 +9,14 @@ import net.dilger.sky_forge_mod.skill.PerkDisplayInfo;
 import net.dilger.sky_forge_mod.skill.PlayerSkillXp;
 import net.dilger.sky_forge_mod.util.KeyBinding;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
 import java.util.Set;
 
 public class SkillTreeScreen extends Screen {
@@ -27,6 +30,14 @@ public class SkillTreeScreen extends Screen {
     private int leftPos, topPos;
 
     private PlayerSkillXp.SKILL_TYPE skill_type;
+    private boolean isScrolling;
+    private double scrollX;
+    private double scrollY;
+    private int maxX = Integer.MIN_VALUE;
+    private int maxY = Integer.MIN_VALUE;
+    private int minX = Integer.MAX_VALUE;
+    private int minY = Integer.MAX_VALUE;
+
     public SkillTreeScreen(PlayerSkillXp.SKILL_TYPE skill_type) {
         super(TITLE);
 
@@ -59,8 +70,22 @@ public class SkillTreeScreen extends Screen {
         //create buttons
         for (PerkButton perkButton: getAllButtons(root)) {
             // adding a widget puts it into the build in child set
-            addRenderableWidget(perkButton);
+            addButton(perkButton);
         }
+    }
+
+    private void addButton(Button button) {
+        int buttonLeft = button.getX();
+        int buttonRight = button.getX() + button.getWidth();
+        int buttonTop = button.getY();
+        int buttonBottom = button.getY() + button.getHeight();
+
+        this.minX = Math.min(this.minX, buttonLeft);
+        this.maxX = Math.max(this.maxX, buttonRight);
+        this.minY = Math.min(this.minY, buttonTop);
+        this.maxY = Math.max(this.maxY, buttonBottom);
+
+        addRenderableWidget(button);
     }
 
     private Set<PerkButton> getAllButtons(Perk perk) {
@@ -84,8 +109,7 @@ public class SkillTreeScreen extends Screen {
     public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         // darkens the background screen
         this.renderBackground(graphics);
-//        graphics.blit(TEXTURE, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
-//        this.drawContents(graphics, this.leftPos, this.topPos);
+
         this.renderPerks(graphics, mouseX, mouseY, partialTicks);
         //this is the format of how we draw text on the exampleScreen
         graphics.drawString(this.font,
@@ -94,42 +118,71 @@ public class SkillTreeScreen extends Screen {
                 this.topPos + 8,
                 0x404040,
                 false);
+        // for dev purposes
+        drawScrollValues(graphics);
     }
 
     public void renderPerks(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        this.root.drawConnectivity(graphics, 0, 0);
-        //super.render renders all widgets
+        int pX = Mth.floor(this.scrollX);
+        int pY = Mth.floor(this.scrollY);
+
+        this.root.drawConnectivity(graphics, pX, pY);
+        // update all the button positions before rendering them
+        this.root.updatePosition(pX, pY);
+        // super.render renders all widgets
+        // mouseX and mouseY are used to determine what to highlight
         super.render(graphics, mouseX, mouseY, partialTicks);
-        this.root.drawIcon(graphics, 0, 0);
+        // render icons on top of the buttons
+        this.root.drawIcon(graphics, pX, pY);
     }
-    public void drawContents(GuiGraphics pGuiGraphics, int pX, int pY) {
-        /*if (!this.centered) {
-            this.scrollX = (double)(117 - (this.maxX + this.minX) / 2);
-            this.scrollY = (double)(56 - (this.maxY + this.minY) / 2);
-            this.centered = true;
+
+    private void drawScrollValues(GuiGraphics graphics) {
+        graphics.drawString(this.font,
+                Component.literal("root X: " + scrollX),
+                8,
+                8,
+                Color.WHITE.hashCode(),
+                true);
+        graphics.drawString(this.font,
+                Component.literal("root Y: " + scrollY),
+                8,
+                16,
+                Color.WHITE.hashCode(),
+                true);
+    }
+
+    public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
+        if (pButton != 0) {
+            this.isScrolling = false;
+            return false;
+        } else {
+            if (!this.isScrolling) {
+                this.isScrolling = true;
+            }
+
+            this.scroll(pDragX, pDragY);
+
+            return true;
+        }
+    }
+
+    public void scroll(double pDragX, double pDragY) {
+        // need to decide how much freedom the player has for scrolling
+        // could make it just go until the extreme values are withing the screen
+
+        this.scrollX = Mth.clamp(this.scrollX + pDragX, -(maxX - 26), this.width - (minX + 26));
+
+        this.scrollY = Mth.clamp(this.scrollY + pDragY, -(maxY - 26), this.height - (minY + 26));
+
+        /*if (this.maxX - this.minX > 0) {
+            this.scrollX = Mth.clamp(this.scrollX + pDragX, 0.0D, Mth.abs(this.width - this.maxX));
+        }
+
+        if (this.maxY - this.minY > 0) {
+            // needs to be slit into if it's bigger or smaller than the screen
+            this.scrollY = Mth.clamp(this.scrollY + pDragY, 0.0D, Mth.abs(this.height - this.maxY));
         }*/
 
-        pGuiGraphics.enableScissor(pX, pY, pX + 234, pY + 113);
-        pGuiGraphics.pose().pushPose();
-        pGuiGraphics.pose().translate((float)pX, (float)pY, 0.0F);
-//        background resource
-//        ResourceLocation resourcelocation = Objects.requireNonNullElse(this.displayInfo.getBackground(), TextureManager.INTENTIONAL_MISSING_TEXTURE);
-//        int i = Mth.floor(this.scrollX);
-//        int j = Mth.floor(this.scrollY);
-//        int k = i % 16;
-//        int l = j % 16;
-//
-//        for(int i1 = -1; i1 <= 15; ++i1) {
-//            for(int j1 = -1; j1 <= 8; ++j1) {
-//                pGuiGraphics.blit(resourcelocation, k + 16 * i1, l + 16 * j1, 0.0F, 0.0F, 16, 16, 16, 16);
-//            }
-//        }
-
-        /*this.rootButton.drawConnectivity(pGuiGraphics, 0, 0, true);
-        this.rootButton.drawConnectivity(pGuiGraphics, 0, 0, false);
-        this.rootButton.draw(pGuiGraphics, 0, 0);
-        pGuiGraphics.pose().popPose();
-        pGuiGraphics.disableScissor();*/
     }
 
     public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {

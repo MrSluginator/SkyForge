@@ -25,12 +25,16 @@ public class PerkButton extends ImageButton {
     * texture is prefix t
     */
     public PerkButton(Perk perk, int pX, int pY, int texStartX, int texStartY, OnPress onPress) {
-        super(pX + 3, pY, BUTTON_WIDTH, BUTTON_HEIGHT, texStartX, 128 + texStartY, BASE_TEXTURE, onPress);
+        super(pX, pY, BUTTON_WIDTH, BUTTON_HEIGHT, texStartX, 128 + texStartY, BASE_TEXTURE, onPress);
         // default texture size is 256x256px
         this.perk = perk;
-
     }
 
+
+    public void updatePosition(int pX, int pY) {
+        setX(pX);
+        setY(pY);
+    }
     public int getWidth() {
         return BUTTON_WIDTH;
     }

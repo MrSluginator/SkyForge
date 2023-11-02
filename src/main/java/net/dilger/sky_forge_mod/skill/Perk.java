@@ -22,14 +22,14 @@ public class Perk {
     private final IconInfo iconInfo;
     private final Perk parent;
     private final Set<Perk> children = Sets.newLinkedHashSet();
-    private final int pX, pY;
+    private final int rX, rY;
 
     public Perk(@Nullable Perk parent, IconInfo iconInfo) {
         this.parent = parent;
         // textures are 26x26
-        this.pX = parent != null ? parent.pX + 32: 0;
-        this.pY = parent != null ? parent.pY + 48: 0;
-        this.button = new PerkButton(this, pX, pY, 0, 0, this::handlePerkButton);
+        this.rX = parent != null ? parent.rX + 32: 0;
+        this.rY = parent != null ? parent.rY + 48: 0;
+        this.button = new PerkButton(this, rX, rY, 0, 0, this::handlePerkButton);
         this.iconInfo = iconInfo;
 
     }
@@ -49,6 +49,14 @@ public class Perk {
         }
     }
 
+    public void updatePosition(int pX, int pY) {
+        button.updatePosition(pX + rX, pY + rY);
+
+        for(Perk perk : this.children) {
+            perk.updatePosition(pX, pY);
+        }
+    }
+
     public void drawIcon(GuiGraphics graphics, int pX, int pY) {
 
         // get the icon type
@@ -56,8 +64,8 @@ public class Perk {
         int size = iconInfo.getSize();
         // blit the icon on top of the button
         graphics.blit(iconInfo.getTexture(),
-                pX + this.pX + 3 + (button.getWidth() - size)/2,
-                pY + this.pY + (button.getHeight() - size)/2,
+                pX + this.rX + (button.getWidth() - size)/2,
+                pY + this.rY + (button.getHeight() - size)/2,
                 iconInfo.getXTexStart(),
                 iconInfo.getYTexStart(),
                 size, size);
@@ -69,11 +77,11 @@ public class Perk {
     public void drawConnectivity(GuiGraphics graphics, int pX, int pY) {
 
         if (this.parent != null) {
-            int parentCenterX = pX + this.parent.pX + 13;
-            int midwayX = pX + this.parent.pX + 26 + 4;
-            int parentCenterY = pY + this.parent.pY + 13;
-            int childCenterX = pX + this.pX + 13;
-            int childCenterY = pY + this.pY + 13;
+            int parentCenterX = pX + this.parent.rX + 13;
+            int midwayX = pX + this.parent.rX + 26 + 4;
+            int parentCenterY = pY + this.parent.rY + 13;
+            int childCenterX = pX + this.rX + 13;
+            int childCenterY = pY + this.rY + 13;
             int colour = Color.WHITE.hashCode();
             /*
             if (pDropShadow) {

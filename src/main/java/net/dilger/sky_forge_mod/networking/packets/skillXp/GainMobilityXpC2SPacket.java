@@ -2,8 +2,8 @@ package net.dilger.sky_forge_mod.networking.packets.skillXp;
 
 import net.dilger.sky_forge_mod.networking.ModMessages;
 import net.dilger.sky_forge_mod.networking.packets.SkillXpDataSyncS2CPacket;
-import net.dilger.sky_forge_mod.skill.PlayerSkillXp;
 import net.dilger.sky_forge_mod.skill.PlayerSkillXpProvider;
+import net.dilger.sky_forge_mod.skill.SKILL_TYPE;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 
 public class GainMobilityXpC2SPacket {
     private static final String MESSAGE_GAIN_XP = "message.sky_forge_mod.gain_xp";
-    private final PlayerSkillXp.SKILL_TYPE skill_type = PlayerSkillXp.SKILL_TYPE.MOBILITY;
+    private final SKILL_TYPE skill_type = SKILL_TYPE.MOBILITY;
 
     public GainMobilityXpC2SPacket() {
         System.out.println("empty"+this);

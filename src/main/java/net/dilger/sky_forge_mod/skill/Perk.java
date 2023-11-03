@@ -2,36 +2,39 @@ package net.dilger.sky_forge_mod.skill;
 
 import com.google.common.collect.Sets;
 import com.google.gson.JsonObject;
-import net.dilger.sky_forge_mod.gui.screen.skill.buttons.IconInfo;
+import net.dilger.sky_forge_mod.gui.screen.skill.IconType;
 import net.dilger.sky_forge_mod.gui.screen.skill.buttons.PerkButton;
+import net.dilger.sky_forge_mod.gui.screen.skill.buttons.PerkType;
+import net.dilger.sky_forge_mod.gui.screen.skill.buttons.RarityType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.critereon.DeserializationContext;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 
 import javax.annotation.Nullable;
-import java.awt.*;
 import java.util.Set;
 
 public class Perk {
 
     private final PerkButton button;
     protected final Component title = Component.literal("root");
-    private final IconInfo iconInfo;
+    private final PerkType perkType;
+    private final RarityType rarity;
+    private final IconType icon;
     private final Perk parent;
     private final Set<Perk> children = Sets.newLinkedHashSet();
     private final int rX, rY;
 
-    public Perk(@Nullable Perk parent, IconInfo iconInfo) {
+    public Perk(@Nullable Perk parent, PerkType perkType, RarityType rarity, @Nullable IconType icon) {
         this.parent = parent;
         // textures are 26x26
         this.rX = parent != null ? parent.rX + 32: 0;
         this.rY = parent != null ? parent.rY + 48: 0;
-        this.button = new PerkButton(this, rX, rY, 0, 0, this::handlePerkButton);
-        this.iconInfo = iconInfo;
-
+        this.button = new PerkButton(this, rX, rY, perkType, rarity, icon, this::handlePerkButton);
+        this.perkType = perkType;
+        this.rarity = rarity;
+        this.icon = icon;
     }
 
 //    display methods
@@ -49,65 +52,28 @@ public class Perk {
         }
     }
 
-    public void updatePosition(int pX, int pY) {
+    public void updateButtonPosition(int pX, int pY) {
         button.updatePosition(pX + rX, pY + rY);
-
-        for(Perk perk : this.children) {
-            perk.updatePosition(pX, pY);
-        }
     }
 
-    public void drawIcon(GuiGraphics graphics, int pX, int pY) {
+/*    public void drawIcon(GuiGraphics graphics, int pX, int pY) {
 
         // get the icon type
         // location from enum
-        int size = iconInfo.getSize();
+        int size = perkType.getSize();
         // blit the icon on top of the button
-        graphics.blit(iconInfo.getTexture(),
+        graphics.blit(perkType.getTexture(),
                 pX + this.rX + (button.getWidth() - size)/2,
                 pY + this.rY + (button.getHeight() - size)/2,
-                iconInfo.getXTexStart(),
-                iconInfo.getYTexStart(),
+                perkType.getXTexStart(),
+                perkType.getYTexStart(),
                 size, size);
 
         for(Perk perk : this.children) {
             perk.drawIcon(graphics, pX, pY);
         }
-    }
-    public void drawConnectivity(GuiGraphics graphics, int pX, int pY) {
+    }*/
 
-        if (this.parent != null) {
-            int parentCenterX = pX + this.parent.rX + 13;
-            int midwayX = pX + this.parent.rX + 26 + 4;
-            int parentCenterY = pY + this.parent.rY + 13;
-            int childCenterX = pX + this.rX + 13;
-            int childCenterY = pY + this.rY + 13;
-            int colour = Color.WHITE.hashCode();
-            /*
-            if (pDropShadow) {
-                pGuiGraphics.hLine(midwayX, parentCenterX, parentCenterY - 1, colour);
-                pGuiGraphics.hLine(midwayX + 1, parentCenterX, parentCenterY, colour);
-                pGuiGraphics.hLine(midwayX, parentCenterX, parentCenterY + 1, colour);
-                pGuiGraphics.hLine(childCenterX, midwayX - 1, childCenterY - 1, colour);
-                pGuiGraphics.hLine(childCenterX, midwayX - 1, childCenterY, colour);
-                pGuiGraphics.hLine(childCenterX, midwayX - 1, childCenterY + 1, colour);
-                pGuiGraphics.vLine(midwayX - 1, childCenterY, parentCenterY, colour);
-                pGuiGraphics.vLine(midwayX + 1, childCenterY, parentCenterY, colour);*/
-
-            // line coming out of parent
-            graphics.hLine(parentCenterX, midwayX, parentCenterY, colour);
-            // line going into child
-            graphics.hLine(midwayX, childCenterX, childCenterY, colour);
-            // vertical connection line
-            graphics.vLine(midwayX, parentCenterY, childCenterY, colour);
-
-        }
-
-        for(Perk perk : this.children) {
-            perk.drawConnectivity(graphics, pX, pY);
-        }
-
-    }
 //    component methods
     private void handlePerkButton(Button button) {
         Minecraft.getInstance().player.sendSystemMessage(Component.literal("Pressed " + this.title + " Button!").withStyle(ChatFormatting.DARK_PURPLE));

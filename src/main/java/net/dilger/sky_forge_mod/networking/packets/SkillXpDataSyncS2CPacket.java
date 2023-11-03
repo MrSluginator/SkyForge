@@ -1,7 +1,7 @@
 package net.dilger.sky_forge_mod.networking.packets;
 
 import net.dilger.sky_forge_mod.client.ClientSkillXpData;
-import net.dilger.sky_forge_mod.skill.PlayerSkillXp;
+import net.dilger.sky_forge_mod.skill.SKILL_TYPE;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -17,14 +17,14 @@ public class SkillXpDataSyncS2CPacket {
     private final long fishing_xp;
     private final long mobility_xp;
 
-    public SkillXpDataSyncS2CPacket(Map<PlayerSkillXp.SKILL_TYPE, Long> skillXpMap) {
-        this.offensive_xp = skillXpMap.get(PlayerSkillXp.SKILL_TYPE.OFFENSE);
-        this.defensive_xp = skillXpMap.get(PlayerSkillXp.SKILL_TYPE.DEFENSE);
-        this.mining_xp = skillXpMap.get(PlayerSkillXp.SKILL_TYPE.MINING);
-        this.farming_xp = skillXpMap.get(PlayerSkillXp.SKILL_TYPE.FARMING);
-        this.trading_xp = skillXpMap.get(PlayerSkillXp.SKILL_TYPE.TRADING);
-        this.fishing_xp = skillXpMap.get(PlayerSkillXp.SKILL_TYPE.FISHING);
-        this.mobility_xp = skillXpMap.get(PlayerSkillXp.SKILL_TYPE.MOBILITY);
+    public SkillXpDataSyncS2CPacket(Map<SKILL_TYPE, Long> skillXpMap) {
+        this.offensive_xp = skillXpMap.get(SKILL_TYPE.OFFENSE);
+        this.defensive_xp = skillXpMap.get(SKILL_TYPE.DEFENSE);
+        this.mining_xp = skillXpMap.get(SKILL_TYPE.MINING);
+        this.farming_xp = skillXpMap.get(SKILL_TYPE.FARMING);
+        this.trading_xp = skillXpMap.get(SKILL_TYPE.TRADING);
+        this.fishing_xp = skillXpMap.get(SKILL_TYPE.FISHING);
+        this.mobility_xp = skillXpMap.get(SKILL_TYPE.MOBILITY);
 
     }
 

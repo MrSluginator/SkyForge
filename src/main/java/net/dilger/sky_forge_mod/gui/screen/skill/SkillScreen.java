@@ -1,8 +1,9 @@
 package net.dilger.sky_forge_mod.gui.screen.skill;
 
+import com.google.common.collect.Maps;
 import net.dilger.sky_forge_mod.SkyForgeMod;
 import net.dilger.sky_forge_mod.gui.screen.skill.buttons.SkillTreeButton;
-import net.dilger.sky_forge_mod.skill.PlayerSkillXp;
+import net.dilger.sky_forge_mod.skill.SKILL_TYPE;
 import net.dilger.sky_forge_mod.util.KeyBinding;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -14,6 +15,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
+
 public class SkillScreen extends Screen {
     private static final Component TITLE =
             Component.translatable("gui.sky_forge_mod.skill_screen");
@@ -22,7 +25,7 @@ public class SkillScreen extends Screen {
 
     private static final ResourceLocation TEXTURE =
             new ResourceLocation(SkyForgeMod.MOD_ID, "textures/gui/example_block.png");
-
+    private final Map<SKILL_TYPE, SkillTreeTab> skillTreeTabs = Maps.newHashMap();
     private final int imageWidth, imageHeight;
 
     private int leftPos, topPos;
@@ -56,11 +59,12 @@ public class SkillScreen extends Screen {
                         .tooltip(Tooltip.create(EXAMPLE_BUTTON))
                         .build());
 
-
         int index = 0;
-        for (PlayerSkillXp.SKILL_TYPE skill_type: PlayerSkillXp.SKILL_TYPE.values()) {
+        for (SKILL_TYPE skill_type: SKILL_TYPE.values()) {
+            skillTreeTabs.put(skill_type ,new SkillTreeTab(null, skill_type, false));
+
             addRenderableWidget(
-                    new SkillTreeButton(this.leftPos + 12 + 24 * index, this.topPos + 40, skill_type)
+                    new SkillTreeButton(this.leftPos + 12 + 24 * index, this.topPos + 40, skill_type, skillTreeTabs)
             );
             index++;
         }

@@ -83,7 +83,7 @@ public class ClientObjectiveEvents {
         @SubscribeEvent
         public static void mobilityObjectiveEvent(BlockEvent.BreakEvent event) {
 //        if (event.getState().is(ModTags.Blocks.MINING_SKILL_OBJECTIVES)) {
-//            ModMessages.sentToServer(new GainMiningXpC2SPacket(PlayerSkillXp.SKILL_TYPE.MOBILITY));
+//            ModMessages.sentToServer(new GainMiningXpC2SPacket(SKILL_TYPE.MOBILITY));
 //        }
 
         }

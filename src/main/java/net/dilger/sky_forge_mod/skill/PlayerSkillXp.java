@@ -9,16 +9,7 @@ import java.util.Map;
 @AutoRegisterCapability
 public class PlayerSkillXp {
 
-    public enum SKILL_TYPE {
-        OFFENSE,
-        DEFENSE,
-        MINING,
-        FARMING,
-        TRADING,
-        FISHING,
-        MOBILITY;
 
-    }
     private final Map<SKILL_TYPE, Long> skillsXpMap = Maps.newLinkedHashMap();
 
     public Map<SKILL_TYPE, Long> getSkillsXpMap() {return this.skillsXpMap;}

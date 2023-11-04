@@ -1,6 +1,5 @@
 package net.dilger.sky_forge_mod.skill;
 
-import com.google.common.collect.Sets;
 import com.google.gson.JsonObject;
 import net.dilger.sky_forge_mod.gui.screen.skill.IconType;
 import net.dilger.sky_forge_mod.gui.screen.skill.buttons.PerkButton;
@@ -9,28 +8,33 @@ import net.dilger.sky_forge_mod.gui.screen.skill.buttons.RarityType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.critereon.DeserializationContext;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 
 import javax.annotation.Nullable;
-import java.util.Set;
+import java.util.ArrayList;
 
 public class Perk {
 
     private final PerkButton button;
     protected final Component title = Component.literal("root");
+    private static final int minXSeperation = 32;
+    private static final int minYSeperation = 32;
+
     private final PerkType perkType;
     private final RarityType rarity;
     private final IconType icon;
     private final Perk parent;
-    private final Set<Perk> children = Sets.newLinkedHashSet();
-    private final int rX, rY;
+    private final ArrayList<Perk> children = new ArrayList<>();
+    private int rX, rY;
 
     public Perk(@Nullable Perk parent, PerkType perkType, RarityType rarity, @Nullable IconType icon) {
+        System.out.println("new perk created: "+this.toString());
         this.parent = parent;
-        // textures are 26x26
-        this.rX = parent != null ? parent.rX + 32: 0;
-        this.rY = parent != null ? parent.rY + 48: 0;
+        this.rX = 0;
+        this.rY = 0;
         this.button = new PerkButton(this, rX, rY, perkType, rarity, icon, this::handlePerkButton);
         this.perkType = perkType;
         this.rarity = rarity;
@@ -38,41 +42,57 @@ public class Perk {
     }
 
 //    display methods
-    private int getAncestryLevel(Perk child) {
-        int level = 0;
+/*    private int buildTree() {
+        // for each of its children find out how much space they take up then seperate them by that amount
+        int childrenYTotal = 0;
 
-        while(true) {
-            Perk parent = child.getParent();
-            if (parent == null) {
-                return level;
-            }
-
-            level++;
-            child = parent;
+        for (Perk child: children) {
+            child.r
+            child.buildTree()
         }
+
+
+        return Math.max(minYSeperation, childrenYTotal);
+    }*/
+
+    public void renderButton(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
+        button.drawConnectivity(graphics, false);
+
+        if (!children.isEmpty()) {
+            for (Perk child : children) {
+                child.renderButton(graphics, pMouseX, pMouseY, pPartialTick);
+            }
+        }
+
+        button.renderWidget(graphics, pMouseX, pMouseY, pPartialTick);
+    }
+
+    public int getSubTreeSize() {
+        int subTreeSize = 0;
+
+        for (Perk child: children) {
+            subTreeSize += child.getSubTreeSize();
+        }
+
+        return subTreeSize != 0 ? subTreeSize: 1;
     }
 
     public void updateButtonPosition(int pX, int pY) {
         button.updatePosition(pX + rX, pY + rY);
+
+
+        if (!children.isEmpty()) {
+            for (Perk child : children) {
+                child.updateButtonPosition(pX, pY);
+            }
+        }
     }
 
-/*    public void drawIcon(GuiGraphics graphics, int pX, int pY) {
-
-        // get the icon type
-        // location from enum
-        int size = perkType.getSize();
-        // blit the icon on top of the button
-        graphics.blit(perkType.getTexture(),
-                pX + this.rX + (button.getWidth() - size)/2,
-                pY + this.rY + (button.getHeight() - size)/2,
-                perkType.getXTexStart(),
-                perkType.getYTexStart(),
-                size, size);
-
-        for(Perk perk : this.children) {
-            perk.drawIcon(graphics, pX, pY);
-        }
-    }*/
+    public void setPosition(float iX, float iY) {
+        this.rX = Mth.floor(iX) * minXSeperation;
+        this.rY = Mth.floor(iY) * minYSeperation;
+        updateButtonPosition(0,0);
+    }
 
 //    component methods
     private void handlePerkButton(Button button) {
@@ -90,7 +110,7 @@ public class Perk {
     public void addChild(Perk child) {
         children.add(child);
     }
-    public Set<Perk> getChildren() {
+    public ArrayList<Perk> getChildren() {
         return children;
     }
 

@@ -19,14 +19,10 @@ public class PerkButton extends ImageButton {
     private final RarityType rarity;
     private final IconType icon;
 
-
-    /*
-    * screen position is denoted with prefix p
-    * relative position is denoted with prefix r
-    * texture is prefix t
-    */
+    // draws the button centered on the pX and pY
     public PerkButton(Perk perk, int pX, int pY, PerkType perkType, RarityType rarity, @Nullable IconType icon, OnPress onPress) {
-        super(pX, pY,
+        super(pX - perkType.getSize()/2,
+                pY - perkType.getSize()/2,
                 perkType.getSize(),
                 perkType.getSize(),
                 perkType.getXTexStart(),
@@ -35,6 +31,7 @@ public class PerkButton extends ImageButton {
                 BASE_TEXTURE,
                 onPress);
 
+        System.out.println("new button created: "+perk.toString());
         this.perk = perk;
         this.perkType = perkType;
         this.rarity = rarity;
@@ -42,16 +39,15 @@ public class PerkButton extends ImageButton {
     }
 
     public void updatePosition(int pX, int pY) {
-        setX(pX);
-        setY(pY);
+        setX(pX - perkType.getSize()/2);
+        setY(pY - perkType.getSize()/2);
     }
 
-    @Override
+/*    @Override
     public void render(@NotNull GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
         super.render(graphics, pMouseX, pMouseY, pPartialTick);
-        drawConnectivity(graphics);
         renderWidget(graphics, pMouseX, pMouseY, pPartialTick);
-    }
+    }*/
 
     @Override
     public void renderWidget(@NotNull GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
@@ -59,29 +55,29 @@ public class PerkButton extends ImageButton {
         if (icon != null) icon.draw(graphics, getX(), getY(), perkType.getSize());
     }
 
-    public void drawConnectivity(GuiGraphics graphics) {
+    public void drawConnectivity(GuiGraphics graphics, boolean drawShadow) {
         Perk parent = perk.getParent();
 
         if (parent != null) {
             PerkButton parentButton = parent.getButton();
 
-            int parentCenterX = parentButton.getX() + parentButton.width/2;
             int midwayX = parentButton.getX() + parentButton.width + 4;
+            int parentCenterX = parentButton.getX() + parentButton.width/2;
             int parentCenterY = parentButton.getY() + parentButton.height/2;
             int childCenterX = getX() + width/2;
             int childCenterY = getY() + height/2;
             int colour = Color.WHITE.hashCode();
-            /*
-            if (pDropShadow) {
-                pGuiGraphics.hLine(midwayX, parentCenterX, parentCenterY - 1, colour);
-                pGuiGraphics.hLine(midwayX + 1, parentCenterX, parentCenterY, colour);
-                pGuiGraphics.hLine(midwayX, parentCenterX, parentCenterY + 1, colour);
-                pGuiGraphics.hLine(childCenterX, midwayX - 1, childCenterY - 1, colour);
-                pGuiGraphics.hLine(childCenterX, midwayX - 1, childCenterY, colour);
-                pGuiGraphics.hLine(childCenterX, midwayX - 1, childCenterY + 1, colour);
-                pGuiGraphics.vLine(midwayX - 1, childCenterY, parentCenterY, colour);
-                pGuiGraphics.vLine(midwayX + 1, childCenterY, parentCenterY, colour);*/
 
+            if (drawShadow) {
+                graphics.hLine(midwayX, parentCenterX, parentCenterY - 1, colour);
+                graphics.hLine(midwayX + 1, parentCenterX, parentCenterY, colour);
+                graphics.hLine(midwayX, parentCenterX, parentCenterY + 1, colour);
+                graphics.hLine(childCenterX, midwayX - 1, childCenterY - 1, colour);
+                graphics.hLine(childCenterX, midwayX - 1, childCenterY, colour);
+                graphics.hLine(childCenterX, midwayX - 1, childCenterY + 1, colour);
+                graphics.vLine(midwayX - 1, childCenterY, parentCenterY, colour);
+                graphics.vLine(midwayX + 1, childCenterY, parentCenterY, colour);
+            }
             // line coming out of parent
             graphics.hLine(parentCenterX, midwayX, parentCenterY, colour);
             // line going into child

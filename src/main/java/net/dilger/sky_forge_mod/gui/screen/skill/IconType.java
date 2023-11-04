@@ -27,18 +27,4 @@ public enum IconType {
             graphics.blit(iconTexture, pX + offSet, pY + offSet, xTexStart, yTexStart, size, size);
         }
 
-        public int getSize() {
-            return size;
-        }
-
-        public int getXTexStart() {
-            return xTexStart;
-        }
-
-        public int getYTexStart() {
-            return yTexStart;
-        }
-
-
-
 }

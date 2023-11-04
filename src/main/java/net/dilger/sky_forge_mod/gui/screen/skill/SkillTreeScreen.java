@@ -6,12 +6,13 @@ import net.dilger.sky_forge_mod.gui.screen.skill.buttons.PerkButton;
 import net.dilger.sky_forge_mod.gui.screen.skill.buttons.PerkType;
 import net.dilger.sky_forge_mod.gui.screen.skill.buttons.RarityType;
 import net.dilger.sky_forge_mod.skill.Perk;
-import net.dilger.sky_forge_mod.skill.PerkDisplayInfo;
 import net.dilger.sky_forge_mod.skill.SKILL_TYPE;
+import net.dilger.sky_forge_mod.skill.TreeNodePosition;
 import net.dilger.sky_forge_mod.util.KeyBinding;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
@@ -53,13 +54,31 @@ public class SkillTreeScreen extends Screen {
         // testing
         // need to find a better way to add buttons to the skill screen
         this.skill_type = skill_type;
-        PerkDisplayInfo rootDisplay = new PerkDisplayInfo(Component.literal("root"), null);
         this.root = new Perk(null, PerkType.SQUARE, RarityType.COMMON, null);
-        Perk child = new Perk(this.root, PerkType.SHIELD, RarityType.EPIC, null);
-        this.root.addChild(child);
-        Perk grandChild = new Perk(child, PerkType.CREST, RarityType.UNCOMMON, null);
-        child.addChild(grandChild);
+        makeNewTree(root, 3, 3, RarityType.UNCOMMON);
+        makeNewTree(root, 1, 2, RarityType.EPIC);
+        makeNewTree(root, 2, 4, RarityType.RARE);
 
+    }
+
+    private void makeTree(Perk perk, int depth, int subTreeSize, RarityType rarity) {
+
+            if (depth > 0) {
+                for (int branch = 0; branch < subTreeSize; branch++) {
+                    perk.addChild(new Perk(perk, PerkType.CREST.getTypeFromIndex(branch%5), rarity, null));
+                }
+                for (Perk child : perk.getChildren()) {
+                    makeTree(child, depth - 1, Math.max(subTreeSize - 1, 0), rarity);
+                }
+            }
+
+    }
+
+    private void makeNewTree(Perk root, int depth, int subTreeSize, RarityType rarity) {
+        Perk treeRoot = new Perk(root, PerkType.DIAMOND, rarity, null);
+        root.addChild(treeRoot);
+
+        makeTree(treeRoot, depth, subTreeSize, rarity);
     }
 
     @Override
@@ -84,24 +103,51 @@ public class SkillTreeScreen extends Screen {
             }
         }
 
+//        TreeNodePosition.run(root);
         //create buttons
         for (PerkButton perkButton: getAllButtons(root)) {
             // adding a widget puts it into the build in child set
             addButton(perkButton);
         }
 
+        addRenderableWidget(
+                Button.builder(
+                                Component.literal("First Walk"),
+                                this::handleFirstWalk)
+                        .bounds(width - 80, 0, 80, 20)
+                        .tooltip(Tooltip.create(Component.literal("TreeNodePosition: first walk")))
+                        .build());
+        addRenderableWidget(
+                Button.builder(
+                                Component.literal("Second Walk"),
+                                this::handleSecondWalk)
+                        .bounds(width - 80, 20, 80, 20)
+                        .tooltip(Tooltip.create(Component.literal("TreeNodePosition: first walk")))
+                        .build());
+        addRenderableWidget(
+                Button.builder(
+                                Component.literal("second Walk"),
+                                this::handleThirdWalk)
+                        .bounds(width - 80, 40, 80, 20)
+                        .tooltip(Tooltip.create(Component.literal("TreeNodePosition: first walk")))
+                        .build());
+
+    }
+    static TreeNodePosition tnp;
+    private void handleFirstWalk(Button button) {
+        tnp = TreeNodePosition.runFirstWalk(root);
+        updateScrollBoundaries(root);
+    }
+    private void handleSecondWalk(Button button) {
+        TreeNodePosition.runSecondWalk(tnp);
+        updateScrollBoundaries(root);
+    }
+    private void handleThirdWalk(Button button) {
+        TreeNodePosition.runThirdWalk(tnp);
+        updateScrollBoundaries(root);
     }
 
     private void addButton(Button button) {
-        int buttonLeft = button.getX();
-        int buttonRight = button.getX() + button.getWidth();
-        int buttonTop = button.getY();
-        int buttonBottom = button.getY() + button.getHeight();
-
-        this.minX = Math.min(this.minX, buttonLeft);
-        this.maxX = Math.max(this.maxX, buttonRight);
-        this.minY = Math.min(this.minY, buttonTop);
-        this.maxY = Math.max(this.maxY, buttonBottom);
 
         addRenderableWidget(button);
     }
@@ -114,6 +160,7 @@ public class SkillTreeScreen extends Screen {
             getAllButtons(buttons, child);
         }
 
+        updateScrollBoundaries(perk);
         return buttons;
     }
 
@@ -127,7 +174,6 @@ public class SkillTreeScreen extends Screen {
     public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         // darkens the background screen
         this.renderBackground(graphics);
-
         this.renderPerk(root, graphics, mouseX, mouseY, partialTicks);
         //this is the format of how we draw text on the exampleScreen
         graphics.drawString(this.font,
@@ -139,18 +185,15 @@ public class SkillTreeScreen extends Screen {
         drawSkillTreeTabs(graphics);
         // for dev purposes
         drawScrollValues(graphics);
+        super.render(graphics, mouseX, mouseY, partialTicks);
     }
 
     public void renderPerk(Perk perk, GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         int sX = Mth.floor(scrollX);
         int sY = Mth.floor(scrollY);
 
-        for (Perk child: perk.getChildren()) {
-            renderPerk(child, graphics, mouseX, mouseY, partialTicks);
-        }
-
         perk.updateButtonPosition(sX, sY);
-        perk.getButton().render(graphics, mouseX, mouseY, partialTicks);
+        perk.renderButton(graphics, mouseX, mouseY, partialTicks);
 
     }
 
@@ -167,6 +210,19 @@ public class SkillTreeScreen extends Screen {
                 16,
                 Color.WHITE.hashCode(),
                 true);
+        graphics.drawString(this.font,
+                Component.literal("min X: " + minX + " max X: " + maxX),
+                8,
+                24,
+                Color.WHITE.hashCode(),
+                true);
+        graphics.drawString(this.font,
+                Component.literal("min Y: " + minY + " max Y: " + maxY),
+                8,
+                48,
+                Color.WHITE.hashCode(),
+                true);
+
     }
     
     private void drawSkillTreeTabs(GuiGraphics graphics) {
@@ -195,22 +251,43 @@ public class SkillTreeScreen extends Screen {
     public void scroll(double pDragX, double pDragY) {
         // need to decide how much freedom the player has for scrolling
         // could make it just go until the extreme values are withing the screen
+        // splitting it into < screen size vs > screen size is still probably best
+        // might just only let it go to the center of the screen
 
-        this.scrollX = Mth.clamp(this.scrollX + pDragX, -(maxX - 26), this.width - (minX + 26));
+        if (this.maxX - this.minX < this.width) {
+            this.scrollX = Mth.clamp(this.scrollX + pDragX, 0.0D, this.width - (this.maxX - this.minX));
+        }
+        else {
+            this.scrollX = Mth.clamp(this.scrollX + pDragX, -((this.maxX - this.minX) - width), 0.0D);
 
-        this.scrollY = Mth.clamp(this.scrollY + pDragY, -(maxY - 26), this.height - (minY + 26));
-
-        /*
-        bounds the scrolling to keep all elements inside the screen
-        if (this.maxX - this.minX > 0) {
-            this.scrollX = Mth.clamp(this.scrollX + pDragX, 0.0D, Mth.abs(this.width - this.maxX));
         }
 
-        if (this.maxY - this.minY > 0) {
-            this.scrollY = Mth.clamp(this.scrollY + pDragY, 0.0D, Mth.abs(this.height - this.maxY));
+        if (this.maxY - this.minY < this.height) {
+            this.scrollY = Mth.clamp(this.scrollY + pDragY, 16.0D, this.height - (this.maxY-this.minY));
         }
-        */
+        else {
+            this.scrollY = Mth.clamp(this.scrollY + pDragY, -((this.maxY-this.minY) - height), 16.0D);
 
+        }
+
+    }
+
+    public void updateScrollBoundaries(Perk perk) {
+        PerkButton button = perk.getButton();
+
+        int buttonLeft = button.getX();
+        int buttonRight = button.getX() + button.getWidth();
+        int buttonTop = button.getY();
+        int buttonBottom = button.getY() + button.getHeight();
+
+        this.minX = Math.min(this.minX, buttonLeft);
+        this.maxX = Math.max(this.maxX, buttonRight);
+        this.minY = Math.min(this.minY, buttonTop);
+        this.maxY = Math.max(this.maxY, buttonBottom);
+
+        for (Perk child: perk.getChildren()) {
+            updateScrollBoundaries(child);
+        }
     }
 
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {

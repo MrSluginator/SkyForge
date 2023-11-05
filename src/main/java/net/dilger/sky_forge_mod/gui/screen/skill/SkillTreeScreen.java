@@ -12,7 +12,6 @@ import net.dilger.sky_forge_mod.util.KeyBinding;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
@@ -25,16 +24,15 @@ import java.util.Set;
 
 public class SkillTreeScreen extends Screen {
 
-
     private static final Component TITLE =
             Component.translatable("gui." + SkyForgeMod.MOD_ID + ".skill_tree_screen");
+    private final SkillTreeEditor editor;
     private final Perk root;
-//    private final PerkButton rootButton;
+    //    private final PerkButton rootButton;
     private final int imageWidth, imageHeight;
     private final Map<SKILL_TYPE, SkillTreeTab> tabs;
+    private final SKILL_TYPE skill_type;
     private int leftPos, topPos;
-
-    private SKILL_TYPE skill_type;
     private boolean isScrolling;
     private double scrollX;
     private double scrollY;
@@ -46,6 +44,8 @@ public class SkillTreeScreen extends Screen {
     public SkillTreeScreen(SKILL_TYPE skill_type, Map<SKILL_TYPE, SkillTreeTab> tabs) {
         super(TITLE);
 
+        editor = new SkillTreeEditor(this);
+
         this.imageWidth = 176;
         this.imageHeight = 166;
 
@@ -55,9 +55,6 @@ public class SkillTreeScreen extends Screen {
         // need to find a better way to add buttons to the skill screen
         this.skill_type = skill_type;
         this.root = new Perk(null, PerkType.SQUARE, RarityType.COMMON, null);
-        makeNewTree(root, 3, 3, RarityType.UNCOMMON);
-        makeNewTree(root, 1, 2, RarityType.EPIC);
-        makeNewTree(root, 2, 4, RarityType.RARE);
 
     }
 
@@ -103,53 +100,22 @@ public class SkillTreeScreen extends Screen {
             }
         }
 
-//        TreeNodePosition.run(root);
-        //create buttons
+        // position buttons
+        TreeNodePosition.run(root);
+        // add buttons to screen
         for (PerkButton perkButton: getAllButtons(root)) {
-            // adding a widget puts it into the build in child set
-            addButton(perkButton);
+            System.out.println(perkButton.toString());
+            addRenderableWidget(perkButton);
         }
-
-        addRenderableWidget(
-                Button.builder(
-                                Component.literal("First Walk"),
-                                this::handleFirstWalk)
-                        .bounds(width - 80, 0, 80, 20)
-                        .tooltip(Tooltip.create(Component.literal("TreeNodePosition: first walk")))
-                        .build());
-        addRenderableWidget(
-                Button.builder(
-                                Component.literal("Second Walk"),
-                                this::handleSecondWalk)
-                        .bounds(width - 80, 20, 80, 20)
-                        .tooltip(Tooltip.create(Component.literal("TreeNodePosition: first walk")))
-                        .build());
-        addRenderableWidget(
-                Button.builder(
-                                Component.literal("second Walk"),
-                                this::handleThirdWalk)
-                        .bounds(width - 80, 40, 80, 20)
-                        .tooltip(Tooltip.create(Component.literal("TreeNodePosition: first walk")))
-                        .build());
+        editor.updateChildren();
 
     }
-    static TreeNodePosition tnp;
-    private void handleFirstWalk(Button button) {
-        tnp = TreeNodePosition.runFirstWalk(root);
-        updateScrollBoundaries(root);
-    }
-    private void handleSecondWalk(Button button) {
-        TreeNodePosition.runSecondWalk(tnp);
-        updateScrollBoundaries(root);
-    }
-    private void handleThirdWalk(Button button) {
-        TreeNodePosition.runThirdWalk(tnp);
-        updateScrollBoundaries(root);
-    }
 
-    private void addButton(Button button) {
-
+    public void addButton(Button button) {
+        TreeNodePosition.run(root);
         addRenderableWidget(button);
+        editor.updateChildren();
+
     }
 
     private Set<PerkButton> getAllButtons(Perk perk) {
@@ -168,6 +134,10 @@ public class SkillTreeScreen extends Screen {
         for (Perk child: perk.getChildren()) {
             buttons.add(child.getButton());
         }
+    }
+
+    public void refresh() {
+        this.rebuildWidgets();
     }
 
     @Override
@@ -219,12 +189,12 @@ public class SkillTreeScreen extends Screen {
         graphics.drawString(this.font,
                 Component.literal("min Y: " + minY + " max Y: " + maxY),
                 8,
-                48,
+                32,
                 Color.WHITE.hashCode(),
                 true);
 
     }
-    
+
     private void drawSkillTreeTabs(GuiGraphics graphics) {
         int index = 0;
         for (SkillTreeTab tab: tabs.values()) {
@@ -249,17 +219,12 @@ public class SkillTreeScreen extends Screen {
     }
 
     public void scroll(double pDragX, double pDragY) {
-        // need to decide how much freedom the player has for scrolling
-        // could make it just go until the extreme values are withing the screen
-        // splitting it into < screen size vs > screen size is still probably best
-        // might just only let it go to the center of the screen
 
         if (this.maxX - this.minX < this.width) {
-            this.scrollX = Mth.clamp(this.scrollX + pDragX, 0.0D, this.width - (this.maxX - this.minX));
+            this.scrollX = Mth.clamp(this.scrollX + pDragX, 16.0D, this.width - (this.maxX - this.minX));
         }
         else {
-            this.scrollX = Mth.clamp(this.scrollX + pDragX, -((this.maxX - this.minX) - width), 0.0D);
-
+            this.scrollX = Mth.clamp(this.scrollX + pDragX, -((this.maxX - this.minX) - width), 16.0D);
         }
 
         if (this.maxY - this.minY < this.height) {
@@ -316,6 +281,9 @@ public class SkillTreeScreen extends Screen {
         if (KeyBinding.OPEN_TESTSCREEN.matches(pKeyCode, pScanCode)) {
             this.minecraft.setScreen(null);
             this.minecraft.mouseHandler.grabMouse();
+            return true;
+        } else if (KeyBinding.OPEN_EDITOR.matches(pKeyCode,pScanCode)) {
+            this.minecraft.setScreen(editor);
             return true;
         } else {
             return super.keyPressed(pKeyCode, pScanCode, pModifiers);

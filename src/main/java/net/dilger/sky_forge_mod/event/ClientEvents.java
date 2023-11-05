@@ -31,6 +31,7 @@ public class ClientEvents {
         @SubscribeEvent
         public static void onKeyRegister(RegisterKeyMappingsEvent event) {
             event.register(KeyBinding.OPEN_SKILLSCREEN);
+            event.register(KeyBinding.OPEN_EDITOR);
         }
     }
 }

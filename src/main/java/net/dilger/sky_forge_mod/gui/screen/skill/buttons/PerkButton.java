@@ -19,6 +19,8 @@ public class PerkButton extends ImageButton {
     private final RarityType rarity;
     private final IconType icon;
 
+
+
     // draws the button centered on the pX and pY
     public PerkButton(Perk perk, int pX, int pY, PerkType perkType, RarityType rarity, @Nullable IconType icon, OnPress onPress) {
         super(pX - perkType.getSize()/2,
@@ -31,23 +33,17 @@ public class PerkButton extends ImageButton {
                 BASE_TEXTURE,
                 onPress);
 
-        System.out.println("new button created: "+perk.toString());
         this.perk = perk;
         this.perkType = perkType;
         this.rarity = rarity;
         this.icon = icon;
     }
 
+
     public void updatePosition(int pX, int pY) {
         setX(pX - perkType.getSize()/2);
         setY(pY - perkType.getSize()/2);
     }
-
-/*    @Override
-    public void render(@NotNull GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
-        super.render(graphics, pMouseX, pMouseY, pPartialTick);
-        renderWidget(graphics, pMouseX, pMouseY, pPartialTick);
-    }*/
 
     @Override
     public void renderWidget(@NotNull GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
@@ -87,5 +83,21 @@ public class PerkButton extends ImageButton {
 
         }
 
+    }
+
+    public Perk getPerk() {
+        return perk;
+    }
+
+    public PerkType getPerkType() {
+        return perkType;
+    }
+
+    public RarityType getRarity() {
+        return rarity;
+    }
+
+    public IconType getIcon() {
+        return icon;
     }
 }

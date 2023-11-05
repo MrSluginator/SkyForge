@@ -31,7 +31,6 @@ public class Perk {
     private int rX, rY;
 
     public Perk(@Nullable Perk parent, PerkType perkType, RarityType rarity, @Nullable IconType icon) {
-        System.out.println("new perk created: "+this.toString());
         this.parent = parent;
         this.rX = 0;
         this.rY = 0;

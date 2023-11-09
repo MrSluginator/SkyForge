@@ -38,16 +38,6 @@ public enum PerkType {
         return rarity.getYIndex() * blockSize;
     }
 
-    public PerkType getTypeFromIndex(int index) {
-        if (index == 0) return SQUARE;
-        if (index == 1) return EXCITED;
-        if (index == 2) return SHIELD;
-        if (index == 3) return DIAMOND;
-        if (index == 4) return CREST;
-
-        return null;
-    }
-
     public Component getName() {
         return Component.literal(name);
     }

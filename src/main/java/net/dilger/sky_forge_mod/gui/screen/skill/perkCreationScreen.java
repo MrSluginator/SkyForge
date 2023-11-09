@@ -25,10 +25,10 @@ public class perkCreationScreen extends Screen {
         super.init();
 
         addRenderableWidget(Button.builder(Component.literal("add perk"), this::handleAddPerk)
-                .bounds(0, 0, 60, 20)
+                .bounds(4, 2, 60, 20)
                 .build());
-        perkTypeCycleButton = CycleButton.builder(PerkType::getName).withValues(PerkType.values()).create(0,20,60,20, Component.literal("perk type"));
-        rarityTypeCycleButton = CycleButton.builder(RarityType::getName).withValues(RarityType.values()).create(0,40,60,20, Component.literal("perk type"));
+        perkTypeCycleButton = CycleButton.builder(PerkType::getName).withValues(PerkType.values()).create(4,24,120,20, Component.literal("perk type"));
+        rarityTypeCycleButton = CycleButton.builder(RarityType::getName).withValues(RarityType.values()).create(4,46,120,20, Component.literal("perk type"));
         addRenderableWidget(perkTypeCycleButton);
         addRenderableWidget(rarityTypeCycleButton);
     }

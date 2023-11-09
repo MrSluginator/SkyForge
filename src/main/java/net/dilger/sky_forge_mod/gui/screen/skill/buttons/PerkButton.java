@@ -41,8 +41,9 @@ public class PerkButton extends ImageButton {
 
 
     public void updatePosition(int pX, int pY) {
-        setX(pX - perkType.getSize()/2);
-        setY(pY - perkType.getSize()/2);
+        // center texture on the positional location
+        setX(pX);
+        setY(pY);
     }
 
     @Override
@@ -57,11 +58,11 @@ public class PerkButton extends ImageButton {
         if (parent != null) {
             PerkButton parentButton = parent.getButton();
 
-            int midwayX = parentButton.getX() + parentButton.width + 4;
-            int parentCenterX = parentButton.getX() + parentButton.width/2;
-            int parentCenterY = parentButton.getY() + parentButton.height/2;
-            int childCenterX = getX() + width/2;
-            int childCenterY = getY() + height/2;
+            int midwayX = (parentButton.getCenterX() + getCenterX())/2;
+            int parentCenterX = parentButton.getCenterX();
+            int parentCenterY = parentButton.getCenterY();
+            int childCenterX = getCenterX();
+            int childCenterY = getCenterY();
             int colour = Color.WHITE.hashCode();
 
             if (drawShadow) {
@@ -83,6 +84,14 @@ public class PerkButton extends ImageButton {
 
         }
 
+    }
+
+    public int getCenterX() {
+        return getX() + this.width/2;
+    }
+
+    public int getCenterY() {
+        return getY() + this.height/2;
     }
 
     public Perk getPerk() {

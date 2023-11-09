@@ -40,6 +40,8 @@ public class SkillTreeScreen extends Screen {
     private int maxY = Integer.MIN_VALUE;
     private int minX = Integer.MAX_VALUE;
     private int minY = Integer.MAX_VALUE;
+    private int treeWidth = 0;
+    private int treeHeight = 0;
 
     public SkillTreeScreen(SKILL_TYPE skill_type, Map<SKILL_TYPE, SkillTreeTab> tabs) {
         super(TITLE);
@@ -56,26 +58,6 @@ public class SkillTreeScreen extends Screen {
         this.skill_type = skill_type;
         this.root = new Perk(null, PerkType.SQUARE, RarityType.COMMON, null);
 
-    }
-
-    private void makeTree(Perk perk, int depth, int subTreeSize, RarityType rarity) {
-
-            if (depth > 0) {
-                for (int branch = 0; branch < subTreeSize; branch++) {
-                    perk.addChild(new Perk(perk, PerkType.CREST.getTypeFromIndex(branch%5), rarity, null));
-                }
-                for (Perk child : perk.getChildren()) {
-                    makeTree(child, depth - 1, Math.max(subTreeSize - 1, 0), rarity);
-                }
-            }
-
-    }
-
-    private void makeNewTree(Perk root, int depth, int subTreeSize, RarityType rarity) {
-        Perk treeRoot = new Perk(root, PerkType.DIAMOND, rarity, null);
-        root.addChild(treeRoot);
-
-        makeTree(treeRoot, depth, subTreeSize, rarity);
     }
 
     @Override
@@ -104,7 +86,7 @@ public class SkillTreeScreen extends Screen {
         TreeNodePosition.run(root);
         // add buttons to screen
         for (PerkButton perkButton: getAllButtons(root)) {
-            System.out.println(perkButton.toString());
+            System.out.println("screen: "+perkButton.toString());
             addRenderableWidget(perkButton);
         }
         editor.updateChildren();
@@ -118,15 +100,17 @@ public class SkillTreeScreen extends Screen {
 
     }
 
-    private Set<PerkButton> getAllButtons(Perk perk) {
-        Set<PerkButton> buttons = Sets.newHashSet(perk.getButton());
+    private Set<PerkButton> getAllButtons(Perk root) {
+        Set<PerkButton> buttons = Sets.newHashSet(root.getButton());
 
-        for (Perk child: perk.getChildren()) {
+        for (Perk child: root.getChildren()) {
             buttons.add(child.getButton());
             getAllButtons(buttons, child);
         }
 
-        updateScrollBoundaries(perk);
+        updateScrollBoundaries(root);
+        this.treeWidth = this.maxX - this.minX;
+        this.treeHeight = this.maxY - this.minY;
         return buttons;
     }
 
@@ -134,10 +118,6 @@ public class SkillTreeScreen extends Screen {
         for (Perk child: perk.getChildren()) {
             buttons.add(child.getButton());
         }
-    }
-
-    public void refresh() {
-        this.rebuildWidgets();
     }
 
     @Override
@@ -159,8 +139,8 @@ public class SkillTreeScreen extends Screen {
     }
 
     public void renderPerk(Perk perk, GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        int sX = Mth.floor(scrollX);
-        int sY = Mth.floor(scrollY);
+        int sX = Mth.floor(this.scrollX);
+        int sY = Mth.floor(this.scrollY);
 
         perk.updateButtonPosition(sX, sY);
         perk.renderButton(graphics, mouseX, mouseY, partialTicks);
@@ -181,13 +161,13 @@ public class SkillTreeScreen extends Screen {
                 Color.WHITE.hashCode(),
                 true);
         graphics.drawString(this.font,
-                Component.literal("min X: " + minX + " max X: " + maxX),
+                Component.literal("Screen X: " + this.width + " Tree X: " + treeWidth),
                 8,
                 24,
                 Color.WHITE.hashCode(),
                 true);
         graphics.drawString(this.font,
-                Component.literal("min Y: " + minY + " max Y: " + maxY),
+                Component.literal("Screen Y: " + this.height + " Tree Y: " + treeHeight),
                 8,
                 32,
                 Color.WHITE.hashCode(),
@@ -198,7 +178,7 @@ public class SkillTreeScreen extends Screen {
     private void drawSkillTreeTabs(GuiGraphics graphics) {
         int index = 0;
         for (SkillTreeTab tab: tabs.values()) {
-            tab.drawTab(graphics, Mth.floor((double) width /2 - (tab.TEXTURE_WIDTH * (index - tabs.size()/2))), 0);
+            tab.drawTab(graphics, Mth.floor((double) width / 2 - (tab.TEXTURE_WIDTH * (index - tabs.size()/2))), 0);
             index++;
         }
     }
@@ -220,35 +200,34 @@ public class SkillTreeScreen extends Screen {
 
     public void scroll(double pDragX, double pDragY) {
 
-        if (this.maxX - this.minX < this.width) {
-            this.scrollX = Mth.clamp(this.scrollX + pDragX, 16.0D, this.width - (this.maxX - this.minX));
+        if (this.treeWidth < this.width) {
+            this.scrollX = Mth.clamp(this.scrollX + pDragX, 0.0D, this.width - this.treeWidth);
         }
         else {
-            this.scrollX = Mth.clamp(this.scrollX + pDragX, -((this.maxX - this.minX) - width), 16.0D);
+            this.scrollX = Mth.clamp(this.scrollX + pDragX, -(this.treeWidth - this.width), 0.0D);
         }
 
-        if (this.maxY - this.minY < this.height) {
-            this.scrollY = Mth.clamp(this.scrollY + pDragY, 16.0D, this.height - (this.maxY-this.minY));
+        if (this.treeHeight < this.height) {
+            this.scrollY = Mth.clamp(this.scrollY + pDragY, 0.0D, this.height - this.treeHeight);
         }
         else {
-            this.scrollY = Mth.clamp(this.scrollY + pDragY, -((this.maxY-this.minY) - height), 16.0D);
+            this.scrollY = Mth.clamp(this.scrollY + pDragY, -(this.treeHeight - this.height), 0.0D);
 
         }
 
     }
 
     public void updateScrollBoundaries(Perk perk) {
-        PerkButton button = perk.getButton();
 
-        int buttonLeft = button.getX();
-        int buttonRight = button.getX() + button.getWidth();
-        int buttonTop = button.getY();
-        int buttonBottom = button.getY() + button.getHeight();
+        int perkLeft = perk.getTreeX();
+        int perkRight = perk.getTreeX() + perk.getButton().getWidth();
+        int perkTop = perk.getTreeY();
+        int perkBottom = perk.getTreeY() + perk.getButton().getHeight();
 
-        this.minX = Math.min(this.minX, buttonLeft);
-        this.maxX = Math.max(this.maxX, buttonRight);
-        this.minY = Math.min(this.minY, buttonTop);
-        this.maxY = Math.max(this.maxY, buttonBottom);
+        this.minX = Math.min(this.minX, perkLeft);
+        this.maxX = Math.max(this.maxX, perkRight);
+        this.minY = Math.min(this.minY, perkTop);
+        this.maxY = Math.max(this.maxY, perkBottom);
 
         for (Perk child: perk.getChildren()) {
             updateScrollBoundaries(child);

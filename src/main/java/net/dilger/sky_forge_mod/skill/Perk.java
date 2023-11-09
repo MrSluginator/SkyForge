@@ -18,10 +18,10 @@ import java.util.ArrayList;
 
 public class Perk {
 
-    private final PerkButton button;
     protected final Component title = Component.literal("root");
-    private static final int minXSeperation = 32;
-    private static final int minYSeperation = 32;
+    private static final int minXSeparation = 32;
+    private static final int minYSeparation = 32;
+    private final PerkButton button;
 
     private final PerkType perkType;
     private final RarityType rarity;
@@ -41,18 +41,6 @@ public class Perk {
     }
 
 //    display methods
-/*    private int buildTree() {
-        // for each of its children find out how much space they take up then seperate them by that amount
-        int childrenYTotal = 0;
-
-        for (Perk child: children) {
-            child.r
-            child.buildTree()
-        }
-
-
-        return Math.max(minYSeperation, childrenYTotal);
-    }*/
 
     public void renderButton(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
         button.drawConnectivity(graphics, false);
@@ -66,16 +54,6 @@ public class Perk {
         button.renderWidget(graphics, pMouseX, pMouseY, pPartialTick);
     }
 
-    public int getSubTreeSize() {
-        int subTreeSize = 0;
-
-        for (Perk child: children) {
-            subTreeSize += child.getSubTreeSize();
-        }
-
-        return subTreeSize != 0 ? subTreeSize: 1;
-    }
-
     public void updateButtonPosition(int pX, int pY) {
         button.updatePosition(pX + rX, pY + rY);
 
@@ -87,13 +65,20 @@ public class Perk {
         }
     }
 
-    public void setPosition(float iX, float iY) {
-        this.rX = Mth.floor(iX) * minXSeperation;
-        this.rY = Mth.floor(iY) * minYSeperation;
-        updateButtonPosition(0,0);
+    public void setTreePosition(float iX, float iY) {
+        this.rX = Mth.floor(iX) * minXSeparation;
+        this.rY = Mth.floor(iY) * minYSeparation;
     }
 
-//    component methods
+    public int getTreeX() {
+        return rX;
+    }
+
+    public int getTreeY() {
+        return rY;
+    }
+
+    //    component methods
     private void handlePerkButton(Button button) {
         Minecraft.getInstance().player.sendSystemMessage(Component.literal("Pressed " + this.title + " Button!").withStyle(ChatFormatting.DARK_PURPLE));
     }
@@ -102,6 +87,7 @@ public class Perk {
         return button;
     }
 
+    @Nullable
     public Perk getParent() {
         return parent;
     }

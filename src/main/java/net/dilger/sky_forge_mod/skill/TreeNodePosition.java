@@ -197,7 +197,7 @@ public class TreeNodePosition {
     }
 
     private void finalizePosition() {
-        this.advancement.setPosition((float)this.x, this.y);
+        this.advancement.setTreePosition((float)this.x, this.y);
         
 
         if (!this.children.isEmpty()) {

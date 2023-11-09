@@ -15,6 +15,7 @@ import java.util.Collection;
 public class SkillTreeEditor extends Screen {
 
     private final SkillTreeScreen screen;
+    private boolean buttonHovered = false;
 
     protected SkillTreeEditor(SkillTreeScreen screen) {
         super(Component.literal("Editor"));
@@ -25,9 +26,25 @@ public class SkillTreeEditor extends Screen {
     @Override
     public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
         screen.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
+        buttonHovered = false;
+        for (GuiEventListener button: this.children()) {
+            if (button instanceof PerkButton) {
+                if (button.isMouseOver(pMouseX, pMouseY)) {
+                    buttonHovered = true;
+
+                }
+            }
+        }
+
         pGuiGraphics.drawString(this.font,
                 Component.literal("editor"),
                 width - 60,
+                4,
+                Color.GREEN.hashCode(),
+                false);
+        pGuiGraphics.drawString(this.font,
+                Component.literal("button hovered: "+buttonHovered),
+                4,
                 4,
                 Color.GREEN.hashCode(),
                 false);
@@ -49,7 +66,6 @@ public class SkillTreeEditor extends Screen {
             for (GuiEventListener button: this.children()) {
                 if (button instanceof PerkButton) {
                     if (button.isMouseOver(pMouseX, pMouseY)) {
-                        System.out.println("clicked a button : " + button.toString());
                         openPerkCreationScreen(((PerkButton) button).getPerk());
 
                     }
@@ -64,7 +80,6 @@ public class SkillTreeEditor extends Screen {
     public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
 
         if (KeyBinding.OPEN_EDITOR.matches(pKeyCode,pScanCode)) {
-            screen.refresh();
             this.minecraft.setScreen(screen);
             return true;
         } else {
@@ -78,5 +93,8 @@ public class SkillTreeEditor extends Screen {
 
     public void updateChildren() {
         this.children().addAll((Collection) screen.children());
+        for (GuiEventListener button: children()) {
+            System.out.println("editor: "+button.toString());
+        }
     }
 }

@@ -1,21 +1,20 @@
 package net.dilger.sky_forge_mod.client.screen;
 
 import net.dilger.sky_forge_mod.SkyForgeMod;
-import net.dilger.sky_forge_mod.networking.ChangePlayerAtributes;
+import net.dilger.sky_forge_mod.networking.PacketHandling;
+import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.AffectPlayerLevel;
 import net.dilger.sky_forge_mod.util.KeyBinding;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.MinecraftServer;
-import com.mojang.authlib.GameProfile;
-
 
 public class ExampleScreen extends Screen {
     private static final Component TITLE =
@@ -31,8 +30,6 @@ public class ExampleScreen extends Screen {
     private int leftPos, topPos;
 
     private Button button;
-
-    private static ChangePlayerAtributes ourPlayer = new ChangePlayerAtributes(Minecraft.getInstance().level.getServer(), Minecraft.getInstance().player.getGameProfile());
 
     public ExampleScreen() {
         super(TITLE);
@@ -80,11 +77,27 @@ public class ExampleScreen extends Screen {
 
     private void handleExampleButton(Button button) {
         // logic here
-        Minecraft.getInstance().player.sendSystemMessage(Component.literal("Pressed a Button!"));
-        if (Minecraft.getInstance().player.experienceLevel >= 15){
-            ourPlayer.subtractLevel(15);
+
+        LocalPlayer player = minecraft.getInstance().player;
+
+        player.sendSystemMessage(Component.literal("Pressed a Button!"));
+        if (player.experienceLevel >= 15){
+
+            //to pass arguments must set the variable beforehand
+            //its a static variable that exists inside the AffectPlayerLevel handle method
+
+            //changes client side xp then changes tha amount to be subtracted in the AffectPlayer class. Then finally uses the messages.toServer to tell the server to update the xp amount aswell.
+            player.experienceLevel -= 15;
+
+            //this first line below wouldn't be needed if we could figure out how to send parameters into the modMessages
+            AffectPlayerLevel.amount = -15;
+            PacketHandling.sentToServer(new AffectPlayerLevel());
+
             // we could use packets for this maybe?
-            Minecraft.getInstance().player.sendSystemMessage(Component.literal("Stole some XP"));
+            player.sendSystemMessage(Component.literal("Stole some XP"));
+            player.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 100000, 6));
+
+
         }
     }
 

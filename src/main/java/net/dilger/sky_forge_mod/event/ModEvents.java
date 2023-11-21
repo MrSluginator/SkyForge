@@ -148,7 +148,9 @@ public class ModEvents {
             if (event.getEntity() instanceof ServerPlayer player) {
 
                 player.getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).ifPresent(skillXp -> {
-                    PacketHandling.sentToPlayer(new SkillXpDataSyncS2CPacket(skillXp.getSkillsXpMap()), player);
+                    for (PlayerSkillXp.SKILL_TYPE st: PlayerSkillXp.SKILL_TYPE.values()) {
+                        PacketHandling.sentToPlayer(new SkillXpDataSyncS2CPacket(skillXp.getSkillsXpMap(), st), player);
+                    }
                 });
 
             }
@@ -157,15 +159,17 @@ public class ModEvents {
 
     //the PlayerEvent.Clone event happens when the player either respawns or moves dimensions
     @SubscribeEvent
-    public static void onPlayerRespawn(PlayerEvent.Clone event){
+    public static void onPlayerClone(PlayerEvent.Clone event){
 
         if (event.getEntity() instanceof ServerPlayer player) {
-            event.getEntity().sendSystemMessage(Component.literal("RESPAWN EVENT HAPPENED"));
+            event.getEntity().sendSystemMessage(Component.literal("CLONE EVENT HAPPENED"));
             event.getEntity().sendSystemMessage(Component.literal(event.getEntity().getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).toString()));
             //printing the levels for debugging
             event.getEntity().sendSystemMessage(Component.literal(String.valueOf(new PlayerSkillXp().getSkillXp(PlayerSkillXp.SKILL_TYPE.OFFENSE))));
             player.getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).ifPresent(skillXp -> {
-                PacketHandling.sentToPlayer(new SkillXpDataSyncS2CPacket(skillXp.getSkillsXpMap()), player);
+                for (PlayerSkillXp.SKILL_TYPE st: PlayerSkillXp.SKILL_TYPE.values()) {
+                    PacketHandling.sentToPlayer(new SkillXpDataSyncS2CPacket(skillXp.getSkillsXpMap(), st), player);
+                }
             });
 
         }

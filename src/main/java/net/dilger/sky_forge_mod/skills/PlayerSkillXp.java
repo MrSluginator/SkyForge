@@ -18,6 +18,10 @@ public class PlayerSkillXp {
         FISHING,
         MOBILITY;
 
+        @Override
+        public String toString() {
+            return super.toString();
+        }
     }
     private final Map<SKILL_TYPE, Long> skillsXpMap = Maps.newLinkedHashMap();
 

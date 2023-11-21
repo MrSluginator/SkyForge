@@ -9,58 +9,40 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class SkillXpDataSyncS2CPacket {
-    private final long offensive_xp;
-    private final long defensive_xp;
-    private final long mining_xp;
-    private final long farming_xp;
-    private final long trading_xp;
-    private final long fishing_xp;
-    private final long mobility_xp;
+    private final long skill_xp;
+    private final PlayerSkillXp.SKILL_TYPE skill_type;
 
-    public SkillXpDataSyncS2CPacket(Map<PlayerSkillXp.SKILL_TYPE, Long> skillXpMap) {
-        this.offensive_xp = skillXpMap.get(PlayerSkillXp.SKILL_TYPE.OFFENSE);
-        this.defensive_xp = skillXpMap.get(PlayerSkillXp.SKILL_TYPE.DEFENSE);
-        this.mining_xp = skillXpMap.get(PlayerSkillXp.SKILL_TYPE.MINING);
-        this.farming_xp = skillXpMap.get(PlayerSkillXp.SKILL_TYPE.FARMING);
-        this.trading_xp = skillXpMap.get(PlayerSkillXp.SKILL_TYPE.TRADING);
-        this.fishing_xp = skillXpMap.get(PlayerSkillXp.SKILL_TYPE.FISHING);
-        this.mobility_xp = skillXpMap.get(PlayerSkillXp.SKILL_TYPE.MOBILITY);
+    public SkillXpDataSyncS2CPacket(Map<PlayerSkillXp.SKILL_TYPE, Long> skillXpMap, PlayerSkillXp.SKILL_TYPE skill_type) {
+        // get xp from the map that was passed in
+        this.skill_type = skill_type;
+        this.skill_xp = skillXpMap.get(skill_type);
+
 
     }
 
     public SkillXpDataSyncS2CPacket(FriendlyByteBuf buf) {
 
-        this.offensive_xp = buf.readLong();
-        this.defensive_xp = buf.readLong();
-        this.mining_xp = buf.readLong();
-        this.farming_xp = buf.readLong();
-        this.trading_xp = buf.readLong();
-        this.fishing_xp = buf.readLong();
-        this.mobility_xp = buf.readLong();
+        // read xp long from file
+        this.skill_type = PlayerSkillXp.SKILL_TYPE.valueOf(buf.readUtf());
+        this.skill_xp = buf.readLong();
+
     }
 
     public void toBytes(FriendlyByteBuf buf) {
 
-        buf.writeLong(offensive_xp);
-        buf.writeLong(defensive_xp);
-        buf.writeLong(mining_xp);
-        buf.writeLong(farming_xp);
-        buf.writeLong(trading_xp);
-        buf.writeLong(fishing_xp);
-        buf.writeLong(mobility_xp);
+        // write xp long to file
+        buf.writeUtf(skill_type.toString());
+        buf.writeLong(skill_xp);
+
     }
 
     public boolean handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             // HERE IS ON THE CLIENT
-            ClientSkillXpData.setOffensive_xp(offensive_xp);
-            ClientSkillXpData.setDefensive_xp(defensive_xp);
-            ClientSkillXpData.setMining_xp(mining_xp);
-            ClientSkillXpData.setFarming_xp(farming_xp);
-            ClientSkillXpData.setTrading_xp(trading_xp);
-            ClientSkillXpData.setFishing_xp(fishing_xp);
-            ClientSkillXpData.setMobility_xp(mobility_xp);
+            // set xp on player capability
+            ClientSkillXpData.setSkill_xp(skill_xp, skill_type);
+
         });
         return true;
     }

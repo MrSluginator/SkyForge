@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/leaves",
-  "render_type": "minecraft:cutout",
-  "textures": {
-    "all": "sky_forge_mod:block/pine_leaves"
-  }
-}

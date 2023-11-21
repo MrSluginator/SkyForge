@@ -1,6 +1,2 @@
-// 1.20.1	2023-10-20T00:44:08.2116821	Tags for minecraft:item mod id sky_forge_mod
-458bc33a1be619329c58e6d9e16f7ab7ad9ccf64 data/minecraft/tags/items/creeper_drop_music_discs.json
-cda73e0126e0f477ee347b6583f5b8dfcba55258 data/minecraft/tags/items/logs_that_burn.json
-458bc33a1be619329c58e6d9e16f7ab7ad9ccf64 data/minecraft/tags/items/music_discs.json
-7d1dfaa2084b05e26c37c7966a11c7870e4ec419 data/minecraft/tags/items/planks.json
+// 1.20.1	2023-11-21T12:13:45.1841381	Tags for minecraft:item mod id sky_forge_mod
 89c6cc96f1e50dbc6f0fb8d8663e2a568c40c33f data/minecraft/tags/items/trimmable_armor.json

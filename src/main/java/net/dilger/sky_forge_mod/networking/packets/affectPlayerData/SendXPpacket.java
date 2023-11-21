@@ -17,7 +17,7 @@ public class SendXPpacket {
     //this is what is getting encoded / decoded
     //add all xp variables here??
     private static final String MESSAGE_GAIN_XP = "message.sky_forge_mod.gain_xp";
-    private PlayerSkillXp.SKILL_TYPE skill_type;
+    private final PlayerSkillXp.SKILL_TYPE skill_type;
 
     private final byte amount;
 
@@ -36,7 +36,7 @@ public class SendXPpacket {
 
     //you need one buffer.write per variable you are passing to the constructor
     public void encode(FriendlyByteBuf buffer) {
-        buffer.writeUtf(String.valueOf(this.skill_type));
+        buffer.writeUtf(this.skill_type.toString());
         buffer.writeByte(this.amount);
 
     }
@@ -57,12 +57,12 @@ public class SendXPpacket {
             player.getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).ifPresent(skill_xp -> {
             skill_xp.addSkillXp(amount, skill_type);
 
-            player.sendSystemMessage(Component.literal("Current Xp " + skill_xp.getSkillXp(skill_type)).withStyle(ChatFormatting.GOLD));
+            player.sendSystemMessage(Component.literal(skill_type.toString() + " xp: " + skill_xp.getSkillXp(skill_type)).withStyle(ChatFormatting.GOLD));
             player.sendSystemMessage(Component.literal(String.valueOf((skill_type))).withStyle(ChatFormatting.BLACK));
-            PacketHandling.sentToPlayer(new SkillXpDataSyncS2CPacket(skill_xp.getSkillsXpMap()), player);
+            PacketHandling.sentToPlayer(new SkillXpDataSyncS2CPacket(skill_xp.getSkillsXpMap(), skill_type), player);
             });
 
-            // Check if the player has leveled up and or met xp requirements
+            // TODO: Check if the player has leveled up and or met xp requirements
 
 
         });

@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "sky_forge_mod:item/pine_cone"
-  }
-}

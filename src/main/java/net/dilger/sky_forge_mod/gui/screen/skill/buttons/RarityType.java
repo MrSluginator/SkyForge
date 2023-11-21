@@ -22,4 +22,14 @@ public enum RarityType {
     public Component getName() {
         return Component.literal(name);
     }
+
+    public static RarityType byName(String name) {
+        for (RarityType rarity: values()) {
+            if (rarity.name.equals(name)) {
+                return rarity;
+            }
+        }
+
+        throw new IllegalArgumentException("Unknown rarity type '" + name + "'");
+    }
 }

@@ -2,7 +2,7 @@ package net.dilger.sky_forge_mod.gui.screen.skill.buttons;
 
 import net.minecraft.network.chat.Component;
 
-public enum PerkType {
+public enum PerkFrameType {
     SQUARE(0, "square"),
     EXCITED(1, "excited"),
     SHIELD(2, "shield"),
@@ -15,7 +15,7 @@ public enum PerkType {
     private final String name;
 
 
-    PerkType(int xIndex, String name)
+    PerkFrameType(int xIndex, String name)
     {
         this.xIndex = xIndex;
         this.name = name;
@@ -42,4 +42,19 @@ public enum PerkType {
         return Component.literal(name);
     }
 
+    public static PerkFrameType byName(String name) {
+        for (PerkFrameType frame: values()) {
+            if (frame.name.equals(name)) {
+                return frame;
+            }
+        }
+
+        throw new IllegalArgumentException("Unknown frame type '" + name + "'");
+    }
+    public static int getBlockSize() {
+        return blockSize;
+    }
+    public int getOffset() {
+        return (blockSize - getSize())/2;
+    }
 }

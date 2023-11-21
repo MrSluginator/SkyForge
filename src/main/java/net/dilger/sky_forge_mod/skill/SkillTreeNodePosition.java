@@ -7,33 +7,33 @@ import net.minecraft.network.chat.Component;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class TreeNodePosition {
-    private final Perk advancement;
+public class SkillTreeNodePosition {
+    private final Perk perk;
     @Nullable
-    private final TreeNodePosition parent;
+    private final SkillTreeNodePosition parent;
     @Nullable
-    private final TreeNodePosition previousSibling;
+    private final SkillTreeNodePosition previousSibling;
     private final int childIndex;
-    private final List<TreeNodePosition> children = Lists.newArrayList();
-    private TreeNodePosition ancestor;
+    private final List<SkillTreeNodePosition> children = Lists.newArrayList();
+    private SkillTreeNodePosition ancestor;
     @Nullable
-    private TreeNodePosition thread;
+    private SkillTreeNodePosition thread;
     private int x;
-    private float y;
+    private int y;
     private float mod;
     private float change;
     private float shift;
 
-    public TreeNodePosition(Perk perk, @Nullable TreeNodePosition pParent, @Nullable TreeNodePosition pPreviousSibling, int pChildIndex, int pX) {
+    public SkillTreeNodePosition(Perk perk, @Nullable SkillTreeNodePosition pParent, @Nullable SkillTreeNodePosition pPreviousSibling, int pChildIndex, int pX) {
 
-        this.advancement = perk;
+        this.perk = perk;
         this.parent = pParent;
         this.previousSibling = pPreviousSibling;
         this.childIndex = pChildIndex;
         this.ancestor = this;
-        this.x = pX;
-        this.y = -1.0F;
-        TreeNodePosition treenodeposition = null;
+        this.x = 0;
+        this.y = 0;
+        SkillTreeNodePosition treenodeposition = null;
 
         for(Perk advancement : perk.getChildren()) {
             treenodeposition = this.addChild(advancement, treenodeposition);
@@ -43,8 +43,8 @@ public class TreeNodePosition {
     }
 
     @Nullable
-    private TreeNodePosition addChild(Perk perk, @Nullable TreeNodePosition pPrevious) {
-        pPrevious = new TreeNodePosition(perk, this, pPrevious, this.children.size() + 1, this.x + 1);
+    private SkillTreeNodePosition addChild(Perk perk, @Nullable SkillTreeNodePosition pPrevious) {
+        pPrevious = new SkillTreeNodePosition(perk, this, pPrevious, this.children.size() + 1, this.x + 1);
         this.children.add(pPrevious);
         
         return pPrevious;
@@ -53,23 +53,23 @@ public class TreeNodePosition {
     private void firstWalk() {
         if (this.children.isEmpty()) {
             if (this.previousSibling != null) {
-                this.y = this.previousSibling.y + 1.0F;
+                this.y = this.previousSibling.y + 1;
             } else {
-                this.y = 0.0F;
+                this.y = 0;
             }
 
         } else {
-            TreeNodePosition treenodeposition = null;
+            SkillTreeNodePosition treenodeposition = null;
 
-            for(TreeNodePosition treenodeposition1 : this.children) {
+            for(SkillTreeNodePosition treenodeposition1 : this.children) {
                 treenodeposition1.firstWalk();
                 treenodeposition = treenodeposition1.apportion(treenodeposition == null ? treenodeposition1 : treenodeposition);
             }
 
             this.executeShifts();
-            float f = ((this.children.get(0)).y + (this.children.get(this.children.size() - 1)).y) / 2.0F;
+            int f = ((this.children.get(0)).y + (this.children.get(this.children.size() - 1)).y) / 2;
             if (this.previousSibling != null) {
-                this.y = this.previousSibling.y + 1.0F;
+                this.y = this.previousSibling.y + 1;
                 this.mod = this.y - f;
             } else {
                 this.y = f;
@@ -85,7 +85,7 @@ public class TreeNodePosition {
             pSubtreeTopY = this.y;
         }
 
-        for(TreeNodePosition treenodeposition : this.children) {
+        for(SkillTreeNodePosition treenodeposition : this.children) {
             pSubtreeTopY = treenodeposition.secondWalk(pOffsetY + this.mod, pColumnX + 1, pSubtreeTopY);
         }
 
@@ -95,7 +95,7 @@ public class TreeNodePosition {
     private void thirdWalk(float pY) {
         this.y += pY;
 
-        for(TreeNodePosition treenodeposition : this.children) {
+        for(SkillTreeNodePosition treenodeposition : this.children) {
             treenodeposition.thirdWalk(pY);
         }
 
@@ -106,7 +106,7 @@ public class TreeNodePosition {
         float f1 = 0.0F;
 
         for(int i = this.children.size() - 1; i >= 0; --i) {
-            TreeNodePosition treenodeposition = this.children.get(i);
+            SkillTreeNodePosition treenodeposition = this.children.get(i);
             treenodeposition.y += f;
             treenodeposition.mod += f;
             f1 += treenodeposition.change;
@@ -116,7 +116,7 @@ public class TreeNodePosition {
     }
 
     @Nullable
-    private TreeNodePosition previousOrThread() {
+    private SkillTreeNodePosition previousOrThread() {
         if (this.thread != null) {
             return this.thread;
         } else {
@@ -125,7 +125,7 @@ public class TreeNodePosition {
     }
 
     @Nullable
-    private TreeNodePosition nextOrThread() {
+    private SkillTreeNodePosition nextOrThread() {
         if (this.thread != null) {
             return this.thread;
         } else {
@@ -133,14 +133,14 @@ public class TreeNodePosition {
         }
     }
 
-    private TreeNodePosition apportion(TreeNodePosition pNode) {
+    private SkillTreeNodePosition apportion(SkillTreeNodePosition pNode) {
         if (this.previousSibling == null) {
             return pNode;
         } else {
-            TreeNodePosition treenodeposition = this;
-            TreeNodePosition treenodeposition1 = this;
-            TreeNodePosition treenodeposition2 = this.previousSibling;
-            TreeNodePosition treenodeposition3 = this.parent.children.get(0);
+            SkillTreeNodePosition treenodeposition = this;
+            SkillTreeNodePosition treenodeposition1 = this;
+            SkillTreeNodePosition treenodeposition2 = this.previousSibling;
+            SkillTreeNodePosition treenodeposition3 = this.parent.children.get(0);
             float f = this.mod;
             float f1 = this.mod;
             float f2 = treenodeposition2.mod;
@@ -180,7 +180,7 @@ public class TreeNodePosition {
         }
     }
 
-    private void moveSubtree(TreeNodePosition pNode, float pShift) {
+    private void moveSubtree(SkillTreeNodePosition pNode, float pShift) {
         float f = (float)(pNode.childIndex - this.childIndex);
         if (f != 0.0F) {
             pNode.change -= pShift / f;
@@ -192,16 +192,16 @@ public class TreeNodePosition {
         pNode.mod += pShift;
     }
 
-    private TreeNodePosition getAncestor(TreeNodePosition pSelf, TreeNodePosition pOther) {
+    private SkillTreeNodePosition getAncestor(SkillTreeNodePosition pSelf, SkillTreeNodePosition pOther) {
         return this.ancestor != null && pSelf.parent.children.contains(this.ancestor) ? this.ancestor : pOther;
     }
 
     private void finalizePosition() {
-        this.advancement.setTreePosition((float)this.x, this.y);
+        this.perk.getDisplay().setTreeLocation(this.x, (int) this.y);
         
 
         if (!this.children.isEmpty()) {
-            for(TreeNodePosition treenodeposition : this.children) {
+            for(SkillTreeNodePosition treenodeposition : this.children) {
                 treenodeposition.finalizePosition();
             }
         }
@@ -209,7 +209,7 @@ public class TreeNodePosition {
     }
 
     public static void run(Perk pRoot) {
-        TreeNodePosition treenodeposition = new TreeNodePosition(pRoot, (TreeNodePosition) null, (TreeNodePosition) null, 1, 0);
+        SkillTreeNodePosition treenodeposition = new SkillTreeNodePosition(pRoot, (SkillTreeNodePosition) null, (SkillTreeNodePosition) null, 1, 0);
         treenodeposition.firstWalk();
         float f = treenodeposition.secondWalk(0.0F, 0, treenodeposition.y);
         if (f < 0.0F) {
@@ -220,14 +220,14 @@ public class TreeNodePosition {
 
     }
 
-    public static TreeNodePosition runFirstWalk(Perk root) {
-        TreeNodePosition treenodeposition = new TreeNodePosition(root, (TreeNodePosition) null, (TreeNodePosition) null, 1, 0);
+    public static SkillTreeNodePosition runFirstWalk(Perk root) {
+        SkillTreeNodePosition treenodeposition = new SkillTreeNodePosition(root, (SkillTreeNodePosition) null, (SkillTreeNodePosition) null, 1, 0);
         treenodeposition.firstWalk();
         treenodeposition.finalizePosition();
         return treenodeposition;
     }
     static float f;
-    public static void runSecondWalk(TreeNodePosition treenodeposition) {
+    public static void runSecondWalk(SkillTreeNodePosition treenodeposition) {
         if (treenodeposition == null) {
             Minecraft.getInstance().player.sendSystemMessage(Component.literal("must do first walk"));
             return;
@@ -236,7 +236,7 @@ public class TreeNodePosition {
         treenodeposition.finalizePosition();
     }
 
-    public static void runThirdWalk(TreeNodePosition treenodeposition) {
+    public static void runThirdWalk(SkillTreeNodePosition treenodeposition) {
         treenodeposition.thirdWalk(-f);
         treenodeposition.finalizePosition();
     }

@@ -1,7 +1,9 @@
-package net.dilger.sky_forge_mod.gui.screen.skill;
+package net.dilger.sky_forge_mod.gui.screen.skill.editor;
 
+import net.dilger.sky_forge_mod.gui.screen.skill.SkillTreeScreen;
 import net.dilger.sky_forge_mod.gui.screen.skill.buttons.PerkButton;
 import net.dilger.sky_forge_mod.skill.Perk;
+import net.dilger.sky_forge_mod.skill.SKILL_TYPE;
 import net.dilger.sky_forge_mod.util.KeyBinding;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -15,12 +17,14 @@ import java.util.Collection;
 public class SkillTreeEditor extends Screen {
 
     private final SkillTreeScreen screen;
+    private final SKILL_TYPE skill_type;
     private boolean buttonHovered = false;
 
-    protected SkillTreeEditor(SkillTreeScreen screen) {
+    public SkillTreeEditor(SkillTreeScreen screen, SKILL_TYPE skill_type) {
         super(Component.literal("Editor"));
 
         this.screen = screen;
+        this.skill_type = skill_type;
     }
 
     @Override
@@ -54,20 +58,27 @@ public class SkillTreeEditor extends Screen {
     protected void init() {
         super.init();
 
+        System.out.println("EDITOR INIT");
+
         updateChildren();
     }
 
     public void addButtonToScreen(Button button) {
-        screen.addButton(button);
+        //screen.addButton(button);
     }
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
         if (pButton == 0) {
             // TODO: make this more efficient with get focused()
-            for (GuiEventListener button: this.children()) {
-                if (button instanceof PerkButton) {
-                    if (button.isMouseOver(pMouseX, pMouseY)) {
-                        openPerkCreationScreen(((PerkButton) button).getPerk());
+            if (this.children().isEmpty()) {
+                openPerkCreationScreen();
+            }
+            else {
+                for (GuiEventListener button : this.children()) {
+                    if (button instanceof PerkButton) {
+                        if (button.isMouseOver(pMouseX, pMouseY)) {
+                            openPerkCreationScreen(((PerkButton) button).getPerk());
 
+                        }
                     }
                 }
             }
@@ -88,10 +99,15 @@ public class SkillTreeEditor extends Screen {
     }
 
     private void openPerkCreationScreen(Perk perk) {
-        this.minecraft.setScreen(new perkCreationScreen(this, perk));
+        this.minecraft.setScreen(new PerkCreationScreen(this, this.skill_type, perk));
+    }
+
+    private void openPerkCreationScreen() {
+        this.openPerkCreationScreen(null);
     }
 
     public void updateChildren() {
+        System.out.println("UPDATE CHILDREN");
         this.children().addAll((Collection) screen.children());
         for (GuiEventListener button: children()) {
             System.out.println("editor: "+button.toString());

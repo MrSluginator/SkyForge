@@ -35,7 +35,8 @@ public class ClientObjectiveEvents {
         public static void defensiveObjectiveEvent(ShieldBlockEvent event) {
             if (event.getEntity() instanceof Player player) {
 
-
+//                after taking damage then wait until the players regens
+//                add xp to a queue
 //                ClientSkillXpData.addDefensive_xp((long) (event.getBlockedDamage() * 10));
                 ModMessages.sentToServer(new GainDefenseXpC2SPacket());
             }

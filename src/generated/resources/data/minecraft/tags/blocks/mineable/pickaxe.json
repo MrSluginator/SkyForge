@@ -5,7 +5,6 @@
     "sky_forge_mod:sapphire_ore",
     "sky_forge_mod:deepslate_sapphire_ore",
     "sky_forge_mod:nether_sapphire_ore",
-    "sky_forge_mod:end_stone_sapphire_ore",
-    "sky_forge_mod:sound_block"
+    "sky_forge_mod:end_stone_sapphire_ore"
   ]
 }

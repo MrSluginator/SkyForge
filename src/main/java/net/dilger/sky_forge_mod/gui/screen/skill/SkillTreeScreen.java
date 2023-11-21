@@ -1,13 +1,13 @@
 package net.dilger.sky_forge_mod.gui.screen.skill;
 
-import com.google.common.collect.Sets;
 import net.dilger.sky_forge_mod.SkyForgeMod;
 import net.dilger.sky_forge_mod.gui.screen.skill.buttons.PerkButton;
-import net.dilger.sky_forge_mod.gui.screen.skill.buttons.PerkType;
-import net.dilger.sky_forge_mod.gui.screen.skill.buttons.RarityType;
+import net.dilger.sky_forge_mod.gui.screen.skill.buttons.PerkFrameType;
+import net.dilger.sky_forge_mod.gui.screen.skill.editor.SkillTreeEditor;
 import net.dilger.sky_forge_mod.skill.Perk;
+import net.dilger.sky_forge_mod.skill.PerkDisplayInfo;
 import net.dilger.sky_forge_mod.skill.SKILL_TYPE;
-import net.dilger.sky_forge_mod.skill.TreeNodePosition;
+import net.dilger.sky_forge_mod.skill.SkillTreeNodePosition;
 import net.dilger.sky_forge_mod.util.KeyBinding;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -27,9 +27,7 @@ public class SkillTreeScreen extends Screen {
     private static final Component TITLE =
             Component.translatable("gui." + SkyForgeMod.MOD_ID + ".skill_tree_screen");
     private final SkillTreeEditor editor;
-    private final Perk root;
-    //    private final PerkButton rootButton;
-    private final int imageWidth, imageHeight;
+    private Perk root;
     private final Map<SKILL_TYPE, SkillTreeTab> tabs;
     private final SKILL_TYPE skill_type;
     private int leftPos, topPos;
@@ -46,17 +44,10 @@ public class SkillTreeScreen extends Screen {
     public SkillTreeScreen(SKILL_TYPE skill_type, Map<SKILL_TYPE, SkillTreeTab> tabs) {
         super(TITLE);
 
-        editor = new SkillTreeEditor(this);
-
-        this.imageWidth = 176;
-        this.imageHeight = 166;
-
         this.tabs = tabs;
-
-        // testing
-        // need to find a better way to add buttons to the skill screen
         this.skill_type = skill_type;
-        this.root = new Perk(null, PerkType.SQUARE, RarityType.COMMON, null);
+
+        editor = new SkillTreeEditor(this, skill_type);
 
     }
 
@@ -82,36 +73,36 @@ public class SkillTreeScreen extends Screen {
             }
         }
 
-        // position buttons
-        TreeNodePosition.run(root);
-        // add buttons to screen
-        for (PerkButton perkButton: getAllButtons(root)) {
-            System.out.println("screen: "+perkButton.toString());
-            addRenderableWidget(perkButton);
+        if (root != null) {
+            // position buttons
+            SkillTreeNodePosition.run(root);
+            // add buttons to screen
+            addPerkButtonToScreen(root);
         }
+
+        this.treeWidth = this.maxX - this.minX;
+        this.treeHeight = this.maxY - this.minY;
+
         editor.updateChildren();
 
     }
 
     public void addButton(Button button) {
-        TreeNodePosition.run(root);
+        if (root != null) SkillTreeNodePosition.run(root);
         addRenderableWidget(button);
         editor.updateChildren();
 
     }
 
-    private Set<PerkButton> getAllButtons(Perk root) {
-        Set<PerkButton> buttons = Sets.newHashSet(root.getButton());
+    private void addPerkButtonToScreen(Perk perk) {
+        addRenderableWidget(perk.getButton());
 
-        for (Perk child: root.getChildren()) {
-            buttons.add(child.getButton());
-            getAllButtons(buttons, child);
+        for (Perk child: perk.getChildren()) {
+            addPerkButtonToScreen(child);
         }
 
-        updateScrollBoundaries(root);
-        this.treeWidth = this.maxX - this.minX;
-        this.treeHeight = this.maxY - this.minY;
-        return buttons;
+        updateTreeSize(perk);
+
     }
 
     private void getAllButtons(Set<PerkButton> buttons, Perk perk) {
@@ -124,7 +115,7 @@ public class SkillTreeScreen extends Screen {
     public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         // darkens the background screen
         this.renderBackground(graphics);
-        this.renderPerk(root, graphics, mouseX, mouseY, partialTicks);
+        if (root != null) this.renderPerk(root, graphics, mouseX, mouseY, partialTicks);
         //this is the format of how we draw text on the exampleScreen
         graphics.drawString(this.font,
                 TITLE,
@@ -135,7 +126,6 @@ public class SkillTreeScreen extends Screen {
         drawSkillTreeTabs(graphics);
         // for dev purposes
         drawScrollValues(graphics);
-        super.render(graphics, mouseX, mouseY, partialTicks);
     }
 
     public void renderPerk(Perk perk, GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
@@ -178,7 +168,7 @@ public class SkillTreeScreen extends Screen {
     private void drawSkillTreeTabs(GuiGraphics graphics) {
         int index = 0;
         for (SkillTreeTab tab: tabs.values()) {
-            tab.drawTab(graphics, Mth.floor((double) width / 2 - (tab.TEXTURE_WIDTH * (index - tabs.size()/2))), 0);
+            tab.drawTab(graphics, Mth.floor((double) width / 2 - (SkillTreeTab.TEXTURE_WIDTH * (index - (double) tabs.size() /2))), 0);
             index++;
         }
     }
@@ -217,12 +207,14 @@ public class SkillTreeScreen extends Screen {
 
     }
 
-    public void updateScrollBoundaries(Perk perk) {
+    public void updateTreeSize(Perk perk) {
+        int blockSize = PerkFrameType.getBlockSize();
+        PerkDisplayInfo perkDisplay = perk.getDisplay();
 
-        int perkLeft = perk.getTreeX();
-        int perkRight = perk.getTreeX() + perk.getButton().getWidth();
-        int perkTop = perk.getTreeY();
-        int perkBottom = perk.getTreeY() + perk.getButton().getHeight();
+        int perkLeft = perkDisplay.getTreeX();
+        int perkRight = perkDisplay.getTreeX() + blockSize;
+        int perkTop = perkDisplay.getTreeY();
+        int perkBottom = perkDisplay.getTreeY() + blockSize;
 
         this.minX = Math.min(this.minX, perkLeft);
         this.maxX = Math.max(this.maxX, perkRight);
@@ -230,7 +222,7 @@ public class SkillTreeScreen extends Screen {
         this.maxY = Math.max(this.maxY, perkBottom);
 
         for (Perk child: perk.getChildren()) {
-            updateScrollBoundaries(child);
+            updateTreeSize(child);
         }
     }
 

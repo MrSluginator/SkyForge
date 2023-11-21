@@ -15,26 +15,25 @@ public class PerkButton extends ImageButton {
 
     private final Perk perk;
     private static final ResourceLocation BASE_TEXTURE = new ResourceLocation(SkyForgeMod.MOD_ID, "textures/gui/skill/buttons/perk_buttons_base.png");
-    private final PerkType perkType;
+    private final PerkFrameType perkFrameType;
     private final RarityType rarity;
     private final IconType icon;
 
 
 
     // draws the button centered on the pX and pY
-    public PerkButton(Perk perk, int pX, int pY, PerkType perkType, RarityType rarity, @Nullable IconType icon, OnPress onPress) {
-        super(pX - perkType.getSize()/2,
-                pY - perkType.getSize()/2,
-                perkType.getSize(),
-                perkType.getSize(),
-                perkType.getXTexStart(),
-                perkType.getYTexStart(rarity),
+    public PerkButton(Perk perk, PerkFrameType perkFrameType, RarityType rarity, @Nullable IconType icon, OnPress onPress) {
+        super(0, 0,
+                perkFrameType.getSize(),
+                perkFrameType.getSize(),
+                perkFrameType.getXTexStart(),
+                perkFrameType.getYTexStart(rarity),
                 0, // assumes that there is a hovered texture then a disabled texture off set by some Y
                 BASE_TEXTURE,
                 onPress);
 
         this.perk = perk;
-        this.perkType = perkType;
+        this.perkFrameType = perkFrameType;
         this.rarity = rarity;
         this.icon = icon;
     }
@@ -42,14 +41,14 @@ public class PerkButton extends ImageButton {
 
     public void updatePosition(int pX, int pY) {
         // center texture on the positional location
-        setX(pX);
-        setY(pY);
+        setX(pX + this.perkFrameType.getOffset());
+        setY(pY + this.perkFrameType.getOffset());
     }
 
     @Override
     public void renderWidget(@NotNull GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
         super.renderWidget(graphics, pMouseX, pMouseY, pPartialTick);
-        if (icon != null) icon.draw(graphics, getX(), getY(), perkType.getSize());
+        if (icon != null) icon.draw(graphics, getX(), getY(), perkFrameType.getSize());
     }
 
     public void drawConnectivity(GuiGraphics graphics, boolean drawShadow) {
@@ -98,8 +97,8 @@ public class PerkButton extends ImageButton {
         return perk;
     }
 
-    public PerkType getPerkType() {
-        return perkType;
+    public PerkFrameType getPerkType() {
+        return perkFrameType;
     }
 
     public RarityType getRarity() {

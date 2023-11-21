@@ -1,12 +1,6 @@
-// 1.20.1	2023-10-20T00:44:08.2136829	Item Models: sky_forge_mod
-03118354c63c2617b18ddba65c474e4000e14cb6 assets/sky_forge_mod/models/item/bar_brawl_music_disc.json
-cdd21977824445774f94153614679e68474f6a06 assets/sky_forge_mod/models/item/catmint.json
-3b1f50a48ba1dbadfb5eb287b07561c077837579 assets/sky_forge_mod/models/item/corn.json
-4fe5f95553950ab42cdbfb60e5345911a707050a assets/sky_forge_mod/models/item/corn_seeds.json
+// 1.20.1	2023-11-21T00:24:58.0536048	Item Models: sky_forge_mod
 a94768aaf803f5ceb41103e53e36a3bd751b426a assets/sky_forge_mod/models/item/metal_detector.json
-5d7f60158b72c512cf24f287cf091f309b4fe353 assets/sky_forge_mod/models/item/pine_cone.json
 3e95c66d351605053032f9e2e80886e298c5aea0 assets/sky_forge_mod/models/item/raw_sapphire.json
-63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/sky_forge_mod/models/item/rhino_spawn_egg.json
 af3deeb3f85bcb843d988cc06dadcbdad07c3725 assets/sky_forge_mod/models/item/sapphire.json
 b432091f1e871e558357e7367aba568f79ca63ac assets/sky_forge_mod/models/item/sapphire_axe.json
 6588855fe93051f5cc47a66f148aa4d2d5005cd5 assets/sky_forge_mod/models/item/sapphire_boots.json
@@ -66,5 +60,3 @@ b75268cecffb7074f4d1bd93edc681c33f3ec302 assets/sky_forge_mod/models/item/sapphi
 a6ea927378025f1ad83bf7d23c237bc300dfb867 assets/sky_forge_mod/models/item/sapphire_sword.json
 21bda60b136ab122bdab1e22c288132c4cc2b4f0 assets/sky_forge_mod/models/item/sapphire_trapdoor.json
 0ce6f2602aafa4a6d4a6135a68419c2dad56b2ed assets/sky_forge_mod/models/item/sapphire_wall.json
-b44901c0f258f760122f016dbebde03d38943b01 assets/sky_forge_mod/models/item/strawberry.json
-105e37343a2fbab211b87b2e61d3be93a9041192 assets/sky_forge_mod/models/item/strawberry_seeds.json

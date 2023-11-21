@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/flower_pot_cross",
-  "render_type": "minecraft:cutout",
-  "textures": {
-    "plant": "sky_forge_mod:block/catmint"
-  }
-}

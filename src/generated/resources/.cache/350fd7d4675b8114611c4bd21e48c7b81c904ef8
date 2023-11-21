@@ -1,15 +1,12 @@
-// 1.20.1	2023-10-20T01:04:08.4545621	Tags for minecraft:block mod id sky_forge_mod
+// 1.20.1	2023-11-21T00:24:58.054605	Tags for minecraft:block mod id sky_forge_mod
 853a1bb5767bdd2307f7aa67d95e76f4bcdd0a2d data/forge/tags/blocks/needs_netherite_tool.json
 6b8df4e03093af6340da4ede76fe54b8ac729f0e data/minecraft/tags/blocks/fences.json
 615e189b53e004de4c9fee19d6f5cc6fe94690cf data/minecraft/tags/blocks/fence_gates.json
-cda73e0126e0f477ee347b6583f5b8dfcba55258 data/minecraft/tags/blocks/logs_that_burn.json
-4df237bf1dc43b3a6812b0455c9e4b02812e8554 data/minecraft/tags/blocks/mineable/pickaxe.json
+2daf48665d282b49bc9e01cc86de839f9f3ddffd data/minecraft/tags/blocks/mineable/pickaxe.json
 7211db3d8495ff48c2ab5677e51353b7cf3989bc data/minecraft/tags/blocks/needs_diamond_tool.json
 2c6b8cbe6ff31801ea1d7c478ad92e651d6f7211 data/minecraft/tags/blocks/needs_iron_tool.json
 1c61a9e335c6b0a637476e662030a8cf4c60860f data/minecraft/tags/blocks/needs_stone_tool.json
-7d1dfaa2084b05e26c37c7966a11c7870e4ec419 data/minecraft/tags/blocks/planks.json
 5451e45678feeaee35db43b9d5cb585338c8216a data/minecraft/tags/blocks/walls.json
 cbe74943424cd58ecea4feb516e4fa6015f9d9b9 data/sky_forge_mod/tags/blocks/farming_skill_objectives.json
 bb25b520c6296d0089a6ae4c0f84121f9ed88402 data/sky_forge_mod/tags/blocks/metal_detector_valuables.json
 73d66f372d8c4d1b45f3aa477fbb0a97cfa88b10 data/sky_forge_mod/tags/blocks/mining_skill_objectives.json
-cae95d93cd8607b1c7d5716fbc858bbff11f79c3 data/sky_forge_mod/tags/blocks/needs_sapphire_tool.json

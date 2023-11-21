@@ -1,6 +1,4 @@
-// 1.20.1	2023-10-20T00:44:08.2176825	Global Loot Modifiers : sky_forge_mod
-2a580ca7f31d58a81f2f8c336850d250a532e275 data/forge/loot_modifiers/global_loot_modifiers.json
+// 1.20.1	2023-11-21T00:24:58.0566043	Global Loot Modifiers : sky_forge_mod
+fdcc09a4c549e9b02eb4d43f64c23dc445b2f6cd data/forge/loot_modifiers/global_loot_modifiers.json
 c039153edd2c8b838d7319ffe3b15308703e2c50 data/sky_forge_mod/loot_modifiers/metal_detector_from_jungle_temples.json
 22dd1356c07815a0b716217069644ea8e2adbcaa data/sky_forge_mod/loot_modifiers/metal_detector_from_suspicious_sand.json
-a3a7f44e8d47b3d4b2f61c5c7c660fde07bd0ca7 data/sky_forge_mod/loot_modifiers/pine_cone_from_creeper.json
-bc52c7a7ef7a96edf6c55f0741be1e2111d198ce data/sky_forge_mod/loot_modifiers/pine_cone_from_grass.json

@@ -1,9 +1,6 @@
 package net.dilger.sky_forge_mod.client.screen;
 
 import net.dilger.sky_forge_mod.SkyForgeMod;
-import net.dilger.sky_forge_mod.networking.PacketHandling;
-import net.dilger.sky_forge_mod.networking.packets.perkEffects.C2SIncreasePlayerMaxHealthPacket;
-import net.dilger.sky_forge_mod.networking.packets.perkEffects.C2SIncreasePlayerSpeedPacket;
 import net.dilger.sky_forge_mod.util.KeyBinding;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -82,9 +79,9 @@ public class ExampleScreen extends Screen {
         player.sendSystemMessage(Component.literal("Pressed a Button!"));
 
         // increase player max health by a full heart
-        PacketHandling.sentToServer(new C2SIncreasePlayerMaxHealthPacket((byte) 2));
+        // PacketHandling.sentToServer(new C2SIncreasePlayerMaxHealthPacket((byte) 2));
         // increase player speed effect amplification by 1
-        PacketHandling.sentToServer(new C2SIncreasePlayerSpeedPacket((byte) 1));
+        // PacketHandling.sentToServer(new C2SIncreasePlayerSpeedPacket((byte) 1));
 
     }
 

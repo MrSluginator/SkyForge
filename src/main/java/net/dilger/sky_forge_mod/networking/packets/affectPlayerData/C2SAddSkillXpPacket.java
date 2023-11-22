@@ -1,7 +1,6 @@
 package net.dilger.sky_forge_mod.networking.packets.affectPlayerData;
 
 import net.dilger.sky_forge_mod.networking.PacketHandling;
-import net.dilger.sky_forge_mod.networking.packets.SkillXpDataSyncS2CPacket;
 import net.dilger.sky_forge_mod.skills.PlayerSkillXp;
 import net.dilger.sky_forge_mod.skills.PlayerSkillXpProvider;
 import net.minecraft.ChatFormatting;
@@ -12,7 +11,7 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class SendXPpacket {
+public class C2SAddSkillXpPacket {
 
     //this is what is getting encoded / decoded
     //add all xp variables here??
@@ -22,11 +21,11 @@ public class SendXPpacket {
     private final byte amount;
 
     //add variables that you want to be passed to the constructor below
-    public SendXPpacket(PlayerSkillXp.SKILL_TYPE skill, byte amount){
+    public C2SAddSkillXpPacket(PlayerSkillXp.SKILL_TYPE skill, byte amount){
         this.skill_type = skill;
         this.amount = amount;
     }
-    public SendXPpacket(FriendlyByteBuf buffer) {
+    public C2SAddSkillXpPacket(FriendlyByteBuf buffer) {
         this(PlayerSkillXp.SKILL_TYPE.valueOf(buffer.readUtf()), buffer.readByte());
     }
 
@@ -36,6 +35,7 @@ public class SendXPpacket {
 
     //you need one buffer.write per variable you are passing to the constructor
     public void encode(FriendlyByteBuf buffer) {
+
         buffer.writeUtf(this.skill_type.toString());
         buffer.writeByte(this.amount);
 
@@ -52,14 +52,14 @@ public class SendXPpacket {
             // Notify the player that they have gained a perk
             assert player != null;
 
-              // Change the player skill xp
+            // Change the player skill xp
 
             player.getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).ifPresent(skill_xp -> {
             skill_xp.addSkillXp(amount, skill_type);
 
             player.sendSystemMessage(Component.literal(skill_type.toString() + " xp: " + skill_xp.getSkillXp(skill_type)).withStyle(ChatFormatting.GOLD));
             player.sendSystemMessage(Component.literal(String.valueOf((skill_type))).withStyle(ChatFormatting.BLACK));
-            PacketHandling.sentToPlayer(new SkillXpDataSyncS2CPacket(skill_xp.getSkillsXpMap(), skill_type), player);
+            PacketHandling.sentToPlayer(new S2CSyncSkillXpPacket(skill_xp.getSkillsXpMap(), skill_type), player);
             });
 
             // TODO: Check if the player has leveled up and or met xp requirements

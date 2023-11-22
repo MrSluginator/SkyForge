@@ -4,7 +4,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.dilger.sky_forge_mod.SkyForgeMod;
 import net.dilger.sky_forge_mod.item.ModItems;
 import net.dilger.sky_forge_mod.networking.PacketHandling;
-import net.dilger.sky_forge_mod.networking.packets.SkillXpDataSyncS2CPacket;
+import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.S2CSyncSkillXpPacket;
 import net.dilger.sky_forge_mod.skills.PlayerSkillXpProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -149,7 +149,7 @@ public class ModEvents {
 
                 player.getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).ifPresent(skillXp -> {
                     for (PlayerSkillXp.SKILL_TYPE st: PlayerSkillXp.SKILL_TYPE.values()) {
-                        PacketHandling.sentToPlayer(new SkillXpDataSyncS2CPacket(skillXp.getSkillsXpMap(), st), player);
+                        PacketHandling.sentToPlayer(new S2CSyncSkillXpPacket(skillXp.getSkillsXpMap(), st), player);
                     }
                 });
 
@@ -163,12 +163,10 @@ public class ModEvents {
 
         if (event.getEntity() instanceof ServerPlayer player) {
             event.getEntity().sendSystemMessage(Component.literal("CLONE EVENT HAPPENED"));
-            event.getEntity().sendSystemMessage(Component.literal(event.getEntity().getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).toString()));
-            //printing the levels for debugging
-            event.getEntity().sendSystemMessage(Component.literal(String.valueOf(new PlayerSkillXp().getSkillXp(PlayerSkillXp.SKILL_TYPE.OFFENSE))));
+
             player.getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).ifPresent(skillXp -> {
                 for (PlayerSkillXp.SKILL_TYPE st: PlayerSkillXp.SKILL_TYPE.values()) {
-                    PacketHandling.sentToPlayer(new SkillXpDataSyncS2CPacket(skillXp.getSkillsXpMap(), st), player);
+                    PacketHandling.sentToPlayer(new S2CSyncSkillXpPacket(skillXp.getSkillsXpMap(), st), player);
                 }
             });
 

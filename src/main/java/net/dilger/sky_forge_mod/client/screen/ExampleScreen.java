@@ -2,11 +2,11 @@ package net.dilger.sky_forge_mod.client.screen;
 
 import net.dilger.sky_forge_mod.SkyForgeMod;
 import net.dilger.sky_forge_mod.util.KeyBinding;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
@@ -73,12 +73,16 @@ public class ExampleScreen extends Screen {
 
     private void handleExampleButton(Button button) {
         // logic here
-        Minecraft.getInstance().player.sendSystemMessage(Component.literal("Pressed a Button!"));
-        if (Minecraft.getInstance().player.experienceLevel >= 15){
-            Minecraft.getInstance().player.experienceLevel -= 15; //kind of works but doesn't tell the server that the player level has changed at all
-            // we could use packets for this maybe?
-            Minecraft.getInstance().player.sendSystemMessage(Component.literal("Stole some XP"));
-        }
+
+        LocalPlayer player = minecraft.getInstance().player;
+
+        player.sendSystemMessage(Component.literal("Pressed a Button!"));
+
+        // increase player max health by a full heart
+        // PacketHandling.sentToServer(new C2SIncreasePlayerMaxHealthPacket((byte) 2));
+        // increase player speed effect amplification by 1
+        // PacketHandling.sentToServer(new C2SIncreasePlayerSpeedPacket((byte) 1));
+
     }
 
     public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {

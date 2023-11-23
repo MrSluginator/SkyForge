@@ -1,9 +1,10 @@
 package net.dilger.sky_forge_mod.gui.screen.skill.editor;
 
+import com.google.common.collect.Maps;
 import net.dilger.sky_forge_mod.gui.screen.skill.IconType;
 import net.dilger.sky_forge_mod.gui.screen.skill.buttons.PerkFrameType;
 import net.dilger.sky_forge_mod.gui.screen.skill.buttons.RarityType;
-import net.dilger.sky_forge_mod.skill.PerkDisplayInfo;
+import net.dilger.sky_forge_mod.skill.Requirement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.CycleButton;
@@ -11,15 +12,18 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
-public class DisplayInfoCreationScreen extends Screen {
+import java.util.Map;
+
+public class RequirmentsCreationScreen extends Screen {
     private final PerkCreationScreen main;
     private CycleButton<PerkFrameType> perkTypeCycleButton;
     private CycleButton<RarityType> rarityTypeCycleButton;
     private EditBox perkNameEditBox;
     private EditBox perkDescriptionEditBox;
+    private final Map<String, Requirement> requirements = Maps.newLinkedHashMap();
 
-    protected DisplayInfoCreationScreen(PerkCreationScreen main) {
-        super(Component.literal("Display Info"));
+    protected RequirmentsCreationScreen(PerkCreationScreen main) {
+        super(Component.literal("Requirements"));
         this.main = main;
     }
 
@@ -49,7 +53,7 @@ public class DisplayInfoCreationScreen extends Screen {
         Minecraft.getInstance().setScreen(main);
     }
     private void handleSave(Button button) {
-        saveDisplay();
+        saveRequirements();
         handleExit(button);
     }
 
@@ -73,13 +77,7 @@ public class DisplayInfoCreationScreen extends Screen {
         return perkDescriptionEditBox.getValue();
     }
 
-    public void saveDisplay() {
-        main.setDisplayInfo(new PerkDisplayInfo(
-                Component.literal(getPerkName()),
-                Component.literal(getPerkDescription()),
-                getFrame(),
-                getRarity(),
-                getIcon()));
-        main.setPerkName(getPerkName());
+    public void saveRequirements() {
+        main.setRequirements(requirements);
     }
 }

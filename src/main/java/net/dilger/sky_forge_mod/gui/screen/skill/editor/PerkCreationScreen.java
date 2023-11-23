@@ -33,6 +33,12 @@ public class PerkCreationScreen extends Screen {
         addRenderableWidget(Button.builder(Component.literal("set display info"), this::handleSetDisplayInfo)
                 .bounds(4, 4, 120, 20)
                 .build());
+        addRenderableWidget(Button.builder(Component.literal("set requirements"), this::handleSetRequirements)
+                .bounds(4, 4, 120, 20)
+                .build());
+        addRenderableWidget(Button.builder(Component.literal("set reward"), this::handleSetReward)
+                .bounds(4, 4, 120, 20)
+                .build());
         addRenderableWidget(Button.builder(Component.literal("add perk"), this::handleAddPerk)
                 .bounds(240, 28, 60, 20)
                 .build());
@@ -62,11 +68,19 @@ public class PerkCreationScreen extends Screen {
         Minecraft.getInstance().setScreen(new DisplayInfoCreationScreen(this));
     }
 
-    private void setReward(PerkReward reward) {
+    private void handleSetRequirements(Button button) {
+        Minecraft.getInstance().setScreen(new RequirmentsCreationScreen(this));
+    }
+
+    private void handleSetReward(Button button) {
+        Minecraft.getInstance().setScreen(new RewardCreationScreen(this));
+    }
+
+    public void setReward(PerkReward reward) {
         this.reward = reward;
     }
 
-    private void setRequirements(Map<String, Requirement> requirements) {
+    public void setRequirements(Map<String, Requirement> requirements) {
         this.requirements = requirements;
     }
 

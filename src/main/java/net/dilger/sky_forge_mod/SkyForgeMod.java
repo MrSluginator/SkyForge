@@ -5,7 +5,7 @@ import net.dilger.sky_forge_mod.block.ModBlocks;
 import net.dilger.sky_forge_mod.item.ModCreativeModTabs;
 import net.dilger.sky_forge_mod.item.ModItems;
 import net.dilger.sky_forge_mod.loot.ModLootModifiers;
-import net.dilger.sky_forge_mod.networking.ModMessages;
+import net.dilger.sky_forge_mod.networking.PacketHandling;
 import net.dilger.sky_forge_mod.recipe.ModRecipes;
 import net.dilger.sky_forge_mod.sound.ModSounds;
 import net.dilger.sky_forge_mod.villager.ModVillagers;
@@ -52,7 +52,7 @@ public class SkyForgeMod {
         event.enqueueWork(() -> {
 
         });
-        ModMessages.register();
+        PacketHandling.register();
 //        might have to be inside enqueue
 
     }

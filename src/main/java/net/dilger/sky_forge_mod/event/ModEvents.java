@@ -4,6 +4,10 @@ package net.dilger.sky_forge_mod.event;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.dilger.sky_forge_mod.SkyForgeMod;
 import net.dilger.sky_forge_mod.item.ModItems;
+import net.dilger.sky_forge_mod.networking.PacketHandling;
+import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.S2CSyncSkillXpPacket;
+import net.dilger.sky_forge_mod.skills.PlayerSkillXpProvider;
+import net.minecraft.network.chat.Component;
 import net.dilger.sky_forge_mod.networking.ModMessages;
 import net.dilger.sky_forge_mod.networking.packets.SkillXpDataSyncS2CPacket;
 import net.dilger.sky_forge_mod.skill.PlayerSkillXpProvider;
@@ -28,7 +32,11 @@ import net.minecraftforge.event.village.WandererTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import net.dilger.sky_forge_mod.skills.PlayerSkillXp;
+
 import java.util.List;
+
+
 
 @Mod.EventBusSubscriber(modid = SkyForgeMod.MOD_ID)
 public class ModEvents {
@@ -128,7 +136,7 @@ public class ModEvents {
 //      @AutoRegisterCapabilities
     }
 
-    /*@SubscribeEvent
+    /*@SubscribeEvent //this is good to know /TODO something with with
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.side == LogicalSide.SERVER) {
             event.player.getCapability(PlayerPerkProvider.PLAYER_PERKS).ifPresent(perks -> {
@@ -144,9 +152,30 @@ public class ModEvents {
             if (event.getEntity() instanceof ServerPlayer player) {
 
                 player.getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).ifPresent(skillXp -> {
-                    ModMessages.sentToPlayer(new SkillXpDataSyncS2CPacket(skillXp.getSkillsXpMap()), player);
+                    for (PlayerSkillXp.SKILL_TYPE st: PlayerSkillXp.SKILL_TYPE.values()) {
+                        PacketHandling.sentToPlayer(new S2CSyncSkillXpPacket(skillXp.getSkillsXpMap(), st), player);
+                    }
                 });
+
             }
         }
     }
+
+    //the PlayerEvent.Clone event happens when the player either respawns or moves dimensions
+    @SubscribeEvent
+    public static void onPlayerClone(PlayerEvent.Clone event){
+
+        if (event.getEntity() instanceof ServerPlayer player) {
+            event.getEntity().sendSystemMessage(Component.literal("CLONE EVENT HAPPENED"));
+
+            player.getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).ifPresent(skillXp -> {
+                for (PlayerSkillXp.SKILL_TYPE st: PlayerSkillXp.SKILL_TYPE.values()) {
+                    PacketHandling.sentToPlayer(new S2CSyncSkillXpPacket(skillXp.getSkillsXpMap(), st), player);
+                }
+            });
+
+        }
+
+    }
+
 }

@@ -1,5 +1,7 @@
 package net.dilger.sky_forge_mod.client;
 
+import net.dilger.sky_forge_mod.skills.PlayerSkillXp;
+
 public class ClientSkillXpData {
 
     private static long offensive_xp;
@@ -9,6 +11,18 @@ public class ClientSkillXpData {
     private static long trading_xp;
     private static long fishing_xp;
     private static long mobility_xp;
+
+    public static void setSkill_xp(long xp, PlayerSkillXp.SKILL_TYPE skill_type) {
+        switch (skill_type) {
+            case DEFENSE -> setDefensive_xp(xp);
+            case FARMING -> setFarming_xp(xp);
+            case FISHING -> setFishing_xp(xp);
+            case MINING -> setMining_xp(xp);
+            case MOBILITY -> setMobility_xp(xp);
+            case OFFENSE -> setOffensive_xp(xp);
+            case TRADING -> setTrading_xp(xp);
+        }
+    }
 
     public static long getOffensive_xp() {
         return offensive_xp;

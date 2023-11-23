@@ -1,3 +1,5 @@
+// 1.20.1	2023-11-21T12:13:45.1891406	Global Loot Modifiers : sky_forge_mod
+fdcc09a4c549e9b02eb4d43f64c23dc445b2f6cd data/forge/loot_modifiers/global_loot_modifiers.json
 // 1.20.1	2023-11-21T00:24:58.0566043	Global Loot Modifiers : sky_forge_mod
 fdcc09a4c549e9b02eb4d43f64c23dc445b2f6cd data/forge/loot_modifiers/global_loot_modifiers.json
 c039153edd2c8b838d7319ffe3b15308703e2c50 data/sky_forge_mod/loot_modifiers/metal_detector_from_jungle_temples.json

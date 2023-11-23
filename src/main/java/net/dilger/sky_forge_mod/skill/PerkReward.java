@@ -10,24 +10,23 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class PerkReward {
     @Nullable
-    private final ArrayList<ResourceLocation> commonBuffs;
+    private final ResourceLocation[] commonBuffs;
     @Nullable
     private final ResourceLocation uniqueBuff;
 
-    public PerkReward(@Nullable ArrayList<ResourceLocation> commonBuffs, @Nullable ResourceLocation uniqueBuff) {
+    public PerkReward(@Nullable ResourceLocation[] commonBuffs, @Nullable ResourceLocation uniqueBuff) {
         this.commonBuffs = commonBuffs;
         this.uniqueBuff = uniqueBuff;
     }
 
     public String toString() {
         assert commonBuffs != null;
-        return "PerkBuff{common_buffs=" + Arrays.toString(commonBuffs.toArray()) + ", unique_buff=" + uniqueBuff + "}";
+        return "PerkBuff{common_buffs=" + Arrays.toString(commonBuffs) + ", unique_buff=" + uniqueBuff + "}";
     }
 
     public JsonElement serializeToJson() {
@@ -58,10 +57,9 @@ public class PerkReward {
         for(int i = 0; i < cpresourcelocation.length; ++i) {
             cpresourcelocation[i] = new ResourceLocation(SkyForgeMod.MOD_ID, GsonHelper.convertToString(jsonarray.get(i), "common_buffs[" + i + "]"));
         }
-        ArrayList<ResourceLocation> arresourcelocation = new ArrayList<>(List.of(cpresourcelocation));
         ResourceLocation upresourcelocation = new ResourceLocation(SkyForgeMod.MOD_ID, GsonHelper.getAsString(pJson, "unique_buff"));
 
-        return new PerkReward(arresourcelocation, upresourcelocation );
+        return new PerkReward(cpresourcelocation, upresourcelocation );
     }
 
     public static class Builder {

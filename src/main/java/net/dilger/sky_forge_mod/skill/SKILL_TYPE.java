@@ -9,4 +9,8 @@ public enum SKILL_TYPE {
     FISHING,
     MOBILITY;
 
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

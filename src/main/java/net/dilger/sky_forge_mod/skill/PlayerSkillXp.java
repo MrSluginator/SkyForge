@@ -8,21 +8,6 @@ import java.util.Map;
 
 @AutoRegisterCapability
 public class PlayerSkillXp {
-
-    public enum SKILL_TYPE {
-        OFFENSE,
-        DEFENSE,
-        MINING,
-        FARMING,
-        TRADING,
-        FISHING,
-        MOBILITY;
-
-        @Override
-        public String toString() {
-            return super.toString();
-        }
-    }
     private final Map<SKILL_TYPE, Long> skillsXpMap = Maps.newLinkedHashMap();
 
     public PlayerSkillXp(){

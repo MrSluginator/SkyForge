@@ -1,8 +1,8 @@
 package net.dilger.sky_forge_mod.networking.packets.affectPlayerData;
 
 import net.dilger.sky_forge_mod.networking.PacketHandling;
-import net.dilger.sky_forge_mod.skills.PlayerSkillXp;
-import net.dilger.sky_forge_mod.skills.PlayerSkillXpProvider;
+import net.dilger.sky_forge_mod.skill.PlayerSkillXpProvider;
+import net.dilger.sky_forge_mod.skill.SKILL_TYPE;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -16,17 +16,17 @@ public class C2SAddSkillXpPacket {
     //this is what is getting encoded / decoded
     //add all xp variables here??
     private static final String MESSAGE_GAIN_XP = "message.sky_forge_mod.gain_xp";
-    private final PlayerSkillXp.SKILL_TYPE skill_type;
+    private final SKILL_TYPE skill_type;
 
     private final byte amount;
 
     //add variables that you want to be passed to the constructor below
-    public C2SAddSkillXpPacket(PlayerSkillXp.SKILL_TYPE skill, byte amount){
+    public C2SAddSkillXpPacket(SKILL_TYPE skill, byte amount){
         this.skill_type = skill;
         this.amount = amount;
     }
     public C2SAddSkillXpPacket(FriendlyByteBuf buffer) {
-        this(PlayerSkillXp.SKILL_TYPE.valueOf(buffer.readUtf()), buffer.readByte());
+        this(SKILL_TYPE.valueOf(buffer.readUtf()), buffer.readByte());
     }
 
     public void toBytes(FriendlyByteBuf buf) {

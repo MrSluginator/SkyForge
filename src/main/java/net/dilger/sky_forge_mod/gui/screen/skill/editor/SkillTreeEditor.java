@@ -110,7 +110,11 @@ public class SkillTreeEditor extends Screen {
         System.out.println("UPDATE CHILDREN");
         this.children().addAll((Collection) screen.children());
         for (GuiEventListener button: children()) {
-            System.out.println("editor: "+button.toString());
+            System.out.println("editor: " + button.toString());
         }
+    }
+
+    public void setRoot(Perk root) {
+        this.screen.setRoot(root);
     }
 }

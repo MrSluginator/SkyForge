@@ -30,13 +30,13 @@ public class PerkCreationScreen extends Screen {
         super.init();
 
         addRenderableWidget(Button.builder(Component.literal("set display info"), this::handleSetDisplayInfo)
-                .bounds(4, 4, 120, 20)
+                .bounds(4, 0, 120, 20)
                 .build());
         addRenderableWidget(Button.builder(Component.literal("set requirements"), this::handleSetRequirements)
-                .bounds(4, 4, 120, 20)
+                .bounds(4, 24, 120, 20)
                 .build());
         addRenderableWidget(Button.builder(Component.literal("set reward"), this::handleSetReward)
-                .bounds(4, 4, 120, 20)
+                .bounds(4, 48, 120, 20)
                 .build());
         addRenderableWidget(Button.builder(Component.literal("add perk"), this::handleAddPerk)
                 .bounds(240, 28, 60, 20)
@@ -52,6 +52,19 @@ public class PerkCreationScreen extends Screen {
 
     private void handleAddPerk(Button button) {
         ResourceLocation resourceLocation = new ResourceLocation(this.skill_type.toString().toLowerCase()+ "/" + name);
+        if (display == null) {
+            Minecraft.getInstance().player.sendSystemMessage(Component.literal("Display null"));
+            return;
+        }
+        if (requirement == null) {
+            Minecraft.getInstance().player.sendSystemMessage(Component.literal("Requirement null"));
+            return;
+        }
+        if (reward == null) {
+            Minecraft.getInstance().player.sendSystemMessage(Component.literal("Reward null"));
+            return;
+        }
+
         Perk child = new Perk(
                 resourceLocation,
                 skill_type,
@@ -60,7 +73,12 @@ public class PerkCreationScreen extends Screen {
                 requirement,
                 reward);
 
-        parent.addChild(child);
+        if (parent == null) {
+            this.editor.setRoot(child);
+        }
+        else {
+            parent.addChild(child);
+        }
         handleExit(button);
     }
 
@@ -69,7 +87,7 @@ public class PerkCreationScreen extends Screen {
     }
 
     private void handleSetRequirements(Button button) {
-        Minecraft.getInstance().setScreen(new RequirmentsCreationScreen(this));
+        Minecraft.getInstance().setScreen(new RequirmentsCreationScreen(this, skill_type));
     }
 
     private void handleSetReward(Button button) {

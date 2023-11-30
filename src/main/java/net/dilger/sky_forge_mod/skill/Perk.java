@@ -87,11 +87,6 @@ public class Perk {
     public ResourceLocation getResourceLocation() {
         return resourceLocation;
     }
-
-    public SKILL_TYPE getTree() {
-        return tree;
-    }
-
     public PerkButton getButton() {
         return button;
     }
@@ -111,7 +106,7 @@ public class Perk {
     // Builder
     public static class Builder {
 
-        private SKILL_TYPE tree;
+        private final SKILL_TYPE tree;
         @Nullable
         private Perk parent;
         @Nullable

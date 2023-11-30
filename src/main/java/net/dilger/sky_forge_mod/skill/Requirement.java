@@ -95,7 +95,7 @@ public class Requirement {
         }
         if (this.itemCost != 0 && this.item != null) {
 
-            jsonobject.addProperty("item", this.item.hashCode());
+            jsonobject.addProperty("item", Item.getId(this.item));
             jsonobject.addProperty("item_cost", this.itemCost);
         }
 

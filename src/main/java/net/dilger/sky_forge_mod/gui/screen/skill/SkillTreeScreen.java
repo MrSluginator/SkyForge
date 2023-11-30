@@ -87,6 +87,10 @@ public class SkillTreeScreen extends Screen {
 
     }
 
+    public void setRoot(Perk root) {
+        this.root = root;
+    }
+
     public void addButton(Button button) {
         if (root != null) SkillTreeNodePosition.run(root);
         addRenderableWidget(button);
@@ -265,5 +269,6 @@ public class SkillTreeScreen extends Screen {
     public boolean isPauseScreen() {
         return false;
     }
+
 
 }

@@ -1,6 +1,5 @@
 package net.dilger.sky_forge_mod.gui.screen.skill.editor;
 
-import com.google.common.collect.Maps;
 import net.dilger.sky_forge_mod.gui.screen.skill.IconType;
 import net.dilger.sky_forge_mod.gui.screen.skill.buttons.PerkFrameType;
 import net.dilger.sky_forge_mod.gui.screen.skill.buttons.RarityType;
@@ -12,15 +11,13 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
-import java.util.Map;
-
 public class RequirmentsCreationScreen extends Screen {
     private final PerkCreationScreen main;
     private CycleButton<PerkFrameType> perkTypeCycleButton;
     private CycleButton<RarityType> rarityTypeCycleButton;
     private EditBox perkNameEditBox;
     private EditBox perkDescriptionEditBox;
-    private final Map<String, Requirement> requirements = Maps.newLinkedHashMap();
+    private Requirement requirement;
 
     protected RequirmentsCreationScreen(PerkCreationScreen main) {
         super(Component.literal("Requirements"));
@@ -78,6 +75,6 @@ public class RequirmentsCreationScreen extends Screen {
     }
 
     public void saveRequirements() {
-        main.setRequirements(requirements);
+        main.setRequirement(requirement);
     }
 }

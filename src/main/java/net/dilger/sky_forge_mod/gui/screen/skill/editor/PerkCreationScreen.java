@@ -8,7 +8,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nullable;
-import java.util.Map;
 
 public class PerkCreationScreen extends Screen {
     private final Perk parent;
@@ -17,7 +16,7 @@ public class PerkCreationScreen extends Screen {
     private PerkDisplayInfo display;
     private String name;
     private PerkReward reward;
-    private Map<String, Requirement> requirements;
+    private Requirement requirement;
 
     public PerkCreationScreen(SkillTreeEditor skillTreeEditor, SKILL_TYPE skill_type, @Nullable Perk parent) {
         super(Component.literal(parent != null ? parent.toString() : "root"));
@@ -55,9 +54,10 @@ public class PerkCreationScreen extends Screen {
         ResourceLocation resourceLocation = new ResourceLocation(this.skill_type.toString().toLowerCase()+ "/" + name);
         Perk child = new Perk(
                 resourceLocation,
+                skill_type,
                 parent,
                 display,
-                requirements,
+                requirement,
                 reward);
 
         parent.addChild(child);
@@ -80,8 +80,8 @@ public class PerkCreationScreen extends Screen {
         this.reward = reward;
     }
 
-    public void setRequirements(Map<String, Requirement> requirements) {
-        this.requirements = requirements;
+    public void setRequirement(Requirement requirement) {
+        this.requirement = requirement;
     }
 
 

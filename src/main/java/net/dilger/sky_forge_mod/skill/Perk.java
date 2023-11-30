@@ -1,9 +1,6 @@
 package net.dilger.sky_forge_mod.skill;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 import net.dilger.sky_forge_mod.gui.screen.skill.IconType;
 import net.dilger.sky_forge_mod.gui.screen.skill.buttons.PerkButton;
 import net.dilger.sky_forge_mod.gui.screen.skill.buttons.PerkFrameType;
@@ -16,11 +13,11 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -28,16 +25,20 @@ public class Perk {
 
     protected final Component title = Component.literal("root");
     private final ResourceLocation resourceLocation;
+    private final SKILL_TYPE tree;
     private final PerkButton button;
     private final Perk parent;
     private final ArrayList<Perk> children = new ArrayList<>();
     private final PerkDisplayInfo display;
     private final PerkReward reward;
-    private final Map<String, Requirement> requirements;
+    private final Requirement requirement;
 
 
-    public Perk(ResourceLocation resourceLocation, @Nullable Perk parent, PerkDisplayInfo display, Map<String, Requirement> requirements, PerkReward reward) {
+
+
+    public Perk(ResourceLocation resourceLocation, SKILL_TYPE tree, @Nullable Perk parent, PerkDisplayInfo display, Requirement requirement, PerkReward reward) {
         this.resourceLocation = resourceLocation;
+        this.tree = tree;
         this.parent = parent;
         this.display = display;
         this.button = new PerkButton(this,
@@ -45,7 +46,7 @@ public class Perk {
                 display.getRarity(),
                 display.getIcon(),
                 this::handlePerkButton);
-        this.requirements = ImmutableMap.copyOf(requirements);
+        this.requirement = requirement;
         this.reward = reward;
     }
 
@@ -87,6 +88,10 @@ public class Perk {
         return resourceLocation;
     }
 
+    public SKILL_TYPE getTree() {
+        return tree;
+    }
+
     public PerkButton getButton() {
         return button;
     }
@@ -105,20 +110,23 @@ public class Perk {
     
     // Builder
     public static class Builder {
+
+        private SKILL_TYPE tree;
         @Nullable
         private Perk parent;
         @Nullable
         private ResourceLocation parentId;
         private PerkDisplayInfo display;
         private PerkReward reward;
-        private Map<String, Requirement> requirements = Maps.newLinkedHashMap();
+        private Requirement requirement;
         
         
-        Builder(@Nullable ResourceLocation parentId, PerkDisplayInfo display, Map<String, Requirement> requirements, PerkReward reward) {
+        Builder(SKILL_TYPE tree, @Nullable ResourceLocation parentId, PerkDisplayInfo display, Requirement requirement, PerkReward reward) {
+            this.tree = tree;
             this.parentId = parentId;
             this.display = display;
             this.reward = reward;
-            this.requirements = requirements;
+            this.requirement = requirement;
         }
         
         public Perk.Builder parent(Perk parent) { 
@@ -148,17 +156,9 @@ public class Perk {
             return this;
         }
 
-        public Perk.Builder addRequirement(String pKey, PerkCondition condition) {
-            return this.addRequirement(pKey, new Requirement(condition));
-        }
-
-        public Perk.Builder addRequirement(String pKey, Requirement requirement) {
-            if (this.requirements.containsKey(pKey)) {
-                throw new IllegalArgumentException("Duplicate criterion " + pKey);
-            } else {
-                this.requirements.put(pKey, requirement);
-                return this;
-            }
+        public Perk.Builder addRequirement(int skillLevel, int xpCost, Item item, int itemCost) {
+            this.requirement = new Requirement(this.tree, skillLevel, xpCost, item, itemCost);
+            return this;
         }
 
         /**
@@ -181,7 +181,7 @@ public class Perk {
                 throw new IllegalStateException("Tried to build incomplete advancement!");
             } else {
 
-                return new Perk(resourceLocation, this.parent, this.display, this.requirements, this.reward);
+                return new Perk(resourceLocation, this.tree, this.parent, this.display, this.requirement, this.reward);
             }
         }
 
@@ -213,19 +213,14 @@ public class Perk {
             
 
             jsonobject.add("reward", this.reward.serializeToJson());
-            JsonObject jsonRequirementsMap = new JsonObject();
 
-            for(Map.Entry<String, Requirement> entry : this.requirements.entrySet()) {
-                jsonRequirementsMap.add(entry.getKey(), entry.getValue().serializeToJson());
-            }
-
-            jsonobject.add("requirements", jsonRequirementsMap);
+            jsonobject.add("requirement", this.requirement.serializeToJson());
             
             return jsonobject;
         }
 
         public String toString() {
-            return "Perk{parentId=" + this.parentId + ", display=" + this.display + ", reward=" + this.reward + ", requirements=" + this.requirements + "}";
+            return "Perk{parentId=" + this.parentId + ", display=" + this.display + ", reward=" + this.reward + ", requirement=" + this.requirement + "}";
         }
 
         /**
@@ -233,19 +228,17 @@ public class Perk {
          *
          */
         public static Perk.Builder fromJson(JsonObject pJson, DeserializationContext pContext, ICondition.IContext context) {
+            SKILL_TYPE tree = SKILL_TYPE.valueOf(GsonHelper.getAsString(pJson, "tree").toUpperCase());
             ResourceLocation resourcelocation = pJson.has("parent") ? new ResourceLocation(GsonHelper.getAsString(pJson, "parent")) : null;
             PerkDisplayInfo display = pJson.has("display") ? PerkDisplayInfo.fromJson(GsonHelper.getAsJsonObject(pJson, "display")) : null;
             PerkReward reward = PerkReward.deserialize(GsonHelper.getAsJsonObject(pJson, "reward"));
-            Map<String, Requirement> requirements = Requirement.requirementsFromJson(GsonHelper.getAsJsonObject(pJson, "requirements"), pContext);
+            Requirement requirements = Requirement.fromJson(GsonHelper.getAsJsonObject(pJson, "requirement"), pContext);
 
-            if (requirements.isEmpty()) {
-                throw new JsonSyntaxException("Perk requirements cannot be empty");
-            } else {
-                return new Perk.Builder(resourcelocation, display, requirements, reward);
-            }
+            return new Perk.Builder(tree, resourcelocation, display, requirements, reward);
+
         }
-        public Map<String, Requirement> getRequirements() {
-            return this.requirements;
+        public Requirement getRequirement() {
+            return this.requirement;
         }
     }
 

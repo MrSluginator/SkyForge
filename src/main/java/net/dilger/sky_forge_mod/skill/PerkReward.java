@@ -24,6 +24,10 @@ public class PerkReward {
         this.uniqueBuff = uniqueBuff;
     }
 
+    public void grantRewards() {
+         
+    }
+
     public String toString() {
         assert commonBuffs != null;
         return "PerkBuff{common_buffs=" + Arrays.toString(commonBuffs) + ", unique_buff=" + uniqueBuff + "}";

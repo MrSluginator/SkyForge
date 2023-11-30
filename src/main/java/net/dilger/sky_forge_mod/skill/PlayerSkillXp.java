@@ -21,6 +21,10 @@ public class PlayerSkillXp {
         return  this.skillsXpMap.get(skill_type);
     }
 
+    public int getSkillLevel(SKILL_TYPE skill_type) {
+        return (int) Math.floor(Math.log(getSkillXp(skill_type)));
+    }
+
     public void addSkillXp(long skillXp, SKILL_TYPE skill_type) {
 
         this.skillsXpMap.put(skill_type, this.skillsXpMap.get(skill_type) + skillXp);

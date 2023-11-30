@@ -1,4 +1,4 @@
-package net.dilger.sky_forge_mod.client;
+package net.dilger.sky_forge_mod.event;
 
 import net.dilger.sky_forge_mod.SkyForgeMod;
 import net.dilger.sky_forge_mod.networking.PacketHandling;

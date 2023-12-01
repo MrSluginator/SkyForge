@@ -38,7 +38,6 @@ public class PerkButton extends ImageButton {
         this.icon = icon;
     }
 
-
     public void updatePosition(int pX, int pY) {
         // center texture on the positional location
         setX(pX + this.perkFrameType.getOffset());

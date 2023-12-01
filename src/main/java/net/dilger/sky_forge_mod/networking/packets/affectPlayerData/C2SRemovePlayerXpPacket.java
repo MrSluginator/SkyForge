@@ -20,9 +20,6 @@ public class C2SRemovePlayerXpPacket {
         this(buffer.readByte());
     }
 
-    public void toBytes(FriendlyByteBuf buf) {
-
-    }
 
     //you need one buffer.write per variable you are passing to the constructor
     public void encode(FriendlyByteBuf buffer) {

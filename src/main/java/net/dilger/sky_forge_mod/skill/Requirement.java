@@ -4,14 +4,12 @@ package net.dilger.sky_forge_mod.skill;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.dilger.sky_forge_mod.networking.PacketHandling;
-import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.C2SRemovePlayerXpPacket;
+import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.C2SPayRequirementsPacket;
 import net.minecraft.advancements.critereon.DeserializationContext;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Requirement {
 
@@ -20,19 +18,9 @@ public class Requirement {
     private final int xpCost;
     private final Item item;
     private final int itemCost;
+    private boolean requirementsMet = false;
 
 
-    public Requirement(SKILL_TYPE skill_type, int skillLevel) {
-        this(skill_type, skillLevel, 0, null, 0);
-    }
-
-    public Requirement(SKILL_TYPE skill_type, int skillLevel, int xpCost) {
-        this(skill_type, skillLevel, xpCost, null, 0);
-    }
-
-    public Requirement(SKILL_TYPE skill_type, int skillLevel, Item item, int itemCost) {
-        this(skill_type, skillLevel, 0, item, itemCost);
-    }
     public Requirement(SKILL_TYPE skill_type, int skillLevel, int xpCost, Item item, int itemCost) {
         this.skillType = skill_type;
         this.skillLevel = skillLevel;
@@ -44,42 +32,49 @@ public class Requirement {
 
 
     public boolean meetsRequirements(ServerPlayer player) {
-        AtomicBoolean flag = new AtomicBoolean(true);
-        // check skill level
-        player.getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).ifPresent(skill -> {
-            if (skill.getSkillLevel(this.skillType) < skillLevel) {
-                flag.set(false);
-            }
-        });
-        // check player xp
-        if (player.experienceLevel < xpCost) {
-            flag.set(false);
-        }
-        // check items
-        if (player.getInventory().countItem(item) < itemCost) {
-            flag.set(false);
-        }
 
-        return flag.get();
+        // Notify the player that they have gained a perk
+        assert player != null;
+
+        // Change the player skill xp
+        // local player does not have capability
+        player.getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).ifPresent(skill_xp -> {
+            skill_xp.getSkillLevel(getSkillType());
+
+            boolean flag = true;
+            // check skill level
+
+            if (skill_xp.getSkillLevel(getSkillType()) < getSkillLevel()) {
+                flag = false;
+                player.sendSystemMessage(Component.literal("skill levelx : " + skill_xp.getSkillLevel(getSkillType())));
+            }
+
+            // check player xp
+            System.out.println("xp lvl : " + player.experienceLevel + " xp cost : " + getXpCost());
+            if (player.experienceLevel < getXpCost()) {
+                flag = false;
+                player.sendSystemMessage(Component.literal("xp level"));
+
+            }
+            // check items
+            if (player.getInventory().countItem(getItem()) < getItemCost()) {
+                flag = false;
+                player.sendSystemMessage(Component.literal("item count"));
+
+            }
+
+            System.out.println(flag);
+            System.out.println("handle : " + this);
+            requirementsMet(flag);
+
+        });
+
+        return requirementsMet;
     }
 
-    public void payRequirements(ServerPlayer player) {
-        // remove player xp
-        PacketHandling.sentToServer(new C2SRemovePlayerXpPacket((byte) 1));
-        // remove items
-        int itemsRemoved = 0;
-        while (itemsRemoved < itemCost) {
-            int slotWithItem = player.getInventory().findSlotMatchingItem(new ItemStack(item));
-            int slotItemCount = player.getInventory().getItem(slotWithItem).getCount();
-            if (slotItemCount < itemCost) {
-                player.getInventory().removeItem(slotWithItem, slotItemCount);
-                itemsRemoved += slotItemCount;
-            }
-            else{
-                player.getInventory().removeItem(slotWithItem, itemCost);
-                itemsRemoved += itemCost;
-            }
-        }
+    public void payRequirements() {
+
+        PacketHandling.sentToServer(new C2SPayRequirementsPacket(this));
 
     }
 
@@ -111,5 +106,31 @@ public class Requirement {
         int itemCost = pJson.has("item_cost") ? GsonHelper.getAsInt(pJson, "item_cost") : 0;
         return new Requirement(skillType, skillLevel, xpCost, item, itemCost);
 
+    }
+
+    public SKILL_TYPE getSkillType() {
+        return skillType;
+    }
+
+    public int getSkillLevel() {
+        return skillLevel;
+    }
+
+    public int getXpCost() {
+        return xpCost;
+    }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public int getItemCost() {
+        return itemCost;
+    }
+
+    public void requirementsMet(boolean met) {
+        requirementsMet = met;
+        System.out.println("package : "+this);
+        System.out.println(requirementsMet);
     }
 }

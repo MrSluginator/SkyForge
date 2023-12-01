@@ -34,7 +34,7 @@ public class AffectPlayerLevel{
 
     }
 
-    public void toBytes(FriendlyByteBuf buf) {
+    public void encode(FriendlyByteBuf buf) {
         assert Minecraft.getInstance().player != null;
         Minecraft.getInstance().player.sendSystemMessage(Component.literal("toBytes"));
         //this writes to the .json file

@@ -1,8 +1,6 @@
 package net.dilger.sky_forge_mod.networking;
 
-import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.AffectPlayerLevel;
-import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.C2SAddSkillXpPacket;
-import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.S2CSyncSkillXpPacket;
+import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.*;
 import net.dilger.sky_forge_mod.networking.packets.perkEffects.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -44,9 +42,25 @@ public class PacketHandling {
         // changing character attributes
         INSTANCE.messageBuilder(AffectPlayerLevel.class, id++, NetworkDirection.PLAY_TO_SERVER)
                 .decoder(AffectPlayerLevel::new)
-                .encoder(AffectPlayerLevel::toBytes)
+                .encoder(AffectPlayerLevel::encode)
                 .consumerMainThread(AffectPlayerLevel::handle)
                 .add();
+        INSTANCE.messageBuilder(C2SRemovePlayerXpPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(C2SRemovePlayerXpPacket::new)
+                .encoder(C2SRemovePlayerXpPacket::encode)
+                .consumerMainThread(C2SRemovePlayerXpPacket::handle)
+                .add();
+        INSTANCE.messageBuilder(C2SCheckRequirementsPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(C2SCheckRequirementsPacket::new)
+                .encoder(C2SCheckRequirementsPacket::encode)
+                .consumerMainThread(C2SCheckRequirementsPacket::handle)
+                .add();
+        INSTANCE.messageBuilder(C2SPayRequirementsPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(C2SPayRequirementsPacket::new)
+                .encoder(C2SPayRequirementsPacket::encode)
+                .consumerMainThread(C2SPayRequirementsPacket::handle)
+                .add();
+
 
         // perk effect packets
         INSTANCE.messageBuilder(C2SIncreasePlayerMaxHealthPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)

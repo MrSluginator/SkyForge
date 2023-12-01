@@ -4,6 +4,7 @@ import com.google.gson.JsonSyntaxException;
 import net.dilger.sky_forge_mod.skill.Requirement;
 import net.dilger.sky_forge_mod.skill.SKILL_TYPE;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -11,6 +12,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.awt.*;
 
 public class RequirmentsCreationScreen extends Screen {
     private final PerkCreationScreen main;
@@ -49,6 +52,18 @@ public class RequirmentsCreationScreen extends Screen {
                 .build());
     }
 
+    @Override
+    public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+        super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
+
+        pGuiGraphics.drawString(this.font,
+                Component.literal(skillType.toString()),
+                4,
+                0,
+                Color.GREEN.hashCode(),
+                false);
+    }
+
     private void handleExit(Button button) {
         Minecraft.getInstance().setScreen(main);
     }
@@ -59,28 +74,28 @@ public class RequirmentsCreationScreen extends Screen {
 
     private int getSkillLevel() {
         try {
-            return Integer.parseInt(skillLevelEditBox.getValue());
+            return Integer.parseInt(skillLevelEditBox.getValue().strip());
         } catch (NumberFormatException nfe) {
             return 0;
         }
     }
     private int getXpCost() {
         try {
-            return Integer.parseInt(xpCostEditBox.getValue());
+            return Integer.parseInt(xpCostEditBox.getValue().strip());
         } catch (NumberFormatException nfe) {
             return 0;
         }
     }
     private Item getItem() {
         try {
-            return ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemEditBox.getValue()));
+            return ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemEditBox.getValue().strip()));
         } catch (JsonSyntaxException jse) {
             return null;
         }
     }
     private int getItemCost() {
         try {
-            return Integer.parseInt(itemCostEditBox.getValue());
+            return Integer.parseInt(itemCostEditBox.getValue().strip());
         } catch (NumberFormatException nfe) {
             return 0;
         }

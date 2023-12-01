@@ -5,9 +5,7 @@ import net.dilger.sky_forge_mod.gui.screen.skill.IconType;
 import net.dilger.sky_forge_mod.gui.screen.skill.buttons.PerkButton;
 import net.dilger.sky_forge_mod.gui.screen.skill.buttons.PerkFrameType;
 import net.dilger.sky_forge_mod.gui.screen.skill.buttons.RarityType;
-import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.critereon.DeserializationContext;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
@@ -81,7 +79,9 @@ public class Perk {
     //    component methods
 
     private void handlePerkButton(Button button) {
-        Minecraft.getInstance().player.sendSystemMessage(Component.literal("Pressed " + display.getName().toString() + " perk!").withStyle(ChatFormatting.DARK_PURPLE));
+
+            requirement.payRequirements();
+
     }
 
     public ResourceLocation getResourceLocation() {

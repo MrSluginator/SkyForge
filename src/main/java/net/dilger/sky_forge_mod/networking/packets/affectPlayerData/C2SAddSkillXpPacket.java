@@ -29,10 +29,6 @@ public class C2SAddSkillXpPacket {
         this(SKILL_TYPE.valueOf(buffer.readUtf()), buffer.readByte());
     }
 
-    public void toBytes(FriendlyByteBuf buf) {
-
-    }
-
     //you need one buffer.write per variable you are passing to the constructor
     public void encode(FriendlyByteBuf buffer) {
 

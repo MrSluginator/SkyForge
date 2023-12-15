@@ -9,6 +9,8 @@ import net.dilger.sky_forge_mod.gui.screen.skill.IconType;
 import net.dilger.sky_forge_mod.gui.screen.skill.buttons.PerkButton;
 import net.dilger.sky_forge_mod.gui.screen.skill.buttons.PerkFrameType;
 import net.dilger.sky_forge_mod.gui.screen.skill.buttons.RarityType;
+import net.dilger.sky_forge_mod.networking.PacketHandling;
+import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.C2SPayRequirementsPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
@@ -35,6 +37,8 @@ public class Perk {
     private final PerkDisplayInfo display;
     private final PerkReward reward;
     private final Requirement requirement;
+    private boolean perkUnlocked = false;
+    private boolean perkAquired = false;
 
 
 
@@ -90,7 +94,15 @@ public class Perk {
 
     private void handlePerkButton(Button button) {
 
-            requirement.payRequirements();
+        if (!perkAquired) {
+            PacketHandling.sentToServer(new C2SPayRequirementsPacket(this.requirement));
+            // make this packet change the player capability of which perks the player has unlocked
+            if (requirement.payRequirements()) {
+                reward.grantRewards();
+                perkAquired = true;
+            }
+        }
+
 
     }
 
@@ -111,28 +123,6 @@ public class Perk {
     }
     public ArrayList<Perk> getChildren() {
         return children;
-    }
-
-    public JsonObject serializeToJson() {
-        JsonObject jsonobject = new JsonObject();
-        if (this.parent != null) {
-            jsonobject.addProperty("parent", this.parent.getResourceLocation().toString());
-        }
-
-
-        jsonobject.add("display", this.display.serializeToJson());
-
-        jsonobject.add("reward", this.reward.serializeToJson());
-
-        jsonobject.add("requirement", this.requirement.serializeToJson());
-
-        if (!children.isEmpty()) {
-            for (Perk child : children) {
-                child.serializeToJson();
-            }
-        }
-
-        return jsonobject;
     }
 
     // Builder

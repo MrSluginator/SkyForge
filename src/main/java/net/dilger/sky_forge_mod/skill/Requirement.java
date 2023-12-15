@@ -5,8 +5,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.dilger.sky_forge_mod.networking.PacketHandling;
 import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.C2SPayRequirementsPacket;
-import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
 
@@ -28,53 +26,11 @@ public class Requirement {
         this.itemCost = itemCost;
     }
 
-
-
-    public boolean meetsRequirements(ServerPlayer player) {
-
-        // Notify the player that they have gained a perk
-        assert player != null;
-
-        // Change the player skill xp
-        // local player does not have capability
-        player.getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).ifPresent(skill_xp -> {
-            skill_xp.getSkillLevel(getSkillType());
-
-            boolean flag = true;
-            // check skill level
-
-            if (skill_xp.getSkillLevel(getSkillType()) < getSkillLevel()) {
-                flag = false;
-                player.sendSystemMessage(Component.literal("skill level : " + skill_xp.getSkillLevel(getSkillType())));
-            }
-
-            // check player xp
-            System.out.println("xp lvl : " + player.experienceLevel + " xp cost : " + getXpCost());
-            if (player.experienceLevel < getXpCost()) {
-                flag = false;
-                player.sendSystemMessage(Component.literal("xp level"));
-
-            }
-            // check items
-            if (player.getInventory().countItem(getItem()) < getItemCost()) {
-                flag = false;
-                player.sendSystemMessage(Component.literal("item count"));
-
-            }
-
-            System.out.println(flag);
-            System.out.println("handle : " + this);
-            requirementsMet(flag);
-
-        });
-
-        return requirementsMet;
-    }
-
-    public void payRequirements() {
-
+    public boolean payRequirements() {
+        System.out.println(requirementsMet);
         PacketHandling.sentToServer(new C2SPayRequirementsPacket(this));
-
+        System.out.println(requirementsMet);
+        return requirementsMet;
     }
 
 

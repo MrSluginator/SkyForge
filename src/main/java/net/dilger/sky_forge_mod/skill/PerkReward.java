@@ -6,6 +6,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import net.dilger.sky_forge_mod.SkyForgeMod;
+import net.dilger.sky_forge_mod.skill.common_buff.CommonBuffs;
+import net.dilger.sky_forge_mod.skill.unique_buff.UniqueBuffs;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 
@@ -25,7 +27,12 @@ public class PerkReward {
     }
 
     public void grantRewards() {
-         
+         for (ResourceLocation resource: commonBuffs) {
+             CommonBuffs.getBuff(resource).runPacket();
+         }
+         if (uniqueBuff != null) {
+             UniqueBuffs.getBuff(uniqueBuff);
+         }
     }
 
     public String toString() {

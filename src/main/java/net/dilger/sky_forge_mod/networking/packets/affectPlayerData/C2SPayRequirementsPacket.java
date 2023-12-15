@@ -24,6 +24,7 @@ public class C2SPayRequirementsPacket {
     //add variables that you want to be passed to the constructor below
     public C2SPayRequirementsPacket(Requirement requirement){
         this.requirement = requirement;
+
     }
     public C2SPayRequirementsPacket(FriendlyByteBuf buffer) {
         this(new Requirement(
@@ -85,6 +86,8 @@ public class C2SPayRequirementsPacket {
                 }
 
                 if (requirementsMet) {
+                    this.requirement.requirementsMet(true);
+
                     Minecraft.getInstance().player.sendSystemMessage(Component.literal("Perk unlocked"));
 
                     PacketHandling.sentToServer(new C2SRemovePlayerXpPacket((byte) this.requirement.getXpCost()));

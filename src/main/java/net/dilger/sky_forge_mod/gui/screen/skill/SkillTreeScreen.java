@@ -99,7 +99,7 @@ public class SkillTreeScreen extends Screen {
         super.onClose();
         System.out.println("on close");
         if (this.root != null) {
-            root.serializeToJson();
+
         }
     }
 

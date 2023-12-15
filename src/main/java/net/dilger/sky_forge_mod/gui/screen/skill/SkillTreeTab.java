@@ -59,9 +59,9 @@ public class SkillTreeTab {
 
     public boolean isMouseOver(double pMouseX, double pMouseY) {
         return pMouseX > (double)pX
-                && pMouseX < (double)(pX + this.TEXTURE_WIDTH)
+                && pMouseX < (double)(pX + TEXTURE_WIDTH)
                 && pMouseY > (double)pY
-                && pMouseY < (double)(pY + this.TEXTURE_HEIGHT);
+                && pMouseY < (double)(pY + TEXTURE_HEIGHT);
     }
     public void selected(boolean selected) {
         this.selected = selected;

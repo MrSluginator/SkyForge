@@ -21,7 +21,7 @@ public class CommonBuffs {
         }
     }
 
-    public static Buff<?> getCriterion(ResourceLocation pId) {
+    public static Buff<?> getBuff(ResourceLocation pId) {
         return CRITERIA.get(pId);
     }
 

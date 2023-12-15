@@ -7,7 +7,9 @@
     "rarity": "rare"
   },
   "reward": {
-
+    "common_buffs": [
+      "regen"
+    ]
   },
   "requirement": {
     "skill_type": "defense",

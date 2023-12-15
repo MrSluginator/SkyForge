@@ -1,14 +1,14 @@
 package net.dilger.sky_forge_mod.networking.packets.perkEffects;
 
-import net.dilger.sky_forge_mod.util.ModifierHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class C2SIncreasePlayerMaxHealthPacket {
+public class C2SIncreasePlayerFireResistancePacket {
 
     private final byte amount;
 
@@ -16,18 +16,17 @@ public class C2SIncreasePlayerMaxHealthPacket {
      * parameters must be set in both constructors through overflow
      * @param amount the amount that the stat will increase by
      */
-    public C2SIncreasePlayerMaxHealthPacket(byte amount) {
+    public C2SIncreasePlayerFireResistancePacket(byte amount) {
         this.amount = amount;
     }
 
-    public C2SIncreasePlayerMaxHealthPacket(FriendlyByteBuf buf) {
+    public C2SIncreasePlayerFireResistancePacket(FriendlyByteBuf buf) {
        this(buf.readByte());
     }
 
     /**
      * this writes to the .json file
      * used in S2C packets
-     *
      */
     public void encode(FriendlyByteBuf buf) {
         buf.writeByte(amount);
@@ -44,10 +43,10 @@ public class C2SIncreasePlayerMaxHealthPacket {
 
             assert player != null;
 
-            // set MAX HEALTH by using the ModifierHandler Class
-            // addition adds some amount to the base number of hearts (20) i.e. amount = 2 -> 20 + 2 = 22 hearts
-            // you need to get the current total then subtract the base number of hearts
-            ModifierHandler.setMaxHealth(player, player.getMaxHealth() - 20 + (float) amount, AttributeModifier.Operation.ADDITION);
+            // checks to see if player already has this effect then adds on the amount onto what they already have
+            int totalAmplification = (player.hasEffect(MobEffects.MOVEMENT_SPEED)) ? amount + player.getEffect(MobEffects.MOVEMENT_SPEED).getAmplifier() : amount;
+
+            player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, MobEffectInstance.INFINITE_DURATION, totalAmplification));
         });
         return true;
     }

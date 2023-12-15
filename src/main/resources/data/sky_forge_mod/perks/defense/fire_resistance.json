@@ -1,21 +1,18 @@
 {
   "tree": "defense",
-  "children": [
-    "resistance"
-  ],
   "display": {
-    "name": "regen",
-    "description": "grants permanent regeneration",
+    "name": "fire_resistance",
+    "description": "grants permanent fire resistance",
     "frame": "excited",
     "rarity": "rare"
   },
   "reward": {
     "common_buffs": [
-      "regen"
+      "fire_resistance"
     ]
   },
   "requirement": {
     "skill_type": "defense",
-    "skill_level": 0
+    "skill_level": 4
   }
 }

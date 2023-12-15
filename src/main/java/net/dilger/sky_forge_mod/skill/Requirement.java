@@ -27,9 +27,7 @@ public class Requirement {
     }
 
     public boolean payRequirements() {
-        System.out.println(requirementsMet);
         PacketHandling.sentToServer(new C2SPayRequirementsPacket(this));
-        System.out.println(requirementsMet);
         return requirementsMet;
     }
 

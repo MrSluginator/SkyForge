@@ -9,6 +9,8 @@ import java.util.Map;
 public class CommonBuffs {
     // contains all common buffs
     public static final RegenBuff REGEN_I = register(new RegenBuff((byte) 1));
+    public static final ResistanceBuff RESISTANCE_I = register(new ResistanceBuff((byte) 1));
+    public static final FireResistanceBuff FIRE_RESISTANCE_I = register(new FireResistanceBuff((byte) 1));
     public static final TemplateBuff TEMPLATE = register(new TemplateBuff());
     private static final Map<ResourceLocation, Buff<?>> CRITERIA = Maps.newHashMap();
     public static <T extends Buff<?>> T register(T buff) {

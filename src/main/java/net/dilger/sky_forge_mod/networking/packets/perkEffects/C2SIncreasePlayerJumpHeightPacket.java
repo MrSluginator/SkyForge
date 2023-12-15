@@ -1,8 +1,6 @@
 package net.dilger.sky_forge_mod.networking.packets.perkEffects;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -49,9 +47,6 @@ public class C2SIncreasePlayerJumpHeightPacket {
             int totalAmplification = (player.hasEffect(MobEffects.MOVEMENT_SPEED)) ? amount + player.getEffect(MobEffects.MOVEMENT_SPEED).getAmplifier() : amount;
 
             player.addEffect(new MobEffectInstance(MobEffects.JUMP, MobEffectInstance.INFINITE_DURATION, totalAmplification));
-
-            player.sendSystemMessage(Component.literal("JUMP BOOST GAINED: " + amount)
-                    .withStyle(ChatFormatting.LIGHT_PURPLE));
         });
         return true;
     }

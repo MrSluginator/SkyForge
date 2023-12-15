@@ -1,8 +1,6 @@
 package net.dilger.sky_forge_mod.networking.packets.perkEffects;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -49,9 +47,6 @@ public class C2SIncreasePlayerRegenerationPacket {
             int totalAmplification = (player.hasEffect(MobEffects.MOVEMENT_SPEED)) ? amount + player.getEffect(MobEffects.MOVEMENT_SPEED).getAmplifier() : amount;
 
             player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, MobEffectInstance.INFINITE_DURATION, totalAmplification));
-
-            player.sendSystemMessage(Component.literal("SPEED GAINED: " + amount)
-                    .withStyle(ChatFormatting.LIGHT_PURPLE));
         });
         return true;
     }

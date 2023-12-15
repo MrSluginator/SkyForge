@@ -1,21 +1,21 @@
 {
   "tree": "defense",
   "children": [
-    "resistance"
+    "max_hp"
   ],
   "display": {
-    "name": "regen",
-    "description": "grants permanent regeneration",
+    "name": "resistance",
+    "description": "grants permanent resistance",
     "frame": "excited",
-    "rarity": "rare"
+    "rarity": "uncommon"
   },
   "reward": {
     "common_buffs": [
-      "regen"
+      "resistance"
     ]
   },
   "requirement": {
     "skill_type": "defense",
-    "skill_level": 0
+    "skill_level": 2
   }
 }

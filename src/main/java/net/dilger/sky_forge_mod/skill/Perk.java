@@ -9,8 +9,6 @@ import net.dilger.sky_forge_mod.gui.screen.skill.IconType;
 import net.dilger.sky_forge_mod.gui.screen.skill.buttons.PerkButton;
 import net.dilger.sky_forge_mod.gui.screen.skill.buttons.PerkFrameType;
 import net.dilger.sky_forge_mod.gui.screen.skill.buttons.RarityType;
-import net.dilger.sky_forge_mod.networking.PacketHandling;
-import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.C2SPayRequirementsPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
@@ -95,8 +93,7 @@ public class Perk {
     private void handlePerkButton(Button button) {
 
         if (!perkAquired) {
-            PacketHandling.sentToServer(new C2SPayRequirementsPacket(this.requirement));
-            // make this packet change the player capability of which perks the player has unlocked
+            // make the packet change the player capability of which perks the player has unlocked
             if (requirement.payRequirements()) {
                 reward.grantRewards();
                 perkAquired = true;

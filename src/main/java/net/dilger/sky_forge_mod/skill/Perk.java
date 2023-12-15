@@ -102,7 +102,29 @@ public class Perk {
     public ArrayList<Perk> getChildren() {
         return children;
     }
-    
+
+    public JsonObject serializeToJson() {
+        JsonObject jsonobject = new JsonObject();
+        if (this.parent != null) {
+            jsonobject.addProperty("parent", this.parent.getResourceLocation().toString());
+        }
+
+
+        jsonobject.add("display", this.display.serializeToJson());
+
+        jsonobject.add("reward", this.reward.serializeToJson());
+
+        jsonobject.add("requirement", this.requirement.serializeToJson());
+
+        if (!children.isEmpty()) {
+            for (Perk child : children) {
+                child.serializeToJson();
+            }
+        }
+
+        return jsonobject;
+    }
+
     // Builder
     public static class Builder {
 

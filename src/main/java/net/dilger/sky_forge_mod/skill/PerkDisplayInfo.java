@@ -84,7 +84,8 @@ public class PerkDisplayInfo {
         jsonobject.add("description", Component.Serializer.toJsonTree(this.description));
         jsonobject.addProperty("frame", this.frame.getName().toString());
         jsonobject.addProperty("rarity", this.rarity.getName().toString());
-        jsonobject.addProperty("icon", this.icon.getName().toString());
+        jsonobject.addProperty("icon", icon == null ? null : this.icon.getName().toString());
+
 
         return jsonobject;
     }

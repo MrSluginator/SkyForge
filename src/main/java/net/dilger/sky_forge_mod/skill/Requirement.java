@@ -46,7 +46,7 @@ public class Requirement {
 
             if (skill_xp.getSkillLevel(getSkillType()) < getSkillLevel()) {
                 flag = false;
-                player.sendSystemMessage(Component.literal("skill levelx : " + skill_xp.getSkillLevel(getSkillType())));
+                player.sendSystemMessage(Component.literal("skill level : " + skill_xp.getSkillLevel(getSkillType())));
             }
 
             // check player xp
@@ -130,7 +130,5 @@ public class Requirement {
 
     public void requirementsMet(boolean met) {
         requirementsMet = met;
-        System.out.println("package : "+this);
-        System.out.println(requirementsMet);
     }
 }

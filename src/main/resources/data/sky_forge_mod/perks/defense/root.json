@@ -1,18 +1,15 @@
 {
   "display": {
-    "announce_to_chat": false,
-    "background": "minecraft:textures/gui/skills/backgrounds/adventure.png",
-    "description": {
-      "translate": "advancements.adventure.root.description"
-    },
-    "frame": "task",
-    "hidden": false,
-    "icon": {
-      "item": "minecraft:iron_sword"
-    },
-    "show_toast": false,
-    "title": {
-      "translate": "perks.skill_tree.root.title"
-    }
+    "name": "root",
+    "description": "root node of defense tree",
+    "frame": "SQUARE",
+    "rarity": "COMMON",
+    "icon": null
+  },
+  "reward": {
+
+  },
+  "requirement": {
+
   }
 }

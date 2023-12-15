@@ -87,6 +87,15 @@ public class SkillTreeScreen extends Screen {
 
     }
 
+    @Override
+    public void onClose() {
+        super.onClose();
+
+        if (this.root != null) {
+            root.serializeToJson();
+        }
+    }
+
     public void setRoot(Perk root) {
         this.root = root;
     }

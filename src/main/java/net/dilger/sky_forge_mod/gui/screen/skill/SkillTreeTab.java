@@ -34,7 +34,7 @@ public class SkillTreeTab {
         this.pX = pX;
         this.pY = pY;
 
-        graphics.blit(this.tabTexture,
+        graphics.blit(tabTexture,
                 pX, pY,
                 0, 0,
                 TEXTURE_WIDTH, TEXTURE_HEIGHT);

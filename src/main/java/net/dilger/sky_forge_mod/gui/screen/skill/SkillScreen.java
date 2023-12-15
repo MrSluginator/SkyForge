@@ -117,4 +117,5 @@ public class SkillScreen extends Screen {
     public boolean isPauseScreen() {
         return false;
     }
+
 }

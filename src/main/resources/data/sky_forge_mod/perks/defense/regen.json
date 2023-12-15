@@ -1,0 +1,19 @@
+{
+  "parent": "root",
+  "display": {
+    "name": "regeneration",
+    "description": "grants permanent regeneration",
+    "frame": "DIAMOND",
+    "rarity": "COMMON",
+    "icon": null
+  },
+  "reward": {
+    "common_buffs": [
+      "regen"
+    ]
+  },
+  "requirement": {
+    "skill_type": "defense",
+    "skill_level": 1
+  }
+}

@@ -1,7 +1,7 @@
 package net.dilger.sky_forge_mod.networking.packets.affectPlayerData;
 
 import net.dilger.sky_forge_mod.networking.PacketHandling;
-import net.dilger.sky_forge_mod.networking.packets.SkillXpDataSyncS2CPacket;
+import net.dilger.sky_forge_mod.networking.packets.affectClientData.SkillXpDataSyncS2CPacket;
 import net.dilger.sky_forge_mod.skills.PlayerSkillXp;
 import net.dilger.sky_forge_mod.skills.PlayerSkillXpProvider;
 import net.minecraft.ChatFormatting;
@@ -38,7 +38,6 @@ public class SendXPpacket {
     public void encode(FriendlyByteBuf buffer) {
         buffer.writeUtf(String.valueOf(this.skill_type));
         buffer.writeByte(this.amount);
-
     }
 
     //this is the logic for what we want to do when this message is built
@@ -47,12 +46,11 @@ public class SendXPpacket {
         context.enqueueWork(() -> {
             // HERE IS ON THE SERVER
             ServerPlayer player = context.getSender();
-//            ServerLevel level = player.serverLevel();
 
             // Notify the player that they have gained a perk
             assert player != null;
 
-              // Change the player skill xp
+            // Change the player skill xp
 
             player.getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).ifPresent(skill_xp -> {
             skill_xp.addSkillXp(amount, skill_type);
@@ -63,10 +61,7 @@ public class SendXPpacket {
             });
 
             // Check if the player has leveled up and or met xp requirements
-
-
         });
         return true;
     }
-
 }

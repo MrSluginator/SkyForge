@@ -1,4 +1,4 @@
-package net.dilger.sky_forge_mod.networking.packets;
+package net.dilger.sky_forge_mod.networking.packets.affectClientData;
 
 import net.dilger.sky_forge_mod.client.ClientSkillXpData;
 import net.dilger.sky_forge_mod.skills.PlayerSkillXp;

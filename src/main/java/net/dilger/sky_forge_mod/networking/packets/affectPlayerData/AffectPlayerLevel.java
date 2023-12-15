@@ -1,5 +1,6 @@
 package net.dilger.sky_forge_mod.networking.packets.affectPlayerData;
 
+import net.dilger.sky_forge_mod.skills.PlayerSkillXp;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
@@ -16,28 +17,23 @@ import java.util.function.Supplier;
 
 public class AffectPlayerLevel{
 
-    public static int amount = 0;
+    private byte amount = 0;
 
     //ANY TIME AffectPlayerLevel() is called all of the below methods happen
     //any variables that you want to be passed through must be declared above
 
-    public AffectPlayerLevel() {
+    public AffectPlayerLevel(byte amount) {
         assert Minecraft.getInstance().player != null;
         Minecraft.getInstance().player.sendSystemMessage(Component.literal(String.valueOf(amount)));
-        System.out.println("empty"+this);
+        this.amount = amount;
     }
 
     public AffectPlayerLevel(FriendlyByteBuf buf) {
-        System.out.println("buf"+this);
-        assert Minecraft.getInstance().player != null;
-        Minecraft.getInstance().player.sendSystemMessage(Component.literal("AffectPlayerLevel"));
-
+        this(buf.readByte());
     }
 
-    public void toBytes(FriendlyByteBuf buf) {
-        assert Minecraft.getInstance().player != null;
-        Minecraft.getInstance().player.sendSystemMessage(Component.literal("toBytes"));
-        //this writes to the .json file
+    public void encode(FriendlyByteBuf buffer) {
+        buffer.writeByte(this.amount);
     }
 
     public boolean handle(Supplier<NetworkEvent.Context> supplier) {
@@ -45,9 +41,7 @@ public class AffectPlayerLevel{
         context.enqueueWork(() -> {
             // HERE IS ON THE SERVER
             System.out.println("HANDLE"+this);
-            //ChangePlayerAttributes player = (ChangePlayerAttributes) context.getSender();
             ServerPlayer player = context.getSender();
-            //LocalPlayer player = Minecraft.getInstance().player;
 
             assert player != null;
             player.experienceLevel += amount;
@@ -63,5 +57,6 @@ public class AffectPlayerLevel{
         });
         return true;
     }
+
 
 }

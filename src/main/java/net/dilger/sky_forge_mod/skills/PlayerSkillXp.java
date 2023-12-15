@@ -27,7 +27,9 @@ public class PlayerSkillXp {
         }
     }
 
-    public Map<SKILL_TYPE, Long> getSkillsXpMap() {return this.skillsXpMap;}
+    public Map<SKILL_TYPE, Long> getSkillsXpMap() {
+        return this.skillsXpMap;
+    }
     public long getSkillXp(SKILL_TYPE skill_type) {
         return  this.skillsXpMap.get(skill_type);
     }
@@ -57,8 +59,6 @@ public class PlayerSkillXp {
                 nbt.putLong("affectPlayerData." + skill.toString().toLowerCase(), 0);
             }
         }
-
-
     }
 
     public void loadNBTData(CompoundTag nbt) {

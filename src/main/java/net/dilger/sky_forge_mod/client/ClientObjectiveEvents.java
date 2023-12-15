@@ -48,7 +48,6 @@ public class ClientObjectiveEvents {
                 Player player = event.getPlayer();
                 PacketHandling.sentToServer(new SendXPpacket(PlayerSkillXp.SKILL_TYPE.MINING, (byte) 1));
             }
-
         }
 
         @SubscribeEvent
@@ -58,7 +57,6 @@ public class ClientObjectiveEvents {
                 Player player = event.getPlayer();
                 PacketHandling.sentToServer(new SendXPpacket(PlayerSkillXp.SKILL_TYPE.FARMING, (byte) 1));
             }
-
         }
 
         @SubscribeEvent
@@ -69,20 +67,17 @@ public class ClientObjectiveEvents {
                 Player player = event.getEntity();
                 PacketHandling.sentToServer(new SendXPpacket(PlayerSkillXp.SKILL_TYPE.TRADING, (byte) 1));
             }
-
         }
 
         @SubscribeEvent
         public static void fishingObjectiveEvent(ItemFishedEvent event) {
             Player player = event.getEntity();
             PacketHandling.sentToServer(new SendXPpacket(PlayerSkillXp.SKILL_TYPE.FISHING, (byte) 1));
-
-
         }
 
         @SubscribeEvent
         public static void mobilityObjectiveEvent(LivingFallEvent event) {
-            if (event.getEntity() instanceof Player player) {
+            if (event.getEntity() instanceof Player) {
                 PacketHandling.sentToServer(new SendXPpacket(PlayerSkillXp.SKILL_TYPE.MOBILITY, (byte) 1));
             }
         }

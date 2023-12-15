@@ -29,7 +29,7 @@ public class SkillTreeTab {
         this.iconInfo = SkillTreeIconType.valueOf(skill_type.toString());
     }
 
-    public void drawTab(GuiGraphics graphics, int pX, int pY) {
+    public void drawTab(GuiGraphics graphics, int pX, int pY, boolean forceShow) {
         // draw tab base
         this.pX = pX;
         this.pY = pY;
@@ -48,7 +48,7 @@ public class SkillTreeTab {
                 iconInfo.getSize(),
                 iconInfo.getSize());
         // make dark if unselected
-        if (!selected) {
+        if (!selected && !forceShow) {
             graphics.fillGradient(pX, pY,
                     pX + TEXTURE_WIDTH,
                     pY + TEXTURE_HEIGHT,

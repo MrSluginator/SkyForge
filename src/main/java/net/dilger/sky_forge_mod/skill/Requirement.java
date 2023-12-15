@@ -5,7 +5,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.dilger.sky_forge_mod.networking.PacketHandling;
 import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.C2SPayRequirementsPacket;
-import net.minecraft.advancements.critereon.DeserializationContext;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.GsonHelper;
@@ -97,8 +96,8 @@ public class Requirement {
         return jsonobject;
     }
 
-    public static Requirement fromJson(JsonObject pJson, DeserializationContext pContext) {
-        SKILL_TYPE skillType = SKILL_TYPE.valueOf(GsonHelper.getAsString(pJson, "skill_type"));
+    public static Requirement fromJson(JsonObject pJson) {
+        SKILL_TYPE skillType = SKILL_TYPE.byName(GsonHelper.getAsString(pJson, "skill_type"));
         int skillLevel = GsonHelper.getAsInt(pJson, "skill_level");
 
         int xpCost = pJson.has("xp_cost") ? GsonHelper.getAsInt(pJson, "xp_cost") : 0;

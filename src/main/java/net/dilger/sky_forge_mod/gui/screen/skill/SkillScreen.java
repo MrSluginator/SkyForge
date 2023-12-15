@@ -2,16 +2,15 @@ package net.dilger.sky_forge_mod.gui.screen.skill;
 
 import com.google.common.collect.Maps;
 import net.dilger.sky_forge_mod.SkyForgeMod;
-import net.dilger.sky_forge_mod.gui.screen.skill.buttons.SkillTreeButton;
 import net.dilger.sky_forge_mod.skill.SKILL_TYPE;
 import net.dilger.sky_forge_mod.util.KeyBinding;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,7 +24,7 @@ public class SkillScreen extends Screen {
 
     private static final ResourceLocation TEXTURE =
             new ResourceLocation(SkyForgeMod.MOD_ID, "textures/gui/example_block.png");
-    private final Map<SKILL_TYPE, SkillTreeTab> skillTreeTabs = Maps.newHashMap();
+    private final Map<SKILL_TYPE, SkillTreeTab> tabs = Maps.newHashMap();
     private final int imageWidth, imageHeight;
 
     private int leftPos, topPos;
@@ -50,23 +49,8 @@ public class SkillScreen extends Screen {
         Level level = this.minecraft.level;
         if(level == null) return;
 
-        //create button
-        addRenderableWidget(
-                Button.builder(
-                        EXAMPLE_BUTTON,
-                        this::handleExampleButton)
-                        .bounds(this.leftPos + 8, this.topPos + 20, 80, 20)
-                        .tooltip(Tooltip.create(EXAMPLE_BUTTON))
-                        .build());
-
-        int index = 0;
         for (SKILL_TYPE skill_type: SKILL_TYPE.values()) {
-            skillTreeTabs.put(skill_type ,new SkillTreeTab(null, skill_type, false));
-
-            addRenderableWidget(
-                    new SkillTreeButton(this.leftPos + 12 + 24 * index, this.topPos + 40, skill_type, skillTreeTabs)
-            );
-            index++;
+            tabs.put(skill_type ,new SkillTreeTab(null, skill_type, false));
         }
     }
 
@@ -75,8 +59,9 @@ public class SkillScreen extends Screen {
     public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         // darkens the background screen
         this.renderBackground(graphics);
-        graphics.blit(TEXTURE, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
         super.render(graphics, mouseX, mouseY, partialTicks);
+
+        drawSkillTreeTabs(graphics);
 
         //this is the format of how we draw text on the exampleScreen
         graphics.drawString(this.font,
@@ -87,18 +72,12 @@ public class SkillScreen extends Screen {
                 false);
     }
 
-    private void handleExampleButton(Button button) {
-        // logic here
-
-        LocalPlayer player = minecraft.getInstance().player;
-
-        player.sendSystemMessage(Component.literal("Pressed a Button!"));
-
-        // increase player max health by a full heart
-        // PacketHandling.sentToServer(new C2SIncreasePlayerMaxHealthPacket((byte) 2));
-        // increase player speed effect amplification by 1
-        // PacketHandling.sentToServer(new C2SIncreasePlayerSpeedPacket((byte) 1));
-
+    private void drawSkillTreeTabs(GuiGraphics graphics) {
+        int index = 0;
+        for (SkillTreeTab tab: tabs.values()) {
+            tab.drawTab(graphics, Mth.floor((double) width / 2 - (SkillTreeTab.TEXTURE_WIDTH * (index - (double) tabs.size() /2))), 0, true);
+            index++;
+        }
     }
 
     public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
@@ -111,6 +90,25 @@ public class SkillScreen extends Screen {
         } else {
             return super.keyPressed(pKeyCode, pScanCode, pModifiers);
         }
+    }
+
+    public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
+        if (pButton == 0) {
+
+            for (SkillTreeTab tab : this.tabs.values()) {
+                if (tab.isMouseOver(pMouseX, pMouseY)) {
+
+                    if (tab.getScreen() == null) {
+                        Minecraft.getInstance().setScreen(new SkillTreeScreen(tab.getSkill_type(), tabs));
+                    } else {
+                        Minecraft.getInstance().setScreen(tab.getScreen());
+                    }
+                    break;
+                }
+            }
+        }
+
+        return super.mouseClicked(pMouseX, pMouseY, pButton);
     }
 
     @Override

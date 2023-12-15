@@ -61,7 +61,7 @@ public class PerkReward {
         for(int i = 0; i < cpresourcelocation.length; ++i) {
             cpresourcelocation[i] = new ResourceLocation(SkyForgeMod.MOD_ID, GsonHelper.convertToString(jsonarray.get(i), "common_buffs[" + i + "]"));
         }
-        ResourceLocation upresourcelocation = new ResourceLocation(SkyForgeMod.MOD_ID, GsonHelper.getAsString(pJson, "unique_buff"));
+        ResourceLocation upresourcelocation = pJson.has("unique_buff") ? new ResourceLocation(SkyForgeMod.MOD_ID, GsonHelper.getAsString(pJson, "unique_buff")) : null;
 
         return new PerkReward(cpresourcelocation, upresourcelocation );
     }

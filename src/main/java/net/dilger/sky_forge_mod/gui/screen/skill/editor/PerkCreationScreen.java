@@ -1,5 +1,6 @@
 package net.dilger.sky_forge_mod.gui.screen.skill.editor;
 
+import net.dilger.sky_forge_mod.SkyForgeMod;
 import net.dilger.sky_forge_mod.skill.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
@@ -51,7 +52,7 @@ public class PerkCreationScreen extends Screen {
     }
 
     private void handleAddPerk(Button button) {
-        ResourceLocation resourceLocation = new ResourceLocation(this.skill_type.toString().toLowerCase()+ "/" + name);
+        ResourceLocation resourceLocation = new ResourceLocation(SkyForgeMod.MOD_ID, this.skill_type.toString().toLowerCase()+ "/" + name);
         if (display == null) {
             Minecraft.getInstance().player.sendSystemMessage(Component.literal("Display null"));
             return;
@@ -68,6 +69,7 @@ public class PerkCreationScreen extends Screen {
         Perk child = new Perk(
                 resourceLocation,
                 skill_type,
+                null,
                 parent,
                 display,
                 requirement,

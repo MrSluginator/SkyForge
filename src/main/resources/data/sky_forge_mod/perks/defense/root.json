@@ -1,15 +1,19 @@
 {
+  "tree": "defense",
+  "children": [
+    "regen"
+  ],
   "display": {
     "name": "root",
     "description": "root node of defense tree",
-    "frame": "SQUARE",
-    "rarity": "COMMON",
-    "icon": null
+    "frame": "square",
+    "rarity": "common"
   },
   "reward": {
 
   },
   "requirement": {
-
+    "skill_type": "defense",
+    "skill_level": 0
   }
 }

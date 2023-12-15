@@ -14,6 +14,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
@@ -51,9 +52,15 @@ public class SkillTreeScreen extends Screen {
 
     }
 
+
     @Override
     protected void init() {
         super.init();
+
+        ResourceLocation rootResource = new ResourceLocation(SkyForgeMod.MOD_ID,"perks/" + skill_type.getName() + "/root.json");
+        root = Perk.Builder.fromResourceLocation(Perk.resourceFromName("root", skill_type));
+
+
 
         this.leftPos = (this.width) / 2;
         this.topPos = (this.height) / 2;
@@ -90,7 +97,7 @@ public class SkillTreeScreen extends Screen {
     @Override
     public void onClose() {
         super.onClose();
-
+        System.out.println("on close");
         if (this.root != null) {
             root.serializeToJson();
         }
@@ -181,7 +188,7 @@ public class SkillTreeScreen extends Screen {
     private void drawSkillTreeTabs(GuiGraphics graphics) {
         int index = 0;
         for (SkillTreeTab tab: tabs.values()) {
-            tab.drawTab(graphics, Mth.floor((double) width / 2 - (SkillTreeTab.TEXTURE_WIDTH * (index - (double) tabs.size() /2))), 0);
+            tab.drawTab(graphics, Mth.floor((double) width / 2 - (SkillTreeTab.TEXTURE_WIDTH * (index - (double) tabs.size() /2))), 0, false);
             index++;
         }
     }

@@ -4,8 +4,10 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.dilger.sky_forge_mod.SkyForgeMod;
 import net.dilger.sky_forge_mod.item.ModItems;
 import net.dilger.sky_forge_mod.networking.PacketHandling;
-import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.S2CSyncSkillXpPacket;
+import net.dilger.sky_forge_mod.networking.packets.affectClientData.PerksDataSyncS2CPacket;
+import net.dilger.sky_forge_mod.networking.packets.affectClientData.SkillXpDataSyncS2CPacket;
 import net.dilger.sky_forge_mod.skills.PlayerSkillXpProvider;
+import net.dilger.sky_forge_mod.talents.PlayerTalentCapability;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -103,13 +105,16 @@ public class ModEvents {
                 2, 12, 0.15f));
     }
 
+    //THIS IS WHERE WE CAN ATTACH VARIABLES TO THE PLAYER
     @SubscribeEvent
     public static void onAttachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
-        if (event.getObject() instanceof Player) {
+        if (event.getObject() instanceof Player player) {
             // attach a new capability to the player if it isn't already there
-            if (!event.getObject().getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).isPresent()) {
-                event.addCapability(new ResourceLocation(SkyForgeMod.MOD_ID, "properties"), new PlayerSkillXpProvider());
-
+            if (!player.getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).isPresent()) {
+                event.addCapability(new ResourceLocation(SkyForgeMod.MOD_ID, "perks"), new PlayerSkillXpProvider());
+            }
+            if (!player.getCapability(PlayerTalentCapability.PLAYER_TALENTS).isPresent()) {
+                event.addCapability(new ResourceLocation(SkyForgeMod.MOD_ID, "talents"), new PlayerTalentCapability());
             }
         }
     }
@@ -121,6 +126,11 @@ public class ModEvents {
 
             event.getOriginal().getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).ifPresent(oldStore -> {
                 event.getOriginal().getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).ifPresent(newStore -> {
+                    newStore.copyFrom(oldStore);
+                });
+            });
+            event.getOriginal().getCapability(PlayerTalentCapability.PLAYER_TALENTS).ifPresent(oldStore -> {
+                event.getOriginal().getCapability(PlayerTalentCapability.PLAYER_TALENTS).ifPresent(newStore -> {
                     newStore.copyFrom(oldStore);
                 });
             });
@@ -148,30 +158,30 @@ public class ModEvents {
             if (event.getEntity() instanceof ServerPlayer player) {
 
                 player.getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).ifPresent(skillXp -> {
-                    for (PlayerSkillXp.SKILL_TYPE st: PlayerSkillXp.SKILL_TYPE.values()) {
-                        PacketHandling.sentToPlayer(new S2CSyncSkillXpPacket(skillXp.getSkillsXpMap(), st), player);
-                    }
+                    PacketHandling.sentToPlayer(new SkillXpDataSyncS2CPacket(skillXp.getSkillsXpMap()), player);
                 });
-
+                player.getCapability(PlayerTalentCapability.PLAYER_TALENTS).ifPresent(talentXp -> {
+                    PacketHandling.sentToPlayer(new PerksDataSyncS2CPacket(talentXp.getTalents()), player);
+                });
             }
         }
     }
 
     //the PlayerEvent.Clone event happens when the player either respawns or moves dimensions
     @SubscribeEvent
-    public static void onPlayerClone(PlayerEvent.Clone event){
+    public static void onPlayerRespawn(PlayerEvent.Clone event){
 
         if (event.getEntity() instanceof ServerPlayer player) {
-            event.getEntity().sendSystemMessage(Component.literal("CLONE EVENT HAPPENED"));
-
+            event.getEntity().sendSystemMessage(Component.literal("RESPAWN EVENT HAPPENED"));
+            event.getEntity().sendSystemMessage(Component.literal(event.getEntity().getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).toString()));
+            //printing the levels for debugging
+            event.getEntity().sendSystemMessage(Component.literal(String.valueOf(new PlayerSkillXp().getSkillXp(PlayerSkillXp.SKILL_TYPE.OFFENSE))));
             player.getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).ifPresent(skillXp -> {
-                for (PlayerSkillXp.SKILL_TYPE st: PlayerSkillXp.SKILL_TYPE.values()) {
-                    PacketHandling.sentToPlayer(new S2CSyncSkillXpPacket(skillXp.getSkillsXpMap(), st), player);
-                }
+                PacketHandling.sentToPlayer(new SkillXpDataSyncS2CPacket(skillXp.getSkillsXpMap()), player);
             });
-
+            player.getCapability(PlayerTalentCapability.PLAYER_TALENTS).ifPresent(TalentXp -> {
+                PacketHandling.sentToPlayer(new PerksDataSyncS2CPacket(TalentXp.getTalents()), player);
+            });
         }
-
     }
-
 }

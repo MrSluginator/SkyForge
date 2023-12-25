@@ -1,6 +1,9 @@
 package net.dilger.sky_forge_mod.client.screen;
 
 import net.dilger.sky_forge_mod.SkyForgeMod;
+import net.dilger.sky_forge_mod.networking.PacketHandling;
+import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.AffectPlayerLevel;
+import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.UpdateTalents;
 import net.dilger.sky_forge_mod.util.KeyBinding;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -9,6 +12,8 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,7 +30,8 @@ public class ExampleScreen extends Screen {
 
     private int leftPos, topPos;
 
-    private Button button;
+    private Button button1;
+    private Button button2;
 
     public ExampleScreen() {
         super(TITLE);
@@ -46,11 +52,19 @@ public class ExampleScreen extends Screen {
         if(level == null) return;
 
         //create button
-        this.button = addRenderableWidget(
+        this.button1 = addRenderableWidget(
                 Button.builder(
                         EXAMPLE_BUTTON,
-                        this::handleExampleButton)
+                        this::handleExampleButton1)
                         .bounds(this.leftPos + 8, this.topPos + 20, 80, 20)
+                        .tooltip(Tooltip.create(EXAMPLE_BUTTON))
+                        .build());
+
+        this.button2 = addRenderableWidget(
+                Button.builder(
+                                EXAMPLE_BUTTON,
+                                this::handleExampleButton2)
+                        .bounds(this.leftPos + 8, this.topPos + 50, 80, 20)
                         .tooltip(Tooltip.create(EXAMPLE_BUTTON))
                         .build());
     }
@@ -71,17 +85,35 @@ public class ExampleScreen extends Screen {
                 false);
     }
 
-    private void handleExampleButton(Button button) {
+    private void handleExampleButton1(Button button) {
         // logic here
 
         LocalPlayer player = minecraft.getInstance().player;
 
         player.sendSystemMessage(Component.literal("Pressed a Button!"));
+        if (player.experienceLevel >= 15){
 
-        // increase player max health by a full heart
-        // PacketHandling.sentToServer(new C2SIncreasePlayerMaxHealthPacket((byte) 2));
-        // increase player speed effect amplification by 1
-        // PacketHandling.sentToServer(new C2SIncreasePlayerSpeedPacket((byte) 1));
+            //changes client side xp then changes tha amount to be subtracted in the AffectPlayer class. Then finally uses the messages.toServer to tell the server to update the xp amount aswell.
+            player.experienceLevel -= 15;
+
+            PacketHandling.sentToServer(new AffectPlayerLevel((byte)-15));
+            //this is the fake perk we are trying to save to the player object
+            PacketHandling.sentToServer(new UpdateTalents((byte) 11));
+
+            // we could use packets for this maybe?
+            player.sendSystemMessage(Component.literal("Stole some XP"));
+            player.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 100000, 6));
+
+
+        }
+    }
+
+    private void handleExampleButton2(Button button) {
+        // logic here
+
+        LocalPlayer player = minecraft.getInstance().player;
+        player.sendSystemMessage(Component.literal("I hate everything"));
+        PacketHandling.sentToServer(new UpdateTalents((byte) 10));
 
     }
 

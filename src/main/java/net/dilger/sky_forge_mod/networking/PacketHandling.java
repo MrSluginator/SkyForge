@@ -1,6 +1,6 @@
 package net.dilger.sky_forge_mod.networking;
 
-import net.dilger.sky_forge_mod.networking.packets.affectClientData.PlayerPerksS2CPacket;
+import net.dilger.sky_forge_mod.networking.packets.affectClientData.PerksDataSyncS2CPacket;
 import net.dilger.sky_forge_mod.networking.packets.affectClientData.SkillXpDataSyncS2CPacket;
 import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.*;
 import net.minecraft.resources.ResourceLocation;
@@ -49,10 +49,10 @@ public class PacketHandling {
                 .consumerMainThread(UpdateTalents::handle)
                 .add();
 
-        INSTANCE.messageBuilder(PlayerPerksS2CPacket.class, 5, NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(PlayerPerksS2CPacket::new)
-                .encoder(PlayerPerksS2CPacket::toBytes)
-                .consumerMainThread(PlayerPerksS2CPacket::handle)
+        INSTANCE.messageBuilder(PerksDataSyncS2CPacket.class, 5, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(PerksDataSyncS2CPacket::new)
+                .encoder(PerksDataSyncS2CPacket::toBytes)
+                .consumerMainThread(PerksDataSyncS2CPacket::handle)
                 .add();
     }
 

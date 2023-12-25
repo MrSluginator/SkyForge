@@ -11,6 +11,7 @@ public class PlayerTalents {
     private byte[] talents;
 
     public PlayerTalents(){
+        talents = new byte[1];
     }
 
     public byte[] getTalents() {

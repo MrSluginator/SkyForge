@@ -4,7 +4,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.dilger.sky_forge_mod.SkyForgeMod;
 import net.dilger.sky_forge_mod.item.ModItems;
 import net.dilger.sky_forge_mod.networking.PacketHandling;
-import net.dilger.sky_forge_mod.networking.packets.affectClientData.PlayerPerksS2CPacket;
+import net.dilger.sky_forge_mod.networking.packets.affectClientData.PerksDataSyncS2CPacket;
 import net.dilger.sky_forge_mod.networking.packets.affectClientData.SkillXpDataSyncS2CPacket;
 import net.dilger.sky_forge_mod.skills.PlayerSkillXpProvider;
 import net.dilger.sky_forge_mod.talents.PlayerTalentCapability;
@@ -111,10 +111,10 @@ public class ModEvents {
         if (event.getObject() instanceof Player player) {
             // attach a new capability to the player if it isn't already there
             if (!player.getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).isPresent()) {
-                event.addCapability(new ResourceLocation(SkyForgeMod.MOD_ID, "properties"), new PlayerSkillXpProvider());
+                event.addCapability(new ResourceLocation(SkyForgeMod.MOD_ID, "perks"), new PlayerSkillXpProvider());
             }
             if (!player.getCapability(PlayerTalentCapability.PLAYER_TALENTS).isPresent()) {
-                event.addCapability(new ResourceLocation(SkyForgeMod.MOD_ID, "playerPerks"), new PlayerTalentCapability());
+                event.addCapability(new ResourceLocation(SkyForgeMod.MOD_ID, "talents"), new PlayerTalentCapability());
             }
         }
     }
@@ -126,6 +126,11 @@ public class ModEvents {
 
             event.getOriginal().getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).ifPresent(oldStore -> {
                 event.getOriginal().getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).ifPresent(newStore -> {
+                    newStore.copyFrom(oldStore);
+                });
+            });
+            event.getOriginal().getCapability(PlayerTalentCapability.PLAYER_TALENTS).ifPresent(oldStore -> {
+                event.getOriginal().getCapability(PlayerTalentCapability.PLAYER_TALENTS).ifPresent(newStore -> {
                     newStore.copyFrom(oldStore);
                 });
             });
@@ -156,7 +161,7 @@ public class ModEvents {
                     PacketHandling.sentToPlayer(new SkillXpDataSyncS2CPacket(skillXp.getSkillsXpMap()), player);
                 });
                 player.getCapability(PlayerTalentCapability.PLAYER_TALENTS).ifPresent(talentXp -> {
-                    PacketHandling.sentToPlayer(new PlayerPerksS2CPacket(talentXp.getTalents()), player);
+                    PacketHandling.sentToPlayer(new PerksDataSyncS2CPacket(talentXp.getTalents()), player);
                 });
             }
         }
@@ -175,7 +180,7 @@ public class ModEvents {
                 PacketHandling.sentToPlayer(new SkillXpDataSyncS2CPacket(skillXp.getSkillsXpMap()), player);
             });
             player.getCapability(PlayerTalentCapability.PLAYER_TALENTS).ifPresent(TalentXp -> {
-                PacketHandling.sentToPlayer(new PlayerPerksS2CPacket(TalentXp.getTalents()), player);
+                PacketHandling.sentToPlayer(new PerksDataSyncS2CPacket(TalentXp.getTalents()), player);
             });
         }
     }

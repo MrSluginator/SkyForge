@@ -1,7 +1,7 @@
 package net.dilger.sky_forge_mod.networking.packets.affectPlayerData;
 
 import net.dilger.sky_forge_mod.networking.PacketHandling;
-import net.dilger.sky_forge_mod.networking.packets.affectClientData.PlayerPerksS2CPacket;
+import net.dilger.sky_forge_mod.networking.packets.affectClientData.PerksDataSyncS2CPacket;
 import net.dilger.sky_forge_mod.talents.PlayerTalentCapability;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
@@ -45,7 +45,7 @@ public class UpdateTalents {
             player.getCapability(PlayerTalentCapability.PLAYER_TALENTS).ifPresent(playerTalents -> {
 
                     playerTalents.addTalent(talent);
-                    PacketHandling.sentToPlayer(new PlayerPerksS2CPacket(playerTalents.getTalents()), player);
+                    PacketHandling.sentToPlayer(new PerksDataSyncS2CPacket(playerTalents.getTalents()), player);
                     player.sendSystemMessage(Component.literal("Saved Talents:" + Arrays.toString(playerTalents.getTalents())).withStyle(ChatFormatting.GOLD));
             });
         });

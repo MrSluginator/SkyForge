@@ -2,13 +2,8 @@ package net.dilger.sky_forge_mod.client.screen;
 
 import net.dilger.sky_forge_mod.SkyForgeMod;
 import net.dilger.sky_forge_mod.networking.PacketHandling;
-import net.dilger.sky_forge_mod.networking.packets.affectClientData.PlayerPerksS2CPacket;
 import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.AffectPlayerLevel;
-import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.SendXPpacket;
 import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.UpdateTalents;
-import net.dilger.sky_forge_mod.skills.PlayerSkillXp;
-import net.dilger.sky_forge_mod.talents.PlayerTalentCapability;
-import net.dilger.sky_forge_mod.talents.PlayerTalents;
 import net.dilger.sky_forge_mod.util.KeyBinding;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;

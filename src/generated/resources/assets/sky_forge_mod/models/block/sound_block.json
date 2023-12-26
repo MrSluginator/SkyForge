@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "sky_forge_mod:block/sound_block"
-  }
-}

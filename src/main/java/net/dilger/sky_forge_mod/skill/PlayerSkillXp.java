@@ -10,7 +10,11 @@ import java.util.Map;
 public class PlayerSkillXp {
     private final Map<SKILL_TYPE, Long> skillsXpMap = Maps.newLinkedHashMap();
 
-    public PlayerSkillXp(){}
+    public PlayerSkillXp(){
+        for (SKILL_TYPE skill_type: SKILL_TYPE.values()){
+            getSkillsXpMap().put(skill_type,0L);
+        }
+    }
 
     public Map<SKILL_TYPE, Long> getSkillsXpMap() {return this.skillsXpMap;}
     public long getSkillXp(SKILL_TYPE skill_type) {

@@ -1,0 +1,18 @@
+{
+  "tree": "defense",
+  "display": {
+    "name": "fire_resistance",
+    "description": "grants permanent fire resistance",
+    "frame": "excited",
+    "rarity": "rare"
+  },
+  "reward": {
+    "common_buffs": [
+      "fire_resistance"
+    ]
+  },
+  "requirement": {
+    "skill_type": "defense",
+    "skill_level": 4
+  }
+}

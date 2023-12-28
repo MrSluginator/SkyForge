@@ -1,0 +1,21 @@
+{
+  "tree": "defense",
+  "children": [
+    "fire_resistance"
+  ],
+  "display": {
+    "name": "max_hp",
+    "description": "increases maximum health",
+    "frame": "excited",
+    "rarity": "rare"
+  },
+  "reward": {
+    "common_buffs": [
+      "max_health"
+    ]
+  },
+  "requirement": {
+    "skill_type": "defense",
+    "skill_level": 3
+  }
+}

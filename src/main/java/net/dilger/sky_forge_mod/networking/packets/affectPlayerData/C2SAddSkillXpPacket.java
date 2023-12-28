@@ -1,7 +1,7 @@
 package net.dilger.sky_forge_mod.networking.packets.affectPlayerData;
 
 import net.dilger.sky_forge_mod.networking.PacketHandling;
-import net.dilger.sky_forge_mod.skills.PlayerSkillXpProvider;
+import net.dilger.sky_forge_mod.skill.PlayerSkillXpProvider;
 import net.dilger.sky_forge_mod.skill.SKILL_TYPE;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
@@ -43,6 +43,7 @@ public class C2SAddSkillXpPacket {
         context.enqueueWork(() -> {
             // HERE IS ON THE SERVER
             ServerPlayer player = context.getSender();
+//            ServerLevel level = player.serverLevel();
 
             // Notify the player that they have gained a perk
             assert player != null;
@@ -59,7 +60,9 @@ public class C2SAddSkillXpPacket {
 
             // TODO: Check if the player has leveled up and or met xp requirements
 
+
         });
         return true;
     }
+
 }

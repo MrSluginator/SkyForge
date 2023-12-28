@@ -1,9 +1,7 @@
 package net.dilger.sky_forge_mod.networking.packets.perkEffects;
 
 import net.dilger.sky_forge_mod.util.ModifierHandler;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraftforge.network.NetworkEvent;
@@ -50,10 +48,6 @@ public class C2SIncreasePlayerMaxHealthPacket {
             // addition adds some amount to the base number of hearts (20) i.e. amount = 2 -> 20 + 2 = 22 hearts
             // you need to get the current total then subtract the base number of hearts
             ModifierHandler.setMaxHealth(player, player.getMaxHealth() - 20 + (float) amount, AttributeModifier.Operation.ADDITION);
-
-            player.sendSystemMessage(Component.literal("HEARTS GAINED: " + amount)
-                    .withStyle(ChatFormatting.RED));
-            player.sendSystemMessage(Component.literal("TOTAL HEARTS: " + player.getMaxHealth()));
         });
         return true;
     }

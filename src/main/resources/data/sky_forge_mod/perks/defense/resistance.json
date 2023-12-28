@@ -1,0 +1,21 @@
+{
+  "tree": "defense",
+  "children": [
+    "max_hp"
+  ],
+  "display": {
+    "name": "resistance",
+    "description": "grants permanent resistance",
+    "frame": "excited",
+    "rarity": "uncommon"
+  },
+  "reward": {
+    "common_buffs": [
+      "resistance"
+    ]
+  },
+  "requirement": {
+    "skill_type": "defense",
+    "skill_level": 2
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "tree": "trading",
+  "display": {
+    "name": "root",
+    "description": "root node of defense tree",
+    "frame": "square",
+    "rarity": "common"
+  },
+  "reward": {
+
+  },
+  "requirement": {
+    "skill_type": "trading",
+    "skill_level": 0
+  }
+}

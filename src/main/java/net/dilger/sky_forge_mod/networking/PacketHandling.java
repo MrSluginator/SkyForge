@@ -1,10 +1,7 @@
 package net.dilger.sky_forge_mod.networking;
 
-import net.dilger.sky_forge_mod.networking.packets.affectClientData.PerksDataSyncS2CPacket;
-import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.AffectPlayerLevel;
-import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.C2SAddSkillXpPacket;
-import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.S2CSyncSkillXpPacket;
-import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.UpdateTalents;
+import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.*;
+import net.dilger.sky_forge_mod.networking.packets.perkEffects.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
@@ -43,22 +40,58 @@ public class PacketHandling {
                 .add();
 
         // changing character attributes
-        INSTANCE.messageBuilder(AffectPlayerLevel.class, 3, NetworkDirection.PLAY_TO_SERVER)
-                .encoder(AffectPlayerLevel::encode)
+        INSTANCE.messageBuilder(AffectPlayerLevel.class, id++, NetworkDirection.PLAY_TO_SERVER)
                 .decoder(AffectPlayerLevel::new)
+                .encoder(AffectPlayerLevel::encode)
                 .consumerMainThread(AffectPlayerLevel::handle)
                 .add();
-
-        INSTANCE.messageBuilder(UpdateTalents.class, 4, NetworkDirection.PLAY_TO_SERVER)
-                .encoder(UpdateTalents::encode)
-                .decoder(UpdateTalents::new)
-                .consumerMainThread(UpdateTalents::handle)
+        INSTANCE.messageBuilder(C2SRemovePlayerXpPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(C2SRemovePlayerXpPacket::new)
+                .encoder(C2SRemovePlayerXpPacket::encode)
+                .consumerMainThread(C2SRemovePlayerXpPacket::handle)
+                .add();
+        INSTANCE.messageBuilder(C2SCheckRequirementsPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(C2SCheckRequirementsPacket::new)
+                .encoder(C2SCheckRequirementsPacket::encode)
+                .consumerMainThread(C2SCheckRequirementsPacket::handle)
+                .add();
+        INSTANCE.messageBuilder(C2SPayRequirementsPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(C2SPayRequirementsPacket::new)
+                .encoder(C2SPayRequirementsPacket::encode)
+                .consumerMainThread(C2SPayRequirementsPacket::handle)
                 .add();
 
-        INSTANCE.messageBuilder(PerksDataSyncS2CPacket.class, 5, NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(PerksDataSyncS2CPacket::new)
-                .encoder(PerksDataSyncS2CPacket::toBytes)
-                .consumerMainThread(PerksDataSyncS2CPacket::handle)
+
+        // perk effect packets
+        INSTANCE.messageBuilder(C2SIncreasePlayerMaxHealthPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(C2SIncreasePlayerMaxHealthPacket::new)
+                .encoder(C2SIncreasePlayerMaxHealthPacket::encode)
+                .consumerMainThread(C2SIncreasePlayerMaxHealthPacket::handle)
+                .add();
+        INSTANCE.messageBuilder(C2SIncreasePlayerSpeedPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(C2SIncreasePlayerSpeedPacket::new)
+                .encoder(C2SIncreasePlayerSpeedPacket::encode)
+                .consumerMainThread(C2SIncreasePlayerSpeedPacket::handle)
+                .add();
+        INSTANCE.messageBuilder(C2SIncreasePlayerJumpHeightPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(C2SIncreasePlayerJumpHeightPacket::new)
+                .encoder(C2SIncreasePlayerJumpHeightPacket::encode)
+                .consumerMainThread(C2SIncreasePlayerJumpHeightPacket::handle)
+                .add();
+        INSTANCE.messageBuilder(C2SIncreasePlayerHastePacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(C2SIncreasePlayerHastePacket::new)
+                .encoder(C2SIncreasePlayerHastePacket::encode)
+                .consumerMainThread(C2SIncreasePlayerHastePacket::handle)
+                .add();
+        INSTANCE.messageBuilder(C2SIncreasePlayerRegenerationPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(C2SIncreasePlayerRegenerationPacket::new)
+                .encoder(C2SIncreasePlayerRegenerationPacket::encode)
+                .consumerMainThread(C2SIncreasePlayerRegenerationPacket::handle)
+                .add();
+        INSTANCE.messageBuilder(C2SIncreasePlayerResistancePacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(C2SIncreasePlayerResistancePacket::new)
+                .encoder(C2SIncreasePlayerResistancePacket::encode)
+                .consumerMainThread(C2SIncreasePlayerResistancePacket::handle)
                 .add();
     }
 

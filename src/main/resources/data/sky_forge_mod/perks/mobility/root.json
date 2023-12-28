@@ -1,0 +1,16 @@
+{
+  "tree": "mobility",
+  "display": {
+    "name": "root",
+    "description": "root node of defense tree",
+    "frame": "square",
+    "rarity": "common"
+  },
+  "reward": {
+
+  },
+  "requirement": {
+    "skill_type": "mobility",
+    "skill_level": 0
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "tree": "farming",
+  "display": {
+    "name": "root",
+    "description": "root node of defense tree",
+    "frame": "square",
+    "rarity": "common"
+  },
+  "reward": {
+
+  },
+  "requirement": {
+    "skill_type": "farming",
+    "skill_level": 0
+  }
+}

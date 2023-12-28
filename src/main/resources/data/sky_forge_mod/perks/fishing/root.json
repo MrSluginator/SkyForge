@@ -1,0 +1,16 @@
+{
+  "tree": "fishing",
+  "display": {
+    "name": "root",
+    "description": "root node of defense tree",
+    "frame": "square",
+    "rarity": "common"
+  },
+  "reward": {
+
+  },
+  "requirement": {
+    "skill_type": "fishing",
+    "skill_level": 0
+  }
+}

@@ -1,5 +1,6 @@
 package net.dilger.sky_forge_mod.networking;
 
+import net.dilger.sky_forge_mod.networking.packets.affectClientData.PerksDataSyncS2CPacket;
 import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.*;
 import net.dilger.sky_forge_mod.networking.packets.perkEffects.*;
 import net.minecraft.resources.ResourceLocation;
@@ -45,6 +46,12 @@ public class PacketHandling {
                 .encoder(AffectPlayerLevel::encode)
                 .consumerMainThread(AffectPlayerLevel::handle)
                 .add();
+
+        INSTANCE.messageBuilder(UpdateTalents.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .encoder(UpdateTalents::encode)
+                .decoder(UpdateTalents::new)
+                .consumerMainThread(UpdateTalents::handle)
+                .add();
         INSTANCE.messageBuilder(C2SRemovePlayerXpPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
                 .decoder(C2SRemovePlayerXpPacket::new)
                 .encoder(C2SRemovePlayerXpPacket::encode)
@@ -61,6 +68,10 @@ public class PacketHandling {
                 .consumerMainThread(C2SPayRequirementsPacket::handle)
                 .add();
 
+        INSTANCE.messageBuilder(PerksDataSyncS2CPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(PerksDataSyncS2CPacket::new)
+                .encoder(PerksDataSyncS2CPacket::toBytes)
+                .consumerMainThread(PerksDataSyncS2CPacket::handle);
 
         // perk effect packets
         INSTANCE.messageBuilder(C2SIncreasePlayerMaxHealthPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)

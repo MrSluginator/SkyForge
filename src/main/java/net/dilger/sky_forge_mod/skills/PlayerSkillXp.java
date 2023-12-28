@@ -1,6 +1,7 @@
 package net.dilger.sky_forge_mod.skills;
 
 import com.google.common.collect.Maps;
+import net.dilger.sky_forge_mod.skill.SKILL_TYPE;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 
@@ -8,21 +9,6 @@ import java.util.Map;
 
 @AutoRegisterCapability
 public class PlayerSkillXp {
-
-    public enum SKILL_TYPE {
-        OFFENSE,
-        DEFENSE,
-        MINING,
-        FARMING,
-        TRADING,
-        FISHING,
-        MOBILITY;
-
-        @Override
-        public String toString() {
-            return super.toString();
-        }
-    }
     private final Map<SKILL_TYPE, Long> skillsXpMap = Maps.newLinkedHashMap();
 
     public PlayerSkillXp(){
@@ -31,20 +17,21 @@ public class PlayerSkillXp {
         }
     }
 
-    public Map<SKILL_TYPE, Long> getSkillsXpMap() {
-        return this.skillsXpMap;
-    }
+    public Map<SKILL_TYPE, Long> getSkillsXpMap() {return this.skillsXpMap;}
+
     public long getSkillXp(SKILL_TYPE skill_type) {
         return  this.skillsXpMap.get(skill_type);
+    }
+
+    final int LINEAR_GROWTH = 5;
+    final double EXPONENTIAL_GROWTH = 0.5;
+    public int getSkillLevel(SKILL_TYPE skill_type) {
+        return (int) Math.floor(Math.log(getSkillXp(skill_type) + 1)*Math.pow(getSkillXp(skill_type), EXPONENTIAL_GROWTH)/ LINEAR_GROWTH);
     }
 
     public void addSkillXp(long skillXp, SKILL_TYPE skill_type) {
 
         this.skillsXpMap.put(skill_type, this.skillsXpMap.get(skill_type) + skillXp);
-    }
-
-    public void subSkillXp(long skillXp, SKILL_TYPE skill_type) {
-        addSkillXp(-skillXp, skill_type);
     }
 
     public void copyFrom(PlayerSkillXp source) {

@@ -4,7 +4,7 @@ import net.dilger.sky_forge_mod.gui.screen.skill.SkillScreen;
 import net.minecraft.client.Minecraft;
 
 public class ClientHooks {
-    public static void openExampleScreen() {
+    public static void openSkillScreen() {
         Minecraft.getInstance().setScreen(new SkillScreen());
     }
 

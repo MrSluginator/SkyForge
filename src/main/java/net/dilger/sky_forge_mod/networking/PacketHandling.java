@@ -1,6 +1,6 @@
 package net.dilger.sky_forge_mod.networking;
 
-import net.dilger.sky_forge_mod.networking.packets.affectClientData.PerksDataSyncS2CPacket;
+import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.S2CSyncPerksDataPacket;
 import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.*;
 import net.dilger.sky_forge_mod.networking.packets.perkEffects.*;
 import net.minecraft.resources.ResourceLocation;
@@ -41,16 +41,10 @@ public class PacketHandling {
                 .add();
 
         // changing character attributes
-        INSTANCE.messageBuilder(AffectPlayerLevel.class, id++, NetworkDirection.PLAY_TO_SERVER)
-                .decoder(AffectPlayerLevel::new)
-                .encoder(AffectPlayerLevel::encode)
-                .consumerMainThread(AffectPlayerLevel::handle)
-                .add();
-
-        INSTANCE.messageBuilder(UpdateTalents.class, id++, NetworkDirection.PLAY_TO_SERVER)
-                .encoder(UpdateTalents::encode)
-                .decoder(UpdateTalents::new)
-                .consumerMainThread(UpdateTalents::handle)
+        INSTANCE.messageBuilder(C2SUnlockPerkPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .encoder(C2SUnlockPerkPacket::encode)
+                .decoder(C2SUnlockPerkPacket::new)
+                .consumerMainThread(C2SUnlockPerkPacket::handle)
                 .add();
         INSTANCE.messageBuilder(C2SRemovePlayerXpPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
                 .decoder(C2SRemovePlayerXpPacket::new)
@@ -68,10 +62,10 @@ public class PacketHandling {
                 .consumerMainThread(C2SPayRequirementsPacket::handle)
                 .add();
 
-        INSTANCE.messageBuilder(PerksDataSyncS2CPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(PerksDataSyncS2CPacket::new)
-                .encoder(PerksDataSyncS2CPacket::toBytes)
-                .consumerMainThread(PerksDataSyncS2CPacket::handle);
+        INSTANCE.messageBuilder(S2CSyncPerksDataPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(S2CSyncPerksDataPacket::new)
+                .encoder(S2CSyncPerksDataPacket::toBytes)
+                .consumerMainThread(S2CSyncPerksDataPacket::handle);
 
         // perk effect packets
         INSTANCE.messageBuilder(C2SIncreasePlayerMaxHealthPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)

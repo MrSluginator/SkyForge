@@ -47,15 +47,11 @@
   "message.sky_forge_mod.gain_xp": "Gain XP",
 
   "key.category.sky_forge_mod.sky_forge": "Sky Forge Category",
-  "key.sky_forge_mod.skill_menu": "Skill Menu Key",
-
-  "skills.sad_label": "SAD BOIIII",
-  "skills.empty": "NOTHING!!!",
+  "key.category.sky_forge_mod.open_skill_screen": "Open Skill Menu",
+  "key.category.sky_forge_mod.open_editor": "Open Skill Menu Editor",
 
   "gui.sky_forge_mod.skill_screen": "Skill Screen",
   "gui.sky_forge_mod.skill_tree_screen": "Skill Tree Screen",
-
-  "gui.sky_forge_mod.skill_screen.button.example_button": "DO THING",
 
   "perks.sill_tree.root.title": "Root Perk",
 

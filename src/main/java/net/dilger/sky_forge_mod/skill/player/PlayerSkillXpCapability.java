@@ -1,4 +1,4 @@
-package net.dilger.sky_forge_mod.talents;
+package net.dilger.sky_forge_mod.skill.player;
 
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -11,22 +11,22 @@ import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class PlayerTalentCapability implements ICapabilityProvider, INBTSerializable<CompoundTag> {
-    public static Capability<PlayerTalents> PLAYER_TALENTS = CapabilityManager.get(new CapabilityToken<>() {});
+public class PlayerSkillXpCapability implements ICapabilityProvider, INBTSerializable<CompoundTag> {
+    public static Capability<PlayerSkillXp> PLAYER_SKILL_XP = CapabilityManager.get(new CapabilityToken<>() {});
 
-    private PlayerTalents talents = null;
-    private final LazyOptional<PlayerTalents> optional = LazyOptional.of(this::createPlayerTalents);
+    private PlayerSkillXp skillXp = null;
+    private final LazyOptional<PlayerSkillXp> optional = LazyOptional.of(this::createPlayerSkillXp);
 
-    private PlayerTalents createPlayerTalents() {
-        if(this.talents == null) {
-            this.talents = new PlayerTalents();
+    private PlayerSkillXp createPlayerSkillXp() {
+        if(this.skillXp == null) {
+            this.skillXp = new PlayerSkillXp();
         }
-        return this.talents;
+        return this.skillXp;
     }
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if(cap == PLAYER_TALENTS) {
+        if(cap == PLAYER_SKILL_XP) {
             return optional.cast();
         }
         return LazyOptional.empty();
@@ -35,12 +35,12 @@ public class PlayerTalentCapability implements ICapabilityProvider, INBTSerializ
     @Override
     public CompoundTag serializeNBT() {
         CompoundTag nbt = new CompoundTag();
-        createPlayerTalents().saveNBTData(nbt);
+        createPlayerSkillXp().saveNBTData(nbt);
         return nbt;
     }
 
     @Override
     public void deserializeNBT(CompoundTag nbt) {
-        createPlayerTalents().loadNBTData(nbt);
+        createPlayerSkillXp().loadNBTData(nbt);
     }
 }

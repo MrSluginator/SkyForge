@@ -1,7 +1,7 @@
 package net.dilger.sky_forge_mod.networking.packets.affectPlayerData;
 
 import net.dilger.sky_forge_mod.networking.PacketHandling;
-import net.dilger.sky_forge_mod.skill.PlayerSkillXpProvider;
+import net.dilger.sky_forge_mod.skill.player.PlayerSkillXpCapability;
 import net.dilger.sky_forge_mod.skill.SKILL_TYPE;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
@@ -50,7 +50,7 @@ public class C2SAddSkillXpPacket {
 
             // Change the player skill xp
 
-            player.getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).ifPresent(skill_xp -> {
+            player.getCapability(PlayerSkillXpCapability.PLAYER_SKILL_XP).ifPresent(skill_xp -> {
             skill_xp.addSkillXp(amount, skill_type);
 
             player.sendSystemMessage(Component.literal(skill_type.toString() + " xp: " + skill_xp.getSkillXp(skill_type)).withStyle(ChatFormatting.GOLD));

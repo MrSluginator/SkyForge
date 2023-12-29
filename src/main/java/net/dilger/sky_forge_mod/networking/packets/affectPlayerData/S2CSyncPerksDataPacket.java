@@ -1,4 +1,4 @@
-package net.dilger.sky_forge_mod.networking.packets.affectClientData;
+package net.dilger.sky_forge_mod.networking.packets.affectPlayerData;
 
 import net.dilger.sky_forge_mod.client.ClientTalentData;
 import net.minecraft.network.FriendlyByteBuf;
@@ -6,14 +6,14 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class PerksDataSyncS2CPacket {
+public class S2CSyncPerksDataPacket {
     private final byte[] perks;
 
-    public PerksDataSyncS2CPacket(byte[] incomingPerks) {
+    public S2CSyncPerksDataPacket(byte[] incomingPerks) {
         this.perks = incomingPerks;
     }
 
-    public PerksDataSyncS2CPacket(FriendlyByteBuf buf) {
+    public S2CSyncPerksDataPacket(FriendlyByteBuf buf) {
 
         this.perks = buf.readByteArray();
     }

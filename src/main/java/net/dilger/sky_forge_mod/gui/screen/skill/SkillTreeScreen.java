@@ -269,7 +269,7 @@ public class SkillTreeScreen extends Screen {
     public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
 
 //        atm it just closes the screen but could be used to switch tabs etc
-        if (KeyBinding.OPEN_TESTSCREEN.matches(pKeyCode, pScanCode)) {
+        if (KeyBinding.OPEN_SKILL_SCREEN.matches(pKeyCode, pScanCode)) {
             this.minecraft.setScreen(null);
             this.minecraft.mouseHandler.grabMouse();
             return true;

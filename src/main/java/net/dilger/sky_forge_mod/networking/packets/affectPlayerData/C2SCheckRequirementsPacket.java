@@ -1,6 +1,6 @@
 package net.dilger.sky_forge_mod.networking.packets.affectPlayerData;
 
-import net.dilger.sky_forge_mod.skill.PlayerSkillXpProvider;
+import net.dilger.sky_forge_mod.skill.player.PlayerSkillXpCapability;
 import net.dilger.sky_forge_mod.skill.Requirement;
 import net.dilger.sky_forge_mod.skill.SKILL_TYPE;
 import net.minecraft.network.FriendlyByteBuf;
@@ -59,7 +59,7 @@ public class C2SCheckRequirementsPacket {
 
             // Change the player skill xp
 
-            player.getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).ifPresent(skill_xp -> {
+            player.getCapability(PlayerSkillXpCapability.PLAYER_SKILL_XP).ifPresent(skill_xp -> {
             skill_xp.getSkillLevel(this.requirement.getSkillType());
 
                 boolean flag = true;

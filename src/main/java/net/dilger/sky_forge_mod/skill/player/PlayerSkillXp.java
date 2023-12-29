@@ -1,4 +1,4 @@
-package net.dilger.sky_forge_mod.skill;
+package net.dilger.sky_forge_mod.skill.player;
 
 import com.google.common.collect.Maps;
 import net.dilger.sky_forge_mod.skill.SKILL_TYPE;

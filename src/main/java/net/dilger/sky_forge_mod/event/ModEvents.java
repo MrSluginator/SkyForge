@@ -6,7 +6,7 @@ import net.dilger.sky_forge_mod.SkyForgeMod;
 import net.dilger.sky_forge_mod.item.ModItems;
 import net.dilger.sky_forge_mod.networking.PacketHandling;
 import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.S2CSyncSkillXpPacket;
-import net.dilger.sky_forge_mod.skill.PlayerSkillXpProvider;
+import net.dilger.sky_forge_mod.skill.player.PlayerSkillXpCapability;
 import net.dilger.sky_forge_mod.skill.SKILL_TYPE;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -107,8 +107,8 @@ public class ModEvents {
     public static void onAttachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof Player) {
             // attach a new capability to the player if it isn't already there
-            if (!event.getObject().getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).isPresent()) {
-                event.addCapability(new ResourceLocation(SkyForgeMod.MOD_ID, "properties"), new PlayerSkillXpProvider());
+            if (!event.getObject().getCapability(PlayerSkillXpCapability.PLAYER_SKILL_XP).isPresent()) {
+                event.addCapability(new ResourceLocation(SkyForgeMod.MOD_ID, "properties"), new PlayerSkillXpCapability());
 
             }
         }
@@ -119,8 +119,8 @@ public class ModEvents {
         if (event.isWasDeath()) {
             // get data from the dead clone and put it onto the new clone
 
-            event.getOriginal().getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).ifPresent(oldStore -> {
-                event.getOriginal().getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).ifPresent(newStore -> {
+            event.getOriginal().getCapability(PlayerSkillXpCapability.PLAYER_SKILL_XP).ifPresent(oldStore -> {
+                event.getOriginal().getCapability(PlayerSkillXpCapability.PLAYER_SKILL_XP).ifPresent(newStore -> {
                     newStore.copyFrom(oldStore);
                 });
             });
@@ -132,7 +132,7 @@ public class ModEvents {
 //      @AutoRegisterCapabilities
     }
 
-    /*@SubscribeEvent //this is good to know /TODO something with with
+    /*@SubscribeEvent //this is good to know /TODO something with
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.side == LogicalSide.SERVER) {
             event.player.getCapability(PlayerPerkProvider.PLAYER_PERKS).ifPresent(perks -> {
@@ -147,7 +147,7 @@ public class ModEvents {
         if (!event.getLevel().isClientSide()) {
             if (event.getEntity() instanceof ServerPlayer player) {
 
-                player.getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).ifPresent(skillXp -> {
+                player.getCapability(PlayerSkillXpCapability.PLAYER_SKILL_XP).ifPresent(skillXp -> {
                     for (SKILL_TYPE st: SKILL_TYPE.values()) {
                         PacketHandling.sentToPlayer(new S2CSyncSkillXpPacket(skillXp.getSkillsXpMap(), st), player);
                     }
@@ -164,7 +164,7 @@ public class ModEvents {
         if (event.getEntity() instanceof ServerPlayer player) {
             event.getEntity().sendSystemMessage(Component.literal("CLONE EVENT HAPPENED"));
 
-            player.getCapability(PlayerSkillXpProvider.PLAYER_SKILL_XP).ifPresent(skillXp -> {
+            player.getCapability(PlayerSkillXpCapability.PLAYER_SKILL_XP).ifPresent(skillXp -> {
                 for (SKILL_TYPE st: SKILL_TYPE.values()) {
                     PacketHandling.sentToPlayer(new S2CSyncSkillXpPacket(skillXp.getSkillsXpMap(), st), player);
                 }

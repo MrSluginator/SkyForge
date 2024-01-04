@@ -20,10 +20,12 @@ public class C2SPayRequirementsPacket {
     //add all xp variables here??
     private static final String MESSAGE_GAIN_XP = "message.sky_forge_mod.gain_xp";
     private final Requirement requirement;
+    private final byte perkID;
 
     //add variables that you want to be passed to the constructor below
-    public C2SPayRequirementsPacket(Requirement requirement){
+    public C2SPayRequirementsPacket(Requirement requirement, byte perkID){
         this.requirement = requirement;
+        this.perkID = perkID;
 
     }
     public C2SPayRequirementsPacket(FriendlyByteBuf buffer) {
@@ -33,7 +35,7 @@ public class C2SPayRequirementsPacket {
                 buffer.readInt(),
                 Item.byId(buffer.readInt()),
                 buffer.readInt()
-        ));
+        ), buffer.readByte());
     }
 
     //you need one buffer.write per variable you are passing to the constructor
@@ -45,7 +47,7 @@ public class C2SPayRequirementsPacket {
         buffer.writeInt(Item.getId(this.requirement.getItem()));
         buffer.writeInt(this.requirement.getItemCost());
 
-
+        buffer.writeByte(this.perkID);
     }
 
     //this is the logic for what we want to do when this message is built
@@ -91,6 +93,7 @@ public class C2SPayRequirementsPacket {
                     Minecraft.getInstance().player.sendSystemMessage(Component.literal("Perk unlocked"));
 
                     PacketHandling.sentToServer(new C2SRemovePlayerXpPacket((byte) this.requirement.getXpCost()));
+                    PacketHandling.sentToServer(new C2SUnlockPerkPacket(perkID));
 
                     final int itemCost = this.requirement.getItemCost();
                     // remove items

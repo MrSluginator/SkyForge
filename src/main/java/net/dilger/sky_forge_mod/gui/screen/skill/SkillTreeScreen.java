@@ -4,10 +4,7 @@ import net.dilger.sky_forge_mod.SkyForgeMod;
 import net.dilger.sky_forge_mod.gui.screen.skill.buttons.PerkButton;
 import net.dilger.sky_forge_mod.gui.screen.skill.buttons.PerkFrameType;
 import net.dilger.sky_forge_mod.gui.screen.skill.editor.SkillTreeEditor;
-import net.dilger.sky_forge_mod.skill.Perk;
-import net.dilger.sky_forge_mod.skill.PerkDisplayInfo;
-import net.dilger.sky_forge_mod.skill.SKILL_TYPE;
-import net.dilger.sky_forge_mod.skill.SkillTreeNodePosition;
+import net.dilger.sky_forge_mod.skill.*;
 import net.dilger.sky_forge_mod.util.KeyBinding;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -58,7 +55,7 @@ public class SkillTreeScreen extends Screen {
         super.init();
 
         ResourceLocation rootResource = new ResourceLocation(SkyForgeMod.MOD_ID,"perks/" + skill_type.getName() + "/root.json");
-        root = Perk.Builder.fromResourceLocation(Perk.resourceFromName("root", skill_type));
+        root = PerkList.get(rootResource);
 
 
 

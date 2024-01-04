@@ -20,16 +20,22 @@ public class PlayerPerks {
 
     public void addPerk(byte talent){
 
-        ByteArrayOutputStream writenPerks = new ByteArrayOutputStream();
+        for (byte perkID: perks) {
+            if (talent == perkID) {
+                return;
+            }
+        }
+
+        ByteArrayOutputStream writtenPerks = new ByteArrayOutputStream();
 
         try {
-            writenPerks.write(this.perks);
+            writtenPerks.write(this.perks);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        writenPerks.write(talent);
+        writtenPerks.write(talent);
 
-        this.perks = writenPerks.toByteArray();
+        this.perks = writtenPerks.toByteArray();
     }
 
     public void copyFrom(PlayerPerks source) {

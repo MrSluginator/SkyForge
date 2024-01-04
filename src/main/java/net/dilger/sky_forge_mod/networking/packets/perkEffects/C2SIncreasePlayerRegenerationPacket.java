@@ -44,7 +44,7 @@ public class C2SIncreasePlayerRegenerationPacket {
             assert player != null;
 
             // checks to see if player already has this effect then adds on the amount onto what they already have
-            int totalAmplification = (player.hasEffect(MobEffects.MOVEMENT_SPEED)) ? amount + player.getEffect(MobEffects.MOVEMENT_SPEED).getAmplifier() : amount;
+            int totalAmplification = (player.hasEffect(MobEffects.REGENERATION)) ? amount + player.getEffect(MobEffects.REGENERATION).getAmplifier() : amount;
 
             player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, MobEffectInstance.INFINITE_DURATION, totalAmplification));
         });

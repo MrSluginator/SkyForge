@@ -44,7 +44,7 @@ public class C2SIncreasePlayerJumpHeightPacket {
             assert player != null;
 
             // checks to see if player already has this effect then adds on the amount onto what they already have
-            int totalAmplification = (player.hasEffect(MobEffects.MOVEMENT_SPEED)) ? amount + player.getEffect(MobEffects.MOVEMENT_SPEED).getAmplifier() : amount;
+            int totalAmplification = (player.hasEffect(MobEffects.JUMP)) ? amount + player.getEffect(MobEffects.JUMP).getAmplifier() : amount;
 
             player.addEffect(new MobEffectInstance(MobEffects.JUMP, MobEffectInstance.INFINITE_DURATION, totalAmplification));
         });

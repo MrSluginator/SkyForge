@@ -5,10 +5,12 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.dilger.sky_forge_mod.SkyForgeMod;
 import net.dilger.sky_forge_mod.item.ModItems;
 import net.dilger.sky_forge_mod.networking.PacketHandling;
+import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.S2CSyncPerksDataPacket;
 import net.dilger.sky_forge_mod.networking.packets.affectPlayerData.S2CSyncSkillXpPacket;
-import net.dilger.sky_forge_mod.skill.player.PlayerSkillXpCapability;
+import net.dilger.sky_forge_mod.skill.PerkList;
 import net.dilger.sky_forge_mod.skill.SKILL_TYPE;
-import net.minecraft.network.chat.Component;
+import net.dilger.sky_forge_mod.skill.player.PlayerPerkCapability;
+import net.dilger.sky_forge_mod.skill.player.PlayerSkillXpCapability;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -21,7 +23,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.trading.MerchantOffer;
-import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -108,7 +109,12 @@ public class ModEvents {
         if (event.getObject() instanceof Player) {
             // attach a new capability to the player if it isn't already there
             if (!event.getObject().getCapability(PlayerSkillXpCapability.PLAYER_SKILL_XP).isPresent()) {
-                event.addCapability(new ResourceLocation(SkyForgeMod.MOD_ID, "properties"), new PlayerSkillXpCapability());
+                event.addCapability(new ResourceLocation(SkyForgeMod.MOD_ID, "xp"), new PlayerSkillXpCapability());
+
+            }
+
+            if (!event.getObject().getCapability(PlayerPerkCapability.PLAYER_PERKS).isPresent()) {
+                event.addCapability(new ResourceLocation(SkyForgeMod.MOD_ID, "perks"), new PlayerPerkCapability());
 
             }
         }
@@ -116,31 +122,20 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void onPlayerCloned(PlayerEvent.Clone event) {
-        if (event.isWasDeath()) {
-            // get data from the dead clone and put it onto the new clone
 
-            event.getOriginal().getCapability(PlayerSkillXpCapability.PLAYER_SKILL_XP).ifPresent(oldStore -> {
-                event.getOriginal().getCapability(PlayerSkillXpCapability.PLAYER_SKILL_XP).ifPresent(newStore -> {
-                    newStore.copyFrom(oldStore);
-                });
+        event.getOriginal().getCapability(PlayerSkillXpCapability.PLAYER_SKILL_XP).ifPresent(oldStore -> {
+            event.getOriginal().getCapability(PlayerSkillXpCapability.PLAYER_SKILL_XP).ifPresent(newStore -> {
+                newStore.copyFrom(oldStore);
             });
-        }
-    }
+        });
 
-    @SubscribeEvent
-    public static void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
-//      @AutoRegisterCapabilities
-    }
-
-    /*@SubscribeEvent //this is good to know /TODO something with
-    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.side == LogicalSide.SERVER) {
-            event.player.getCapability(PlayerPerkProvider.PLAYER_PERKS).ifPresent(perks -> {
-                // Timed based event would go here
-                // ex: heal every 10 sec
+        event.getOriginal().getCapability(PlayerPerkCapability.PLAYER_PERKS).ifPresent(oldStore -> {
+            event.getOriginal().getCapability(PlayerPerkCapability.PLAYER_PERKS).ifPresent(newStore -> {
+                newStore.copyFrom(oldStore);
             });
-        }
-    }*/
+        });
+
+    }
 
     @SubscribeEvent
     public static void onPlayerJoinWorld(EntityJoinLevelEvent event) {
@@ -153,25 +148,15 @@ public class ModEvents {
                     }
                 });
 
+                player.getCapability(PlayerPerkCapability.PLAYER_PERKS).ifPresent(playerPerks -> {
+                    PacketHandling.sentToPlayer(new S2CSyncPerksDataPacket(playerPerks.getPerks()), player);
+//                    PerkList.updatePlayerPerks();
+                });
+
+                PerkList.init();
+
             }
         }
-    }
-
-    //the PlayerEvent.Clone event happens when the player either respawns or moves dimensions
-    @SubscribeEvent
-    public static void onPlayerClone(PlayerEvent.Clone event){
-
-        if (event.getEntity() instanceof ServerPlayer player) {
-            event.getEntity().sendSystemMessage(Component.literal("CLONE EVENT HAPPENED"));
-
-            player.getCapability(PlayerSkillXpCapability.PLAYER_SKILL_XP).ifPresent(skillXp -> {
-                for (SKILL_TYPE st: SKILL_TYPE.values()) {
-                    PacketHandling.sentToPlayer(new S2CSyncSkillXpPacket(skillXp.getSkillsXpMap(), st), player);
-                }
-            });
-
-        }
-
     }
 
 }

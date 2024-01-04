@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class PlayerPerkCapability implements ICapabilityProvider, INBTSerializable<CompoundTag> {
-    public static Capability<PlayerPerks> PLAYER_TALENTS = CapabilityManager.get(new CapabilityToken<>() {});
+    public static Capability<PlayerPerks> PLAYER_PERKS = CapabilityManager.get(new CapabilityToken<>() {});
 
     private PlayerPerks talents = null;
     private final LazyOptional<PlayerPerks> optional = LazyOptional.of(this::createPlayerTalents);
@@ -26,7 +26,7 @@ public class PlayerPerkCapability implements ICapabilityProvider, INBTSerializab
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if(cap == PLAYER_TALENTS) {
+        if(cap == PLAYER_PERKS) {
             return optional.cast();
         }
         return LazyOptional.empty();

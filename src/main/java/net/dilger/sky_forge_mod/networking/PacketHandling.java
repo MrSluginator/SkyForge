@@ -28,23 +28,34 @@ public class PacketHandling {
     public static void register() {
 
         //this is for sending the class xp packets to the server. the constructor is called in the client objective events file
+        INSTANCE.messageBuilder(S2CSyncSkillXpPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(S2CSyncSkillXpPacket::new)
+                .encoder(S2CSyncSkillXpPacket::encode)
+                .consumerMainThread(S2CSyncSkillXpPacket::handle)
+                .add();
+        INSTANCE.messageBuilder(S2CSyncPerksDataPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(S2CSyncPerksDataPacket::new)
+                .encoder(S2CSyncPerksDataPacket::encode)
+                .consumerMainThread(S2CSyncPerksDataPacket::handle)
+                .add();
+
+
+        // changing character attributes
         INSTANCE.messageBuilder(C2SAddSkillXpPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
                 .encoder(C2SAddSkillXpPacket::encode)
                 .decoder(C2SAddSkillXpPacket::new)
                 .consumerMainThread(C2SAddSkillXpPacket::handle)
                 .add();
 
-        INSTANCE.messageBuilder(S2CSyncSkillXpPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(S2CSyncSkillXpPacket::new)
-                .encoder(S2CSyncSkillXpPacket::encode)
-                .consumerMainThread(S2CSyncSkillXpPacket::handle)
-                .add();
-
-        // changing character attributes
         INSTANCE.messageBuilder(C2SUnlockPerkPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
-                .encoder(C2SUnlockPerkPacket::encode)
                 .decoder(C2SUnlockPerkPacket::new)
+                .encoder(C2SUnlockPerkPacket::encode)
                 .consumerMainThread(C2SUnlockPerkPacket::handle)
+                .add();
+        INSTANCE.messageBuilder(C2SUpdatePlayerPerksPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(C2SUpdatePlayerPerksPacket::new)
+                .encoder(C2SUpdatePlayerPerksPacket::encode)
+                .consumerMainThread(C2SUpdatePlayerPerksPacket::handle)
                 .add();
         INSTANCE.messageBuilder(C2SRemovePlayerXpPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
                 .decoder(C2SRemovePlayerXpPacket::new)
@@ -62,10 +73,6 @@ public class PacketHandling {
                 .consumerMainThread(C2SPayRequirementsPacket::handle)
                 .add();
 
-        INSTANCE.messageBuilder(S2CSyncPerksDataPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(S2CSyncPerksDataPacket::new)
-                .encoder(S2CSyncPerksDataPacket::toBytes)
-                .consumerMainThread(S2CSyncPerksDataPacket::handle);
 
         // perk effect packets
         INSTANCE.messageBuilder(C2SIncreasePlayerMaxHealthPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
@@ -97,6 +104,11 @@ public class PacketHandling {
                 .decoder(C2SIncreasePlayerResistancePacket::new)
                 .encoder(C2SIncreasePlayerResistancePacket::encode)
                 .consumerMainThread(C2SIncreasePlayerResistancePacket::handle)
+                .add();
+        INSTANCE.messageBuilder(C2SIncreasePlayerFireResistancePacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(C2SIncreasePlayerFireResistancePacket::new)
+                .encoder(C2SIncreasePlayerFireResistancePacket::encode)
+                .consumerMainThread(C2SIncreasePlayerFireResistancePacket::handle)
                 .add();
     }
 

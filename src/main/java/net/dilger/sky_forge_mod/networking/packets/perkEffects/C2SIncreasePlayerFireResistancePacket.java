@@ -6,6 +6,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraftforge.network.NetworkEvent;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public class C2SIncreasePlayerFireResistancePacket {
@@ -44,7 +45,7 @@ public class C2SIncreasePlayerFireResistancePacket {
             assert player != null;
 
             // checks to see if player already has this effect then adds on the amount onto what they already have
-            int totalAmplification = (player.hasEffect(MobEffects.MOVEMENT_SPEED)) ? amount + player.getEffect(MobEffects.MOVEMENT_SPEED).getAmplifier() : amount;
+            int totalAmplification = (player.hasEffect(MobEffects.FIRE_RESISTANCE)) ? amount + Objects.requireNonNull(player.getEffect(MobEffects.FIRE_RESISTANCE)).getAmplifier() : amount;
 
             player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, MobEffectInstance.INFINITE_DURATION, totalAmplification));
         });

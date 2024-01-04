@@ -9,8 +9,8 @@ import java.util.function.Supplier;
 public class S2CSyncPerksDataPacket {
     private final byte[] perks;
 
-    public S2CSyncPerksDataPacket(byte[] incomingPerks) {
-        this.perks = incomingPerks;
+    public S2CSyncPerksDataPacket(byte[] perks) {
+        this.perks = perks;
     }
 
     public S2CSyncPerksDataPacket(FriendlyByteBuf buf) {
@@ -18,7 +18,7 @@ public class S2CSyncPerksDataPacket {
         this.perks = buf.readByteArray();
     }
 
-    public void toBytes(FriendlyByteBuf buf) {
+    public void encode(FriendlyByteBuf buf) {
 
         buf.writeBytes(perks);
     }

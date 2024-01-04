@@ -33,11 +33,9 @@ public class C2SUnlockPerkPacket {
         context.enqueueWork(() -> {
             // HERE IS ON THE SERVER
             ServerPlayer player = context.getSender();
-            player.sendSystemMessage(Component.literal("debuggggg").withStyle(ChatFormatting.GOLD));
+            player.sendSystemMessage(Component.literal(String.valueOf(player.getCapability(PlayerPerkCapability.PLAYER_PERKS).isPresent())));
 
-            player.sendSystemMessage(Component.literal(String.valueOf(player.getCapability(PlayerPerkCapability.PLAYER_TALENTS).isPresent())));
-
-            player.getCapability(PlayerPerkCapability.PLAYER_TALENTS).ifPresent(playerTalents -> {
+            player.getCapability(PlayerPerkCapability.PLAYER_PERKS).ifPresent(playerTalents -> {
 
                     playerTalents.addPerk(talent);
                     PacketHandling.sentToPlayer(new S2CSyncPerksDataPacket(playerTalents.getPerks()), player);

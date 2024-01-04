@@ -26,9 +26,8 @@ public class Requirement {
         this.itemCost = itemCost;
     }
 
-    public boolean payRequirements() {
-        PacketHandling.sentToServer(new C2SPayRequirementsPacket(this));
-        return requirementsMet;
+    public void payRequirements(byte perkID) {
+        PacketHandling.sentToServer(new C2SPayRequirementsPacket(this, perkID));
     }
 
 

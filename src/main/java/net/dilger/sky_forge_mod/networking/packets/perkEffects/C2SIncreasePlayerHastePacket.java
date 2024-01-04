@@ -44,7 +44,7 @@ public class C2SIncreasePlayerHastePacket {
             assert player != null;
 
             // checks to see if player already has this effect then adds on the amount onto what they already have
-            int totalAmplification = (player.hasEffect(MobEffects.MOVEMENT_SPEED)) ? amount + player.getEffect(MobEffects.MOVEMENT_SPEED).getAmplifier() : amount;
+            int totalAmplification = (player.hasEffect(MobEffects.DIG_SPEED)) ? amount + player.getEffect(MobEffects.DIG_SPEED).getAmplifier() : amount;
 
             player.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, MobEffectInstance.INFINITE_DURATION, totalAmplification));
         });

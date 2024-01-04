@@ -27,6 +27,8 @@ import java.util.function.Function;
 public class Perk {
 
     protected final Component title = Component.literal("root");
+    private static byte PERKIDCOUNT = 0;
+    private byte perkID;
     private final ResourceLocation resourceLocation;
     private final SKILL_TYPE tree;
     private final PerkButton button;
@@ -35,8 +37,7 @@ public class Perk {
     private final PerkDisplayInfo display;
     private final PerkReward reward;
     private final Requirement requirement;
-    private boolean perkUnlocked = false;
-    private boolean perkAquired = false;
+    private boolean perkActive = false;
 
 
 
@@ -54,6 +55,8 @@ public class Perk {
                 this::handlePerkButton);
         this.requirement = requirement;
         this.reward = reward;
+
+        PerkList.add(this);
     }
 
     public static ResourceLocation resourceFromName(String name, SKILL_TYPE skill_type) {
@@ -92,12 +95,11 @@ public class Perk {
 
     private void handlePerkButton(Button button) {
 
-        if (!perkAquired) {
+        if (!isActive()) {
             // make the packet change the player capability of which perks the player has unlocked
-            if (requirement.payRequirements()) {
-                reward.grantRewards();
-                perkAquired = true;
-            }
+            requirement.payRequirements(getID());
+            PerkList.updatePlayerPerks();
+
         }
 
 
@@ -120,6 +122,26 @@ public class Perk {
     }
     public ArrayList<Perk> getChildren() {
         return children;
+    }
+
+    public PerkReward getReward() {
+        return reward;
+    }
+
+    public byte getID() {
+        return this.perkID;
+    }
+
+    public boolean isActive() {
+        return perkActive;
+    }
+
+    public void setActive(boolean perkActive) {
+        this.perkActive = perkActive;
+    }
+
+    public void setID(byte ID) {
+        this.perkID = ID;
     }
 
     // Builder

@@ -27,7 +27,9 @@ public class PerkReward {
     }
 
     public void grantRewards() {
-         for (ResourceLocation resource: commonBuffs) {
+        System.out.println("granting reward");
+        assert commonBuffs != null;
+        for (ResourceLocation resource: commonBuffs) {
              CommonBuffs.getBuff(resource).runPacket();
          }
          if (uniqueBuff != null) {

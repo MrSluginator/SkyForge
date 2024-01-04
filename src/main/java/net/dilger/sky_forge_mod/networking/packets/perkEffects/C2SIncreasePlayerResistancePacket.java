@@ -42,9 +42,9 @@ public class C2SIncreasePlayerResistancePacket {
             ServerPlayer player = context.getSender();
 
             assert player != null;
-
+            System.out.println("Resistance added");
             // checks to see if player already has this effect then adds on the amount onto what they already have
-            int totalAmplification = (player.hasEffect(MobEffects.MOVEMENT_SPEED)) ? amount + player.getEffect(MobEffects.MOVEMENT_SPEED).getAmplifier() : amount;
+            int totalAmplification = (player.hasEffect(MobEffects.DAMAGE_RESISTANCE)) ? amount + player.getEffect(MobEffects.DAMAGE_RESISTANCE).getAmplifier() : amount;
 
             player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, MobEffectInstance.INFINITE_DURATION, totalAmplification));
         });
